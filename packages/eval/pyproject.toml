@@ -1,0 +1,20 @@
+[project]
+name = "chickadee-eval"
+version = "0.0.0"
+description = "Benchmark harness for measuring Chickadee's solve rate and cost."
+license = "AGPL-3.0-or-later"
+authors = [{ name = "Kundan Kumar", email = "kundan91700@gmail.com" }]
+requires-python = ">=3.12"
+dependencies = [
+    "chickadee-core",
+]
+
+[project.scripts]
+chickadee-eval = "chickadee_eval.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/chickadee_eval"]

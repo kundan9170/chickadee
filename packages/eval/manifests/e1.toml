@@ -1,0 +1,210 @@
+# E1 problem sets — the three committed manifests.
+#
+# Counts are RECORDED, not assumed. Every id below was read from a real checkout of
+# Aider-AI/polyglot-benchmark: 34 Python + 49 JavaScript practice exercises, 83 total.
+# "~30" and "~20" in the spec are targets; what a gate run measures is this file.
+#
+# Ids are the problem directory relative to the benchmark root. Bare exercise names are not
+# unique across languages — bottle-song, forth, book-store, grade-school and others exist in
+# both — and `Subset` rejects duplicate ids, correctly. A path is also exactly what
+# `polyglot.load` resolves against its root, so the id stays the thing the loader opens.
+#
+# Selection is a stable blake2b sort over (seed, purpose, language, id), so the split can be
+# re-derived by anyone rather than taken on trust. Allocation is stratified: each language
+# contributes in proportion to its share of the pool (34/83 and 49/83 of 30 -> 12 and 18).
+#
+# NOTE: the loader opens the stub, never the reference solution (`.meta/example.py`).
+
+experiment = "e1"
+
+# --- dev subset: 30 (12 python, 18 javascript) --------------------------------
+# Iteration and tuning. Freely used.
+[[subsets]]
+name = "e1-dev"
+kind = "dev"
+problems = [
+  { id = "python/exercises/practice/beer-song", language = "python" },
+  { id = "python/exercises/practice/bottle-song", language = "python" },
+  { id = "python/exercises/practice/dot-dsl", language = "python" },
+  { id = "python/exercises/practice/food-chain", language = "python" },
+  { id = "python/exercises/practice/forth", language = "python" },
+  { id = "python/exercises/practice/grep", language = "python" },
+  { id = "python/exercises/practice/hangman", language = "python" },
+  { id = "python/exercises/practice/list-ops", language = "python" },
+  { id = "python/exercises/practice/react", language = "python" },
+  { id = "python/exercises/practice/transpose", language = "python" },
+  { id = "python/exercises/practice/variable-length-quantity", language = "python" },
+  { id = "python/exercises/practice/zebra-puzzle", language = "python" },
+  { id = "javascript/exercises/practice/affine-cipher", language = "javascript" },
+  { id = "javascript/exercises/practice/alphametics", language = "javascript" },
+  { id = "javascript/exercises/practice/book-store", language = "javascript" },
+  { id = "javascript/exercises/practice/bottle-song", language = "javascript" },
+  { id = "javascript/exercises/practice/bowling", language = "javascript" },
+  { id = "javascript/exercises/practice/forth", language = "javascript" },
+  { id = "javascript/exercises/practice/go-counting", language = "javascript" },
+  { id = "javascript/exercises/practice/ocr-numbers", language = "javascript" },
+  { id = "javascript/exercises/practice/poker", language = "javascript" },
+  { id = "javascript/exercises/practice/queen-attack", language = "javascript" },
+  { id = "javascript/exercises/practice/react", language = "javascript" },
+  { id = "javascript/exercises/practice/rectangles", language = "javascript" },
+  { id = "javascript/exercises/practice/scale-generator", language = "javascript" },
+  { id = "javascript/exercises/practice/triangle", language = "javascript" },
+  { id = "javascript/exercises/practice/twelve-days", language = "javascript" },
+  { id = "javascript/exercises/practice/word-search", language = "javascript" },
+  { id = "javascript/exercises/practice/wordy", language = "javascript" },
+  { id = "javascript/exercises/practice/zebra-puzzle", language = "javascript" },
+]
+
+# --- smoke subset: 8 of the dev subset (4 python, 4 javascript) -----------------
+# A quick check before and after a harness change: `chickadee-eval run` runs it by
+# default. Drawn from dev, so it may be read and tuned on freely; a smoke number is never a
+# gate number. Every stem here is dev in BOTH languages: a statement is byte-identical across
+# languages, so tuning on `python/grep` would tune on `javascript/grep`, which is held out
+# in the held-out set. Easy to hard: bottle-song and queen-attack, dot-dsl, ocr-numbers and rectangles,
+# forth, react and alphametics.
+[[subsets]]
+name = "e1-smoke"
+kind = "dev"
+problems = [
+  { id = "python/exercises/practice/bottle-song", language = "python" },
+  { id = "python/exercises/practice/dot-dsl", language = "python" },
+  { id = "python/exercises/practice/forth", language = "python" },
+  { id = "python/exercises/practice/react", language = "python" },
+  { id = "javascript/exercises/practice/alphametics", language = "javascript" },
+  { id = "javascript/exercises/practice/ocr-numbers", language = "javascript" },
+  { id = "javascript/exercises/practice/queen-attack", language = "javascript" },
+  { id = "javascript/exercises/practice/rectangles", language = "javascript" },
+]
+
+# --- confirmation set: 53 (22 python, 31 javascript) --------------------------
+# Held out. Gates only, never touched by tuning (EV-11). "The remaining Python +
+# JavaScript problems" — this is the whole pool minus the dev subset, which is why
+# it is 53 rather than a round number. Once spent it cannot be restored, so the size is
+# whatever is left rather than whatever is convenient.
+[[subsets]]
+name = "e1-confirmation"
+kind = "confirmation"
+problems = [
+  { id = "python/exercises/practice/affine-cipher", language = "python" },
+  { id = "python/exercises/practice/book-store", language = "python" },
+  { id = "python/exercises/practice/bowling", language = "python" },
+  { id = "python/exercises/practice/connect", language = "python" },
+  { id = "python/exercises/practice/dominoes", language = "python" },
+  { id = "python/exercises/practice/go-counting", language = "python" },
+  { id = "python/exercises/practice/grade-school", language = "python" },
+  { id = "python/exercises/practice/paasio", language = "python" },
+  { id = "python/exercises/practice/phone-number", language = "python" },
+  { id = "python/exercises/practice/pig-latin", language = "python" },
+  { id = "python/exercises/practice/poker", language = "python" },
+  { id = "python/exercises/practice/pov", language = "python" },
+  { id = "python/exercises/practice/proverb", language = "python" },
+  { id = "python/exercises/practice/rest-api", language = "python" },
+  { id = "python/exercises/practice/robot-name", language = "python" },
+  { id = "python/exercises/practice/scale-generator", language = "python" },
+  { id = "python/exercises/practice/sgf-parsing", language = "python" },
+  { id = "python/exercises/practice/simple-linked-list", language = "python" },
+  { id = "python/exercises/practice/tree-building", language = "python" },
+  { id = "python/exercises/practice/two-bucket", language = "python" },
+  { id = "python/exercises/practice/wordy", language = "python" },
+  { id = "python/exercises/practice/zipper", language = "python" },
+  { id = "javascript/exercises/practice/beer-song", language = "javascript" },
+  { id = "javascript/exercises/practice/binary", language = "javascript" },
+  { id = "javascript/exercises/practice/complex-numbers", language = "javascript" },
+  { id = "javascript/exercises/practice/connect", language = "javascript" },
+  { id = "javascript/exercises/practice/food-chain", language = "javascript" },
+  { id = "javascript/exercises/practice/grade-school", language = "javascript" },
+  { id = "javascript/exercises/practice/grep", language = "javascript" },
+  { id = "javascript/exercises/practice/house", language = "javascript" },
+  { id = "javascript/exercises/practice/killer-sudoku-helper", language = "javascript" },
+  { id = "javascript/exercises/practice/ledger", language = "javascript" },
+  { id = "javascript/exercises/practice/list-ops", language = "javascript" },
+  { id = "javascript/exercises/practice/meetup", language = "javascript" },
+  { id = "javascript/exercises/practice/palindrome-products", language = "javascript" },
+  { id = "javascript/exercises/practice/parallel-letter-frequency", language = "javascript" },
+  { id = "javascript/exercises/practice/phone-number", language = "javascript" },
+  { id = "javascript/exercises/practice/pig-latin", language = "javascript" },
+  { id = "javascript/exercises/practice/promises", language = "javascript" },
+  { id = "javascript/exercises/practice/rational-numbers", language = "javascript" },
+  { id = "javascript/exercises/practice/resistor-color-trio", language = "javascript" },
+  { id = "javascript/exercises/practice/rest-api", language = "javascript" },
+  { id = "javascript/exercises/practice/robot-name", language = "javascript" },
+  { id = "javascript/exercises/practice/say", language = "javascript" },
+  { id = "javascript/exercises/practice/simple-linked-list", language = "javascript" },
+  { id = "javascript/exercises/practice/space-age", language = "javascript" },
+  { id = "javascript/exercises/practice/state-of-tic-tac-toe", language = "javascript" },
+  { id = "javascript/exercises/practice/sum-of-multiples", language = "javascript" },
+  { id = "javascript/exercises/practice/tournament", language = "javascript" },
+  { id = "javascript/exercises/practice/transpose", language = "javascript" },
+  { id = "javascript/exercises/practice/two-bucket", language = "javascript" },
+  { id = "javascript/exercises/practice/variable-length-quantity", language = "javascript" },
+  { id = "javascript/exercises/practice/zipper", language = "javascript" },
+]
+
+# --- perturbed set: 20 (8 python, 12 javascript) ------------------------------
+# Contamination control. Each entry is a seeded perturbation of the confirmation
+# problem of the same name, generated by `problems/perturb.py` with the seed below.
+#
+# Drawn from the CONFIRMATION set, not from dev, because the comparison is between the
+# between-arm delta on the perturbed set and the between-arm delta on "the original set" —
+# and at a gate the original set is confirmation. Perturbations of dev problems would put
+# the two deltas on different populations and compare them anyway.
+#
+# The cost of that choice, stated rather than buried: iterating on perturbation quality by
+# reading perturbed results is indirect exposure to holdout signal. Generating the set is
+# not tuning, but reading its per-problem outcomes and changing the generator would be.
+[[subsets]]
+name = "e1-perturbed"
+kind = "perturbed"
+seed = 20260820
+problems = [
+  { id = "python/exercises/practice/affine-cipher-perturbed", language = "python" },
+  { id = "python/exercises/practice/connect-perturbed", language = "python" },
+  { id = "python/exercises/practice/grade-school-perturbed", language = "python" },
+  { id = "python/exercises/practice/phone-number-perturbed", language = "python" },
+  { id = "python/exercises/practice/scale-generator-perturbed", language = "python" },
+  { id = "python/exercises/practice/tree-building-perturbed", language = "python" },
+  { id = "python/exercises/practice/two-bucket-perturbed", language = "python" },
+  { id = "python/exercises/practice/zipper-perturbed", language = "python" },
+  { id = "javascript/exercises/practice/beer-song-perturbed", language = "javascript" },
+  { id = "javascript/exercises/practice/binary-perturbed", language = "javascript" },
+  { id = "javascript/exercises/practice/complex-numbers-perturbed", language = "javascript" },
+  { id = "javascript/exercises/practice/food-chain-perturbed", language = "javascript" },
+  { id = "javascript/exercises/practice/killer-sudoku-helper-perturbed", language = "javascript" },
+  { id = "javascript/exercises/practice/phone-number-perturbed", language = "javascript" },
+  { id = "javascript/exercises/practice/rest-api-perturbed", language = "javascript" },
+  { id = "javascript/exercises/practice/robot-name-perturbed", language = "javascript" },
+  { id = "javascript/exercises/practice/state-of-tic-tac-toe-perturbed", language = "javascript" },
+  { id = "javascript/exercises/practice/transpose-perturbed", language = "javascript" },
+  { id = "javascript/exercises/practice/variable-length-quantity-perturbed", language = "javascript" },
+  { id = "javascript/exercises/practice/zipper-perturbed", language = "javascript" },
+]
+
+# --- arms ---------------------------------------------------------------------
+# Only the arms that exist.
+#
+# `hard_cost_usd` is a CAP, not an estimate. Crossing it ends the run with rows on
+# disk under the preregistered missing rule. Set from problem count times a generous
+# per-problem ceiling, deliberately loose enough that hitting it means something is wrong.
+
+[[arms]]
+name = "e1-naive"
+harness = "chickadee-eval:e1_naive"
+harness_version = "0.0.0"
+slm_model = "TBD"
+hard_cost_usd = 25.0
+
+[[arms]]
+name = "e1-stock-diagnostic"
+harness = "aider"
+harness_version = "TBD"
+frontier_model = "TBD"
+hard_cost_usd = 40.0
+
+# The complete system (`arms/chickadee.py`). Its models are the person's own config,
+# recorded per run in the archive's `config.json` (`engine`), not here: one arm, measured
+# under whatever models it is given, and two configs are two archives.
+[[arms]]
+name = "e1-chickadee"
+harness = "chickadee-eval:chickadee"
+harness_version = "0.0.0"
+hard_cost_usd = 60.0

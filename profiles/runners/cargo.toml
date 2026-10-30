@@ -1,0 +1,22 @@
+name = "cargo"
+
+[[summary]]
+line = '^test result: (?:ok|FAILED)\. \d+ passed; \d+ failed;.*$'
+passed = '(\d+) passed'
+failed = '(\d+) failed'
+
+[names]
+failing = ['^test (.+?) \.\.\. FAILED$']
+passing = ['^test (.+?) \.\.\. ok$']
+broken = ['^error: could not compile']
+
+# Its argument filters test names by substring. `--lib`, `--test`, `-p` and the like narrow
+# what runs and are not listed, so a run with one is unknown.
+[command]
+words = ["cargo", "test"]
+selects = "names"
+flags = [
+  "-q", "--quiet", "-v", "--verbose", "--release", "--all-features", "--no-fail-fast",
+  "--offline", "--locked", "--frozen",
+]
+values = ["-j", "--jobs", "--features", "-F", "--color", "--target-dir"]

@@ -1,0 +1,49 @@
+name = "typescript"
+extensions = [".ts", ".tsx", ".mts", ".cts"]
+# TSX is its own grammar: `<T>x` is a cast in `.ts` and an element in `.tsx`.
+tree_sitter_grammar = { ".ts" = "typescript", ".tsx" = "tsx", ".mts" = "typescript", ".cts" = "typescript" }
+
+[syntax]
+# The grammar's parse, in process (D203 decision 3). `tsc` needs the project's tsconfig and
+# its node_modules to say anything about one file; the build check below runs it whole.
+mode = "parse"
+
+[tests]
+globs = [
+  "**/__tests__/**", "**/test/**", "**/tests/**",
+  "*.test.ts", "*.spec.ts", "*.test.tsx", "*.spec.tsx", "*.test.mts", "*.spec.mts",
+]
+# Jest takes test file paths as its patterns. A Vitest project overrides this
+# (`npx vitest run {selector}`).
+runner = "npx jest --silent {selector}"
+timeout_s = 180
+
+[build]
+# The whole project's type check: what a compiler says, which the parse above does not.
+compile_cmd = "npx tsc --noEmit"
+import_smoke = ""
+
+[deps]
+# tsconfig.json pins no package, but it is what marks a TypeScript project.
+manifests = ["package.json", "tsconfig.json"]
+install_cmd = "npm install {name}"
+
+[examples]
+snippet = """
+import { {symbol} } from './{module}';
+expect({symbol}({input})).toEqual({output});
+"""
+
+[conventions]
+file = "conventions/typescript.md"
+
+[lsp]
+server = "typescript-language-server --stdio"
+# Run by `chickadee setup` when the server is missing and the person says yes.
+install = "npm install --global --prefix {dir} typescript typescript-language-server"
+# The LSP `languageId` a `.tsx` file is opened as; every other extension is `typescript`.
+language_id = { ".ts" = "typescript", ".tsx" = "typescriptreact", ".mts" = "typescript", ".cts" = "typescript" }
+
+[toolchain]
+# D109: once at worktree creation, from the lockfile. A worktree has no node_modules.
+bootstrap = ["npm", "ci"]

@@ -1,0 +1,1 @@
+insert_lines(path, after, content): insert content's lines into the file after the line whose anchor is after; after=0 inserts at the file's start. A line that moved since you read it is refused with the lines there now.

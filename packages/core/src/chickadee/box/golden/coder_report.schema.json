@@ -1,0 +1,811 @@
+{
+  "$defs": {
+    "ChangeSummary": {
+      "additionalProperties": false,
+      "description": "Files, lines and symbols: deliberately not the diff, which travels as a handle.",
+      "properties": {
+        "files": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Files",
+          "type": "array"
+        },
+        "lines_added": {
+          "default": 0,
+          "title": "Lines Added",
+          "type": "integer"
+        },
+        "lines_removed": {
+          "default": 0,
+          "title": "Lines Removed",
+          "type": "integer"
+        },
+        "symbols_added": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Symbols Added",
+          "type": "array"
+        },
+        "symbols_known": {
+          "default": true,
+          "title": "Symbols Known",
+          "type": "boolean"
+        },
+        "symbols_removed": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Symbols Removed",
+          "type": "array"
+        }
+      },
+      "title": "ChangeSummary",
+      "type": "object"
+    },
+    "CommandFactP": {
+      "additionalProperties": false,
+      "description": "One command a task ran, from its step and its `exec` line.",
+      "properties": {
+        "command": {
+          "title": "Command",
+          "type": "string"
+        },
+        "exit_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exit Code"
+        },
+        "failing": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Failing",
+          "type": "array"
+        },
+        "operation_id": {
+          "title": "Operation Id",
+          "type": "string"
+        },
+        "output_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Output Sha"
+        },
+        "tail": {
+          "title": "Tail",
+          "type": "string"
+        },
+        "test_outcome": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Test Outcome"
+        },
+        "timed_out": {
+          "title": "Timed Out",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "operation_id",
+        "command",
+        "timed_out",
+        "tail"
+      ],
+      "title": "CommandFactP",
+      "type": "object"
+    },
+    "CostWire": {
+      "additionalProperties": false,
+      "description": "`RunSpend` as the report writes it: the same fields, its read-only maps as objects.",
+      "properties": {
+        "by_rung": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "By Rung",
+          "type": "object"
+        },
+        "by_task": {
+          "additionalProperties": {
+            "maxItems": 2,
+            "minItems": 2,
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array"
+          },
+          "title": "By Task",
+          "type": "object"
+        },
+        "cost_usd": {
+          "title": "Cost Usd",
+          "type": "number"
+        },
+        "floor_usd": {
+          "title": "Floor Usd",
+          "type": "number"
+        },
+        "tokens_in": {
+          "title": "Tokens In",
+          "type": "integer"
+        },
+        "tokens_out": {
+          "title": "Tokens Out",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "tokens_in",
+        "tokens_out",
+        "cost_usd",
+        "by_rung",
+        "by_task",
+        "floor_usd"
+      ],
+      "title": "CostWire",
+      "type": "object"
+    },
+    "FileFactP": {
+      "additionalProperties": false,
+      "description": "One file a task changed, measured between its start tree and its end tree.",
+      "properties": {
+        "added": {
+          "minimum": 0,
+          "title": "Added",
+          "type": "integer"
+        },
+        "kind": {
+          "enum": [
+            "created",
+            "edited",
+            "deleted"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "removed": {
+          "minimum": 0,
+          "title": "Removed",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "path",
+        "added",
+        "removed",
+        "kind"
+      ],
+      "title": "FileFactP",
+      "type": "object"
+    },
+    "Handle": {
+      "description": "Stable within the session; rehydratable.\n\nThe first six fields are the spec's. The next three say where the bytes are, which the\nspec leaves to \"resolves via\": a file handle names its `path`; a stored handle names the\nrun whose blob store holds it, or None for the session's own (a checkpoint's output\nlives in its run's store); a journal handle names its run and, when it is narrower than\nthe whole journal, its seq range. `name` is a stored file's own name, when it had one.",
+      "properties": {
+        "content_sha": {
+          "title": "Content Sha",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "file",
+            "diff",
+            "log",
+            "journal",
+            "findings",
+            "output",
+            "attachment"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "ops": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Ops",
+          "type": "array"
+        },
+        "path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Path"
+        },
+        "preview": {
+          "title": "Preview",
+          "type": "string"
+        },
+        "run_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Run Id"
+        },
+        "seqs": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Seqs"
+        },
+        "shape": {
+          "$ref": "#/$defs/Shape"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "shape",
+        "preview",
+        "content_sha"
+      ],
+      "title": "Handle",
+      "type": "object"
+    },
+    "ReportHandles": {
+      "additionalProperties": false,
+      "properties": {
+        "diff": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Handle"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "failing_output": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Handle"
+          },
+          "title": "Failing Output",
+          "type": "array"
+        },
+        "journal": {
+          "$ref": "#/$defs/Handle"
+        }
+      },
+      "required": [
+        "journal"
+      ],
+      "title": "ReportHandles",
+      "type": "object"
+    },
+    "ReportedTask": {
+      "additionalProperties": false,
+      "description": "One task as the episode left it: the task book's entry, and its last\nround's end and facts.",
+      "properties": {
+        "answer": {
+          "anyOf": [
+            {
+              "enum": [
+                "accept",
+                "feedback",
+                "continue",
+                "take_over",
+                "abandon",
+                "re_cut",
+                "drop"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Answer"
+        },
+        "by": {
+          "title": "By",
+          "type": "string"
+        },
+        "commit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Commit"
+        },
+        "facts": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TaskFactsP"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "rounds": {
+          "title": "Rounds",
+          "type": "integer"
+        },
+        "state": {
+          "enum": [
+            "delegated",
+            "reported",
+            "held",
+            "taken_over",
+            "accepted",
+            "committed",
+            "abandoned",
+            "replaced"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "stopped": {
+          "anyOf": [
+            {
+              "enum": [
+                "replied",
+                "limit",
+                "looped",
+                "context_full",
+                "model_error",
+                "harness_error",
+                "halted",
+                "held"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Stopped"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "by",
+        "state",
+        "rounds"
+      ],
+      "title": "ReportedTask",
+      "type": "object"
+    },
+    "Shape": {
+      "description": "Enough to decide whether to fetch, without fetching.",
+      "properties": {
+        "bytes": {
+          "title": "Bytes",
+          "type": "integer"
+        },
+        "est_tokens": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Est Tokens"
+        },
+        "height": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Height"
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "lines": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lines"
+        },
+        "pages": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pages"
+        },
+        "symbols": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Symbols"
+        },
+        "width": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Width"
+        }
+      },
+      "required": [
+        "bytes",
+        "kind"
+      ],
+      "title": "Shape",
+      "type": "object"
+    },
+    "SyntaxFactP": {
+      "additionalProperties": false,
+      "description": "One changed file's syntax, judged by its own language's profile over the file as the\ntask left it: the same check the edit tool reported.",
+      "properties": {
+        "depth": {
+          "anyOf": [
+            {
+              "enum": [
+                "compiled",
+                "command",
+                "parsed"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Depth"
+        },
+        "detail": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Detail"
+        },
+        "ok": {
+          "title": "Ok",
+          "type": "boolean"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "ok"
+      ],
+      "title": "SyntaxFactP",
+      "type": "object"
+    },
+    "TaskFactsP": {
+      "additionalProperties": false,
+      "description": "What a task did, measured from the trees and the journal, never from the\nreport.",
+      "properties": {
+        "commands": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/CommandFactP"
+          },
+          "title": "Commands",
+          "type": "array"
+        },
+        "end_tree": {
+          "title": "End Tree",
+          "type": "string"
+        },
+        "files": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/FileFactP"
+          },
+          "title": "Files",
+          "type": "array"
+        },
+        "skipped": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Skipped",
+          "type": "array"
+        },
+        "start_tree": {
+          "title": "Start Tree",
+          "type": "string"
+        },
+        "symbols_added": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Symbols Added",
+          "type": "array"
+        },
+        "symbols_known": {
+          "default": true,
+          "title": "Symbols Known",
+          "type": "boolean"
+        },
+        "symbols_removed": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Symbols Removed",
+          "type": "array"
+        },
+        "syntax": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/SyntaxFactP"
+          },
+          "title": "Syntax",
+          "type": "array"
+        },
+        "tests_added": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Tests Added",
+          "type": "array"
+        },
+        "tests_edited": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Tests Edited",
+          "type": "array"
+        }
+      },
+      "required": [
+        "start_tree",
+        "end_tree"
+      ],
+      "title": "TaskFactsP",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "athena": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Athena"
+    },
+    "change_summary": {
+      "$ref": "#/$defs/ChangeSummary",
+      "default": {
+        "files": [],
+        "lines_added": 0,
+        "lines_removed": 0,
+        "symbols_added": [],
+        "symbols_known": true,
+        "symbols_removed": []
+      }
+    },
+    "cost": {
+      "$ref": "#/$defs/CostWire"
+    },
+    "growth": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Growth"
+    },
+    "handles": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ReportHandles"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "harness": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Harness",
+      "type": "array"
+    },
+    "outcome": {
+      "enum": [
+        "COMPLETED",
+        "PARTIAL",
+        "BLOCKED",
+        "ASK",
+        "BUDGET_CAP",
+        "ABORTED",
+        "OUTGROWN"
+      ],
+      "title": "Outcome",
+      "type": "string"
+    },
+    "run_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Run Id"
+    },
+    "tasks": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ReportedTask"
+      },
+      "title": "Tasks",
+      "type": "array"
+    },
+    "unanswered": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Unanswered",
+      "type": "array"
+    },
+    "why": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Why"
+    }
+  },
+  "required": [
+    "outcome",
+    "cost"
+  ],
+  "title": "CoderReport",
+  "type": "object"
+}

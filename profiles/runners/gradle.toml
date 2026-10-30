@@ -1,0 +1,12 @@
+name = "gradle"
+
+# Printed when a test failed; a passing run prints no counts and is read by its exit code.
+[[summary]]
+line = '^\d+ tests? completed(?:, \d+ failed)?(?:, \d+ skipped)?$'
+total = '^(\d+) tests? completed'
+failed = '(\d+) failed'
+skipped = '(\d+) skipped'
+
+[names]
+failing = ['^(\S+ > \S+) FAILED$']
+broken = ["^Execution failed for task ':\\S*compile\\w*'"]

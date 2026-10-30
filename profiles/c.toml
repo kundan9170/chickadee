@@ -1,0 +1,33 @@
+name = "c"
+# `.h` is C's (D203): a header shared with C++ is read by C's grammar, which parses the C
+# subset such headers mostly are. A parse gap there is a gap, not a refusal (GR-4).
+extensions = [".c", ".h"]
+tree_sitter_grammar = "c"
+
+[syntax]
+# The grammar's parse, in process (D203 decision 3): a compiler needs the build's include
+# paths and macros to say anything about one file.
+mode = "parse"
+
+[tests]
+globs = ["**/test/**", "**/tests/**", "test_*.c", "*_test.c"]
+# No runner is shipped: C has no one test convention (`make check`, `ctest`, a script). A
+# repository states its own, and until it does nothing claims its tests ran.
+
+[build]
+compile_cmd = ""
+import_smoke = ""
+
+[deps]
+manifests = ["Makefile", "CMakeLists.txt", "meson.build"]
+
+[examples]
+snippet = """
+assert({symbol}({input}) == {output});
+"""
+
+[conventions]
+file = "conventions/c.md"
+
+[lsp]
+server = "clangd"

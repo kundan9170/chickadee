@@ -1,0 +1,38 @@
+name = "java"
+extensions = [".java"]
+tree_sitter_grammar = "java"
+
+[syntax]
+# The grammar's parse, in process (D203 decision 3). `javac` needs the classpath to say
+# anything about one file.
+mode = "parse"
+
+[tests]
+globs = ["**/src/test/**", "*Test.java", "*Tests.java", "*IT.java"]
+# Maven, the default build, its goal first so the command table reads it; Surefire selects by class name (`-Dtest=`), not by file, so the
+# whole suite runs. A Gradle project overrides this (`gradle test`).
+runner = "mvn test -q"
+timeout_s = 600
+
+[build]
+compile_cmd = "mvn compile -q"
+import_smoke = ""
+
+[deps]
+manifests = ["pom.xml", "build.gradle", "build.gradle.kts"]
+# Maven has no command that adds a dependency: an edit to pom.xml is how one is added.
+
+[examples]
+snippet = """
+assertEquals({output}, {symbol}({input}));
+"""
+
+[conventions]
+file = "conventions/java.md"
+
+[lsp]
+server = "jdtls"
+
+[toolchain]
+# D109: every artifact the build needs, once at worktree creation.
+bootstrap = ["mvn", "dependency:go-offline", "-q"]

@@ -1,0 +1,10 @@
+--- FAIL: TestBad (0.00s)
+    a_test.go:4: no
+--- FAIL: TestSub (0.00s)
+    --- FAIL: TestSub/one (0.00s)
+        a_test.go:5: x
+FAIL
+FAIL	example.com/m/a	0.004s
+ok  	example.com/m/b	0.002s
+?   	example.com/m/c	[no test files]
+FAIL

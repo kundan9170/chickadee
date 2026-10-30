@@ -1,0 +1,55 @@
+name = "python"
+extensions = [".py", ".pyi"]
+tree_sitter_grammar = "python"
+
+[syntax]
+# In-process: the language's own parser, no spawn. The syntax check runs after every edit
+# call, so the cost of a subprocess here would be paid thousands of times per run.
+mode = "inproc"
+
+[tests]
+globs = ["**/tests/**", "test_*.py", "*_test.py", "conftest.py"]
+runner = "pytest -q {selector}"
+timeout_s = 120
+
+[build]
+compile_cmd = ""
+# D109: prints where the module came from; a path outside the worktree is ENV_MISMATCH.
+import_smoke = "python -c 'import {module} as m; print(m.__file__)'"
+
+[deps]
+manifests = ["pyproject.toml", "requirements.txt", "setup.cfg", "setup.py"]
+install_cmd = "uv add {name}"
+
+[examples]
+snippet = """
+from {module} import {symbol}
+assert {symbol}({input}) == {output}
+"""
+
+[conventions]
+file = "conventions/python.md"
+
+[lsp]
+# basedpyright, pyright's fork that bundles Node: Chickadee ships it (`packages/core`), so its
+# first start downloads nothing in a sandbox with no network. A repository's own `.venv` copy
+# is used first (`profiles/tools.find_tool`); one that wants pyright's overrides this line.
+server = "basedpyright-langserver --stdio"
+
+# The client's defaults, which a repository's own `pyrightconfig.json` or `[tool.basedpyright]`
+# overrides: pyright's `standard` checks, not basedpyright's stricter `recommended`, so a
+# repository with no configuration is judged as pyright would judge it.
+[lsp.settings.basedpyright.analysis]
+typeCheckingMode = "standard"
+
+[lint]
+# D237 B2: ruff's own server, kept beside pyright and asked each changed file's verdict. It
+# reads the repository's ruff configuration, or ruff's defaults where there is none.
+server = "ruff server"
+
+[toolchain]
+# D109: runs once at worktree creation, as the episode's first operation, through
+# Isolation + ProcessSupervisor with the network its class allows (lockfile_install, T1).
+# An argv list, never a shell string. Installs fresh from the lockfile — the source
+# checkout's .venv is an editable install pointing at the unpatched tree.
+bootstrap = ["uv", "sync", "--frozen"]

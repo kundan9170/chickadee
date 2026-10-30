@@ -1,0 +1,38 @@
+name = "php"
+extensions = [".php"]
+tree_sitter_grammar = "php"
+
+[syntax]
+# The grammar's parse, in process (D203 decision 3), where `php -l` would spawn per edit.
+mode = "parse"
+
+[tests]
+globs = ["tests/**", "**/tests/**", "*Test.php"]
+# PHPUnit takes test file paths; Composer installs it under vendor/bin.
+runner = "vendor/bin/phpunit {selector}"
+timeout_s = 300
+
+[build]
+compile_cmd = ""
+import_smoke = ""
+
+[deps]
+manifests = ["composer.json"]
+install_cmd = "composer require {name}"
+
+[examples]
+snippet = """
+$this->assertSame({output}, {symbol}({input}));
+"""
+
+[conventions]
+file = "conventions/php.md"
+
+[lsp]
+server = "intelephense --stdio"
+# Run by `chickadee setup` when the server is missing and the person says yes.
+install = "npm install --global --prefix {dir} intelephense"
+
+[toolchain]
+# D109: the packages composer.lock names, once at worktree creation.
+bootstrap = ["composer", "install"]

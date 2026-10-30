@@ -1,0 +1,226 @@
+# Every answer that moved between the six matchers before D168 (deny: D171) and the one matcher after.
+# caller	glob	path	before	after	why
+deny	**/*.py	a**b.py	no match	match	D168 rule 2: `**/` is zero or more directories
+deny	**/*.py	a.py	no match	match	D168 rule 2: `**/` is zero or more directories
+deny	**/*.py	axb.py	no match	match	D168 rule 2: `**/` is zero or more directories
+deny	**/*.py	conftest.py	no match	match	D168 rule 2: `**/` is zero or more directories
+deny	**/*.py	test_1.py	no match	match	D168 rule 2: `**/` is zero or more directories
+deny	**/*.yaml	app.yaml	no match	match	D168 rule 2: `**/` is zero or more directories
+deny	**/migrations/**	migrations/x.py	no match	match	D168 rule 2: `**/` is zero or more directories
+deny	**/prisma/**	prisma/schema.prisma	no match	match	D168 rule 2: `**/` is zero or more directories
+deny	**/schema/**	schema/a.py	no match	match	D168 rule 2: `**/` is zero or more directories
+deny	**/test/**	test/a.js	no match	match	D168 rule 2: `**/` is zero or more directories
+deny	**/test_*.py	test_1.py	no match	match	D168 rule 2: `**/` is zero or more directories
+deny	**/tests	tests	no match	match	D168 rule 2: `**/` is zero or more directories
+deny	**/tests/**	tests/test_a.py	no match	match	D168 rule 2: `**/` is zero or more directories
+deny	**/tests/**	tests/unit/test_b.py	no match	match	D168 rule 2: `**/` is zero or more directories
+deny	*/*.py	db/migrations/0001.py	match	no match	D168 rule 1: `*` stays within one segment
+deny	*/*.py	pkg/tests/helpers.py	match	no match	D168 rule 1: `*` stays within one segment
+deny	*/*.py	pkg/tests/test_x.py	match	no match	D168 rule 1: `*` stays within one segment
+deny	*/*.py	src/a/b.py	match	no match	D168 rule 1: `*` stays within one segment
+deny	*/*.py	src/a/b/c.py	match	no match	D168 rule 1: `*` stays within one segment
+deny	*/*.py	tests/unit/test_b.py	match	no match	D168 rule 1: `*` stays within one segment
+deny	*/*.py	x/alembic/versions/a.py	match	no match	D168 rule 1: `*` stays within one segment
+deny	/src/*.py	src/.hidden.py	no match	match	D168 rule 4: a leading `/` anchors at the root
+deny	/src/*.py	src/a.py	no match	match	D168 rule 4: a leading `/` anchors at the root
+deny	/src/*.py	src/a_test.py	no match	match	D168 rule 4: a leading `/` anchors at the root
+deny	[ab]*.py	schema/a.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+deny	[ab]*.py	src/a.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+deny	[ab]*.py	src/a/b.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+deny	[ab]*.py	src/a_test.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+deny	[ab]*.py	x/alembic/versions/a.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+deny	a/**/b	a/b	no match	match	D168 rule 2: `**/` is zero or more directories
+deny	conftest.py	pkg/conftest.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+deny	docs/*.md	docs/a/y.md	match	no match	D168 rule 1: `*` stays within one segment
+deny	src/*	src/a/b.py	match	no match	D168 rule 1: `*` stays within one segment
+deny	src/*	src/a/b/c.py	match	no match	D168 rule 1: `*` stays within one segment
+deny	src/*	src/test/a.js	match	no match	D168 rule 1: `*` stays within one segment
+deny	src/**.py	src/a/b.py	match	no match	D168 rule 6: `**` not a whole segment is `*`
+deny	src/**.py	src/a/b/c.py	match	no match	D168 rule 6: `**` not a whole segment is `*`
+deny	src/**/*.py	src/.hidden.py	no match	match	D168 rule 2: `**/` is zero or more directories
+deny	src/**/*.py	src/a.py	no match	match	D168 rule 2: `**/` is zero or more directories
+deny	src/**/*.py	src/a_test.py	no match	match	D168 rule 2: `**/` is zero or more directories
+deny	src/*.py	src/a/b.py	match	no match	D168 rule 1: `*` stays within one segment
+deny	src/*.py	src/a/b/c.py	match	no match	D168 rule 1: `*` stays within one segment
+deny	src/a/	src/a/b.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+deny	src/a/	src/a/b/c.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+deny	test_*.py	pkg/tests/test_x.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+deny	test_*.py	test_utils/helpers.py	match	no match	D168 rule 3: a glob with no `/` is the base name, at any depth
+deny	test_*.py	tests/test_a.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+deny	test_*.py	tests/unit/test_b.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+deny	test_?.py	pkg/tests/test_x.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+deny	test_?.py	tests/test_a.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+deny	test_?.py	tests/unit/test_b.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+deny	tests/	pkg/tests/helpers.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+deny	tests/	pkg/tests/test_x.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+deny	tests/	tests/test_a.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+deny	tests/	tests/unit/test_b.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+effects	**/*.py	a**b.py	no match	match	D168 rule 2: `**/` is zero or more directories
+effects	**/*.py	a.py	no match	match	D168 rule 2: `**/` is zero or more directories
+effects	**/*.py	axb.py	no match	match	D168 rule 2: `**/` is zero or more directories
+effects	**/*.py	conftest.py	no match	match	D168 rule 2: `**/` is zero or more directories
+effects	**/*.py	test_1.py	no match	match	D168 rule 2: `**/` is zero or more directories
+effects	**/*.yaml	app.yaml	no match	match	D168 rule 2: `**/` is zero or more directories
+effects	**/migrations/**	migrations/x.py	no match	match	D168 rule 2: `**/` is zero or more directories
+effects	**/prisma/**	prisma/schema.prisma	no match	match	D168 rule 2: `**/` is zero or more directories
+effects	**/schema/**	schema/a.py	no match	match	D168 rule 2: `**/` is zero or more directories
+effects	**/test/**	test/a.js	no match	match	D168 rule 2: `**/` is zero or more directories
+effects	**/test_*.py	test_1.py	no match	match	D168 rule 2: `**/` is zero or more directories
+effects	**/tests	tests	no match	match	D168 rule 2: `**/` is zero or more directories
+effects	**/tests/**	tests/test_a.py	no match	match	D168 rule 2: `**/` is zero or more directories
+effects	**/tests/**	tests/unit/test_b.py	no match	match	D168 rule 2: `**/` is zero or more directories
+effects	*/*.py	db/migrations/0001.py	match	no match	D168 rule 1: `*` stays within one segment
+effects	*/*.py	pkg/tests/helpers.py	match	no match	D168 rule 1: `*` stays within one segment
+effects	*/*.py	pkg/tests/test_x.py	match	no match	D168 rule 1: `*` stays within one segment
+effects	*/*.py	src/a/b.py	match	no match	D168 rule 1: `*` stays within one segment
+effects	*/*.py	src/a/b/c.py	match	no match	D168 rule 1: `*` stays within one segment
+effects	*/*.py	tests/unit/test_b.py	match	no match	D168 rule 1: `*` stays within one segment
+effects	*/*.py	x/alembic/versions/a.py	match	no match	D168 rule 1: `*` stays within one segment
+effects	/src/*.py	src/.hidden.py	no match	match	D168 rule 4: a leading `/` anchors at the root
+effects	/src/*.py	src/a.py	no match	match	D168 rule 4: a leading `/` anchors at the root
+effects	/src/*.py	src/a_test.py	no match	match	D168 rule 4: a leading `/` anchors at the root
+effects	[ab]*.py	schema/a.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+effects	[ab]*.py	src/a.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+effects	[ab]*.py	src/a/b.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+effects	[ab]*.py	src/a_test.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+effects	[ab]*.py	x/alembic/versions/a.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+effects	a/**/b	a/b	no match	match	D168 rule 2: `**/` is zero or more directories
+effects	conftest.py	pkg/conftest.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+effects	docs/*.md	docs/a/y.md	match	no match	D168 rule 1: `*` stays within one segment
+effects	migrations/**	migrations	match	no match	D168 rule 2: `a/**` is what is inside `a`, not `a` itself
+effects	src/*	src/a/b.py	match	no match	D168 rule 1: `*` stays within one segment
+effects	src/*	src/a/b/c.py	match	no match	D168 rule 1: `*` stays within one segment
+effects	src/*	src/test/a.js	match	no match	D168 rule 1: `*` stays within one segment
+effects	src/**.py	src/a/b.py	match	no match	D168 rule 6: `**` not a whole segment is `*`
+effects	src/**.py	src/a/b/c.py	match	no match	D168 rule 6: `**` not a whole segment is `*`
+effects	src/**/*.py	src/.hidden.py	no match	match	D168 rule 2: `**/` is zero or more directories
+effects	src/**/*.py	src/a.py	no match	match	D168 rule 2: `**/` is zero or more directories
+effects	src/**/*.py	src/a_test.py	no match	match	D168 rule 2: `**/` is zero or more directories
+effects	src/*.py	src/a/b.py	match	no match	D168 rule 1: `*` stays within one segment
+effects	src/*.py	src/a/b/c.py	match	no match	D168 rule 1: `*` stays within one segment
+effects	src/a/	src/a/b.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+effects	src/a/	src/a/b/c.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+effects	test_*.py	pkg/tests/test_x.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+effects	test_*.py	test_utils/helpers.py	match	no match	D168 rule 3: a glob with no `/` is the base name, at any depth
+effects	test_*.py	tests/test_a.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+effects	test_*.py	tests/unit/test_b.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+effects	test_?.py	pkg/tests/test_x.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+effects	test_?.py	tests/test_a.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+effects	test_?.py	tests/unit/test_b.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+effects	tests/	pkg/tests/helpers.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+effects	tests/	pkg/tests/test_x.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+effects	tests/	tests/test_a.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+effects	tests/	tests/unit/test_b.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+effects	tests/**	tests	match	no match	D168 rule 2: `a/**` is what is inside `a`, not `a` itself
+ignore	[!a]*.txt	app.txt	match	no match	D168 rule 7: `[!…]` negates
+ignore	[!a]*.txt	bin.txt	no match	match	D168 rule 7: `[!…]` negates
+ignore	[!a]*.txt	notes.txt	no match	match	D168 rule 7: `[!…]` negates
+ignore	a**b.py	src/a/b.py	match	no match	D168 rule 6: `**` not a whole segment is `*`
+ignore	src/**.py	src/a/b.py	match	no match	D168 rule 6: `**` not a whole segment is `*`
+ignore	src/**.py	src/a/b/c.py	match	no match	D168 rule 6: `**` not a whole segment is `*`
+paths	**/*.py	a**b.py	no match	match	D168 rule 2: `**/` is zero or more directories
+paths	**/*.py	a.py	no match	match	D168 rule 2: `**/` is zero or more directories
+paths	**/*.py	axb.py	no match	match	D168 rule 2: `**/` is zero or more directories
+paths	**/*.py	conftest.py	no match	match	D168 rule 2: `**/` is zero or more directories
+paths	**/*.py	test_1.py	no match	match	D168 rule 2: `**/` is zero or more directories
+paths	**/*.yaml	app.yaml	no match	match	D168 rule 2: `**/` is zero or more directories
+paths	**/migrations/**	migrations	match	no match	D168 rule 2: `a/**` is what is inside `a`, not `a` itself
+paths	**/test_*.py	test_1.py	no match	match	D168 rule 2: `**/` is zero or more directories
+paths	**/tests	tests	no match	match	D168 rule 2: `**/` is zero or more directories
+paths	**/tests/**	tests	match	no match	D168 rule 2: `a/**` is what is inside `a`, not `a` itself
+paths	*/*.py	db/migrations/0001.py	match	no match	D168 rule 1: `*` stays within one segment
+paths	*/*.py	pkg/tests/helpers.py	match	no match	D168 rule 1: `*` stays within one segment
+paths	*/*.py	pkg/tests/test_x.py	match	no match	D168 rule 1: `*` stays within one segment
+paths	*/*.py	src/a/b.py	match	no match	D168 rule 1: `*` stays within one segment
+paths	*/*.py	src/a/b/c.py	match	no match	D168 rule 1: `*` stays within one segment
+paths	*/*.py	tests/unit/test_b.py	match	no match	D168 rule 1: `*` stays within one segment
+paths	*/*.py	x/alembic/versions/a.py	match	no match	D168 rule 1: `*` stays within one segment
+paths	/src/*.py	src/.hidden.py	no match	match	D168 rule 4: a leading `/` anchors at the root
+paths	/src/*.py	src/a.py	no match	match	D168 rule 4: a leading `/` anchors at the root
+paths	/src/*.py	src/a_test.py	no match	match	D168 rule 4: a leading `/` anchors at the root
+paths	a/**/b	a/b	no match	match	D168 rule 2: `**/` is zero or more directories
+paths	docs/*.md	docs/a/y.md	match	no match	D168 rule 1: `*` stays within one segment
+paths	migrations/**	migrations	match	no match	D168 rule 2: `a/**` is what is inside `a`, not `a` itself
+paths	src/*	src/a/b.py	match	no match	D168 rule 1: `*` stays within one segment
+paths	src/*	src/a/b/c.py	match	no match	D168 rule 1: `*` stays within one segment
+paths	src/*	src/test/a.js	match	no match	D168 rule 1: `*` stays within one segment
+paths	src/**.py	src/a/b.py	match	no match	D168 rule 6: `**` not a whole segment is `*`
+paths	src/**.py	src/a/b/c.py	match	no match	D168 rule 6: `**` not a whole segment is `*`
+paths	src/**/*.py	src/.hidden.py	no match	match	D168 rule 2: `**/` is zero or more directories
+paths	src/**/*.py	src/a.py	no match	match	D168 rule 2: `**/` is zero or more directories
+paths	src/**/*.py	src/a_test.py	no match	match	D168 rule 2: `**/` is zero or more directories
+paths	src/*.py	src/a/b.py	match	no match	D168 rule 1: `*` stays within one segment
+paths	src/*.py	src/a/b/c.py	match	no match	D168 rule 1: `*` stays within one segment
+paths	src/a/	src/a/b.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+paths	src/a/	src/a/b/c.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+paths	tests/	pkg/tests/helpers.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+paths	tests/	pkg/tests/test_x.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+paths	tests/	tests/test_a.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+paths	tests/	tests/unit/test_b.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+paths	tests/**	tests	match	no match	D168 rule 2: `a/**` is what is inside `a`, not `a` itself
+preferences	**/*.py	a**b.py	no match	match	D168 rule 2: `**/` is zero or more directories
+preferences	**/*.py	a.py	no match	match	D168 rule 2: `**/` is zero or more directories
+preferences	**/*.py	axb.py	no match	match	D168 rule 2: `**/` is zero or more directories
+preferences	**/*.py	conftest.py	no match	match	D168 rule 2: `**/` is zero or more directories
+preferences	**/*.py	test_1.py	no match	match	D168 rule 2: `**/` is zero or more directories
+preferences	**/*.yaml	app.yaml	no match	match	D168 rule 2: `**/` is zero or more directories
+preferences	**/migrations/**	migrations/x.py	no match	match	D168 rule 2: `**/` is zero or more directories
+preferences	**/prisma/**	prisma/schema.prisma	no match	match	D168 rule 2: `**/` is zero or more directories
+preferences	**/schema/**	schema/a.py	no match	match	D168 rule 2: `**/` is zero or more directories
+preferences	**/test/**	test/a.js	no match	match	D168 rule 2: `**/` is zero or more directories
+preferences	**/test_*.py	test_1.py	no match	match	D168 rule 2: `**/` is zero or more directories
+preferences	**/tests	tests	no match	match	D168 rule 2: `**/` is zero or more directories
+preferences	**/tests/**	tests/test_a.py	no match	match	D168 rule 2: `**/` is zero or more directories
+preferences	**/tests/**	tests/unit/test_b.py	no match	match	D168 rule 2: `**/` is zero or more directories
+preferences	*/*.py	db/migrations/0001.py	match	no match	D168 rule 1: `*` stays within one segment
+preferences	*/*.py	pkg/tests/helpers.py	match	no match	D168 rule 1: `*` stays within one segment
+preferences	*/*.py	pkg/tests/test_x.py	match	no match	D168 rule 1: `*` stays within one segment
+preferences	*/*.py	src/a/b.py	match	no match	D168 rule 1: `*` stays within one segment
+preferences	*/*.py	src/a/b/c.py	match	no match	D168 rule 1: `*` stays within one segment
+preferences	*/*.py	tests/unit/test_b.py	match	no match	D168 rule 1: `*` stays within one segment
+preferences	*/*.py	x/alembic/versions/a.py	match	no match	D168 rule 1: `*` stays within one segment
+preferences	/src/*.py	src/.hidden.py	no match	match	D168 rule 4: a leading `/` anchors at the root
+preferences	/src/*.py	src/a.py	no match	match	D168 rule 4: a leading `/` anchors at the root
+preferences	/src/*.py	src/a_test.py	no match	match	D168 rule 4: a leading `/` anchors at the root
+preferences	[ab]*.py	schema/a.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+preferences	[ab]*.py	src/a.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+preferences	[ab]*.py	src/a/b.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+preferences	[ab]*.py	src/a_test.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+preferences	[ab]*.py	x/alembic/versions/a.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+preferences	a/**/b	a/b	no match	match	D168 rule 2: `**/` is zero or more directories
+preferences	conftest.py	pkg/conftest.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+preferences	docs/*.md	docs/a/y.md	match	no match	D168 rule 1: `*` stays within one segment
+preferences	src/*	src/a/b.py	match	no match	D168 rule 1: `*` stays within one segment
+preferences	src/*	src/a/b/c.py	match	no match	D168 rule 1: `*` stays within one segment
+preferences	src/*	src/test/a.js	match	no match	D168 rule 1: `*` stays within one segment
+preferences	src/**.py	src/a/b.py	match	no match	D168 rule 6: `**` not a whole segment is `*`
+preferences	src/**.py	src/a/b/c.py	match	no match	D168 rule 6: `**` not a whole segment is `*`
+preferences	src/**/*.py	src/.hidden.py	no match	match	D168 rule 2: `**/` is zero or more directories
+preferences	src/**/*.py	src/a.py	no match	match	D168 rule 2: `**/` is zero or more directories
+preferences	src/**/*.py	src/a_test.py	no match	match	D168 rule 2: `**/` is zero or more directories
+preferences	src/*.py	src/a/b.py	match	no match	D168 rule 1: `*` stays within one segment
+preferences	src/*.py	src/a/b/c.py	match	no match	D168 rule 1: `*` stays within one segment
+preferences	src/a/	src/a/b.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+preferences	src/a/	src/a/b/c.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+preferences	test_*.py	pkg/tests/test_x.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+preferences	test_*.py	test_utils/helpers.py	match	no match	D168 rule 3: a glob with no `/` is the base name, at any depth
+preferences	test_*.py	tests/test_a.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+preferences	test_*.py	tests/unit/test_b.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+preferences	test_?.py	pkg/tests/test_x.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+preferences	test_?.py	tests/test_a.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+preferences	test_?.py	tests/unit/test_b.py	no match	match	D168 rule 3: a glob with no `/` is the base name, at any depth
+preferences	tests/	pkg/tests/helpers.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+preferences	tests/	pkg/tests/test_x.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+preferences	tests/	tests/test_a.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+preferences	tests/	tests/unit/test_b.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+scout	/src/*.py	src/.hidden.py	no match	match	D168 rule 4: a leading `/` anchors at the root
+scout	/src/*.py	src/a.py	no match	match	D168 rule 4: a leading `/` anchors at the root
+scout	/src/*.py	src/a_test.py	no match	match	D168 rule 4: a leading `/` anchors at the root
+scout	src/**.py	src/a/b.py	match	no match	D168 rule 6: `**` not a whole segment is `*`
+scout	src/**.py	src/a/b/c.py	match	no match	D168 rule 6: `**` not a whole segment is `*`
+scout	src/a/	src/a/b.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+scout	src/a/	src/a/b/c.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+scout	tests/	pkg/tests/helpers.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+scout	tests/	pkg/tests/test_x.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+scout	tests/	tests/test_a.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory
+scout	tests/	tests/unit/test_b.py	no match	match	D168 rule 5: a trailing `/` is everything inside the directory

@@ -1,0 +1,885 @@
+{
+  "$defs": {
+    "CommandFactP": {
+      "additionalProperties": false,
+      "description": "One command a task ran, from its step and its `exec` line.",
+      "properties": {
+        "command": {
+          "title": "Command",
+          "type": "string"
+        },
+        "exit_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exit Code"
+        },
+        "failing": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Failing",
+          "type": "array"
+        },
+        "operation_id": {
+          "title": "Operation Id",
+          "type": "string"
+        },
+        "output_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Output Sha"
+        },
+        "tail": {
+          "title": "Tail",
+          "type": "string"
+        },
+        "test_outcome": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Test Outcome"
+        },
+        "timed_out": {
+          "title": "Timed Out",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "operation_id",
+        "command",
+        "timed_out",
+        "tail"
+      ],
+      "title": "CommandFactP",
+      "type": "object"
+    },
+    "DiagnosticsSeen": {
+      "additionalProperties": false,
+      "description": "The task's files at the stop against their kept start, each problem as\n`file:line source code message`.",
+      "properties": {
+        "already": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Already",
+          "type": "array"
+        },
+        "new_errors": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "New Errors",
+          "type": "array"
+        },
+        "new_warnings": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "New Warnings",
+          "type": "array"
+        },
+        "no_record": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "No Record",
+          "type": "array"
+        },
+        "unchecked": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Unchecked",
+          "type": "array"
+        }
+      },
+      "title": "DiagnosticsSeen",
+      "type": "object"
+    },
+    "FileFactP": {
+      "additionalProperties": false,
+      "description": "One file a task changed, measured between its start tree and its end tree.",
+      "properties": {
+        "added": {
+          "minimum": 0,
+          "title": "Added",
+          "type": "integer"
+        },
+        "kind": {
+          "enum": [
+            "created",
+            "edited",
+            "deleted"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "removed": {
+          "minimum": 0,
+          "title": "Removed",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "path",
+        "added",
+        "removed",
+        "kind"
+      ],
+      "title": "FileFactP",
+      "type": "object"
+    },
+    "HookPoint": {
+      "enum": [
+        "session_start",
+        "prompt_submitted",
+        "before_request",
+        "before_tool",
+        "after_tool",
+        "after_step",
+        "after_batch",
+        "before_stop",
+        "permission_asked",
+        "round_ended",
+        "task_reviewed",
+        "task_committed",
+        "episode_ended",
+        "before_compact",
+        "job_exited",
+        "session_end"
+      ],
+      "title": "HookPoint",
+      "type": "string"
+    },
+    "JsonValue": {},
+    "ProgressCall": {
+      "additionalProperties": false,
+      "description": "One worker call as the progress record tagged it (`box/progress.py`).",
+      "properties": {
+        "about": {
+          "title": "About",
+          "type": "string"
+        },
+        "changed": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Changed",
+          "type": "array"
+        },
+        "file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "File"
+        },
+        "key": {
+          "title": "Key",
+          "type": "string"
+        },
+        "regressed": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Regression"
+          },
+          "title": "Regressed",
+          "type": "array"
+        },
+        "response": {
+          "title": "Response",
+          "type": "integer"
+        },
+        "run": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TestRunSeen"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "tag": {
+          "enum": [
+            "changed",
+            "learned",
+            "nothing"
+          ],
+          "title": "Tag",
+          "type": "string"
+        },
+        "tool": {
+          "title": "Tool",
+          "type": "string"
+        },
+        "weight": {
+          "default": 1,
+          "title": "Weight",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "response",
+        "tool",
+        "tag",
+        "key",
+        "about"
+      ],
+      "title": "ProgressCall",
+      "type": "object"
+    },
+    "Regression": {
+      "additionalProperties": false,
+      "description": "A test broken and still failing after more changes: the note that\nrides on the run that confirmed it.",
+      "properties": {
+        "changed": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Changed",
+          "type": "array"
+        },
+        "passed_at": {
+          "title": "Passed At",
+          "type": "string"
+        },
+        "test": {
+          "title": "Test",
+          "type": "string"
+        }
+      },
+      "required": [
+        "test",
+        "passed_at"
+      ],
+      "title": "Regression",
+      "type": "object"
+    },
+    "SyntaxFactP": {
+      "additionalProperties": false,
+      "description": "One changed file's syntax, judged by its own language's profile over the file as the\ntask left it: the same check the edit tool reported.",
+      "properties": {
+        "depth": {
+          "anyOf": [
+            {
+              "enum": [
+                "compiled",
+                "command",
+                "parsed"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Depth"
+        },
+        "detail": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Detail"
+        },
+        "ok": {
+          "title": "Ok",
+          "type": "boolean"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "ok"
+      ],
+      "title": "SyntaxFactP",
+      "type": "object"
+    },
+    "TaskFactsP": {
+      "additionalProperties": false,
+      "description": "What a task did, measured from the trees and the journal, never from the\nreport.",
+      "properties": {
+        "commands": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/CommandFactP"
+          },
+          "title": "Commands",
+          "type": "array"
+        },
+        "end_tree": {
+          "title": "End Tree",
+          "type": "string"
+        },
+        "files": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/FileFactP"
+          },
+          "title": "Files",
+          "type": "array"
+        },
+        "skipped": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Skipped",
+          "type": "array"
+        },
+        "start_tree": {
+          "title": "Start Tree",
+          "type": "string"
+        },
+        "symbols_added": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Symbols Added",
+          "type": "array"
+        },
+        "symbols_known": {
+          "default": true,
+          "title": "Symbols Known",
+          "type": "boolean"
+        },
+        "symbols_removed": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Symbols Removed",
+          "type": "array"
+        },
+        "syntax": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/SyntaxFactP"
+          },
+          "title": "Syntax",
+          "type": "array"
+        },
+        "tests_added": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Tests Added",
+          "type": "array"
+        },
+        "tests_edited": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Tests Edited",
+          "type": "array"
+        }
+      },
+      "required": [
+        "start_tree",
+        "end_tree"
+      ],
+      "title": "TaskFactsP",
+      "type": "object"
+    },
+    "TestRunSeen": {
+      "additionalProperties": false,
+      "description": "A test run as the progress record read it: how it was read, what it\ncounted, and what it changed in the record of the task's tests.",
+      "properties": {
+        "broken": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Broken",
+          "type": "array"
+        },
+        "errors": {
+          "default": 0,
+          "title": "Errors",
+          "type": "integer"
+        },
+        "failed": {
+          "default": 0,
+          "title": "Failed",
+          "type": "integer"
+        },
+        "failing": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Failing",
+          "type": "array"
+        },
+        "fixed": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Fixed",
+          "type": "array"
+        },
+        "how": {
+          "enum": [
+            "summary",
+            "exit_code",
+            "partial",
+            "stopped"
+          ],
+          "title": "How",
+          "type": "string"
+        },
+        "outcome": {
+          "title": "Outcome",
+          "type": "string"
+        },
+        "passed": {
+          "default": 0,
+          "title": "Passed",
+          "type": "integer"
+        },
+        "unit": {
+          "default": "test",
+          "enum": [
+            "test",
+            "package"
+          ],
+          "title": "Unit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "outcome",
+        "how"
+      ],
+      "title": "TestRunSeen",
+      "type": "object"
+    },
+    "TestsSeen": {
+      "additionalProperties": false,
+      "description": "The task's tests as its runs left them, for the reader of a report.",
+      "properties": {
+        "already_failing": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Already Failing",
+          "type": "array"
+        },
+        "broken": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Broken",
+          "type": "array"
+        },
+        "edited": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Edited",
+          "type": "array"
+        },
+        "failing": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Failing",
+          "type": "array"
+        },
+        "fixed": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Fixed",
+          "type": "array"
+        }
+      },
+      "title": "TestsSeen",
+      "type": "object"
+    },
+    "WorkerProgress": {
+      "additionalProperties": false,
+      "description": "The worker's progress this round, as the progress record holds it:\nevery call in order, with what a hook needs to say what was ignored. A hook replays it, so\nit holds no state of its own.",
+      "properties": {
+        "brief_files": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Brief Files",
+          "type": "array"
+        },
+        "calls": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ProgressCall"
+          },
+          "title": "Calls",
+          "type": "array"
+        },
+        "calls_left": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Calls Left"
+        },
+        "diagnostics": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DiagnosticsSeen"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "failure_call": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Failure Call"
+        },
+        "failure_files": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Failure Files",
+          "type": "array"
+        },
+        "last_failure": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Failure"
+        },
+        "opened": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Opened",
+          "type": "array"
+        },
+        "runnable": {
+          "default": false,
+          "title": "Runnable",
+          "type": "boolean"
+        },
+        "tests": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TestsSeen"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "WorkerProgress",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "calls_left": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Calls Left"
+    },
+    "chickadee_event": {
+      "$ref": "#/$defs/HookPoint"
+    },
+    "cwd": {
+      "title": "Cwd",
+      "type": "string"
+    },
+    "facts": {
+      "$ref": "#/$defs/TaskFactsP"
+    },
+    "hook_event_name": {
+      "title": "Hook Event Name",
+      "type": "string"
+    },
+    "last_assistant_message": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Last Assistant Message"
+    },
+    "model": {
+      "title": "Model",
+      "type": "string"
+    },
+    "progress": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/WorkerProgress"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "report": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Report"
+    },
+    "retries_left": {
+      "default": 0,
+      "title": "Retries Left",
+      "type": "integer"
+    },
+    "retries_used": {
+      "default": 0,
+      "title": "Retries Used",
+      "type": "integer"
+    },
+    "role": {
+      "title": "Role",
+      "type": "string"
+    },
+    "round": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Round"
+    },
+    "run_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Run Id"
+    },
+    "session_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Session Id"
+    },
+    "stop_hook_active": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Stop Hook Active"
+    },
+    "stopped": {
+      "enum": [
+        "replied",
+        "limit",
+        "looped",
+        "context_full",
+        "model_error",
+        "harness_error",
+        "halted",
+        "held"
+      ],
+      "title": "Stopped",
+      "type": "string"
+    },
+    "task": {
+      "title": "Task",
+      "type": "string"
+    },
+    "task_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Task Id"
+    },
+    "tool_input": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tool Input"
+    },
+    "tool_name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tool Name"
+    },
+    "tool_name_sent": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tool Name Sent"
+    },
+    "tool_response": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tool Response"
+    }
+  },
+  "required": [
+    "task",
+    "round",
+    "stopped",
+    "report",
+    "facts",
+    "hook_event_name",
+    "chickadee_event",
+    "session_id",
+    "cwd",
+    "role",
+    "model",
+    "run_id",
+    "task_id"
+  ],
+  "title": "RoundEndedInput",
+  "type": "object"
+}

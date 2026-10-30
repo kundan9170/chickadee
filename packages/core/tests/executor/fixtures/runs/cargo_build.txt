@@ -1,0 +1,13 @@
+   Compiling rs v0.1.0 (/work/rs)
+error: this file contains an unclosed delimiter
+  --> src/lib.rs:10:9
+   |
+10 | fn x( {
+   |     - -^
+   |     | |
+   |     | unclosed delimiter
+   |     unclosed delimiter
+
+error: could not compile `rs` (lib test) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `rs` (lib) due to 1 previous error

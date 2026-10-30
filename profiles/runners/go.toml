@@ -1,0 +1,21 @@
+name = "go"
+unit = "package"
+
+[[summary]]
+line = '^ok\s+\S+\s+(?:[\d.]+s|\(cached\))(?:\s+coverage:.*)?$'
+passed = '^ok'
+
+[[summary]]
+line = '^ok\s+\S+\s+.*\[no tests to run\]$'
+
+[[summary]]
+line = '^FAIL\s+\S+\s+[\d.]+s$'
+failed = '^FAIL'
+
+[[summary]]
+line = '^FAIL\s+\S+\s+\[(?:build|setup) failed\]$'
+errors = '^FAIL'
+
+[names]
+failing = ['^\s*--- FAIL: (\S+)']
+passing = ['^\s*--- PASS: (\S+)']

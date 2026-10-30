@@ -1,0 +1,1 @@
+replace_symbol(path, symbol, content): replace a whole declaration in the file, named by symbol (qualified, as Widget.render, when the name is not unique), with content; its decorators are part of it, so write them in content once.

@@ -1,0 +1,41 @@
+name = "rust"
+extensions = [".rs"]
+tree_sitter_grammar = "rust"
+
+[syntax]
+# The grammar's parse, in process (D203 decision 3). `cargo check` is the compiler's word,
+# minutes on a cold cache: the build check below.
+mode = "parse"
+
+[tests]
+# Unit tests live beside the code (`#[cfg(test)]`), so only integration tests are files of
+# their own.
+globs = ["tests/**", "**/tests/**", "benches/**"]
+# `cargo test`'s argument filters test names, not files: the whole crate runs.
+runner = "cargo test"
+timeout_s = 600
+
+[build]
+compile_cmd = "cargo check"
+import_smoke = ""
+
+[deps]
+manifests = ["Cargo.toml"]
+install_cmd = "cargo add {name}"
+
+[examples]
+snippet = """
+assert_eq!({symbol}({input}), {output});
+"""
+
+[conventions]
+file = "conventions/rust.md"
+
+[lsp]
+server = "rust-analyzer"
+# Run by `chickadee setup` when the server is missing and the person says yes.
+install = "rustup component add rust-analyzer"
+
+[toolchain]
+# D109: the crates Cargo.lock names, once at worktree creation.
+bootstrap = ["cargo", "fetch"]

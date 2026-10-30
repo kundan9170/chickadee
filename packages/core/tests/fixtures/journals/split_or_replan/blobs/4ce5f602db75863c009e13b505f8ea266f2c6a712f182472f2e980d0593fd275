@@ -1,0 +1,56 @@
+# Handoff — run 2026-09-30-0a1b2c3d
+
+- **Terminal:** `SOLVED`
+- **Goal:** the goal
+- **Isolation:** worktree
+- **Head:** `08895a6f2e8bd6f479221a06c1932ea76d0d4bb8`
+
+## Packets
+
+| packet | kind | state | attempts | commit | note |
+|---|---|---|---|---|---|
+| p1 | code | REPLANNED | 2 |  | cut smaller; replaced by p1-r1 |
+| p2 | code | DONE | 1 | `08895a6f2e8b` |  |
+| p1-r1 | code | DONE | 1 | `8cc854a80571` |  |
+
+## Verification
+
+- p1 (attempt 2): A1 pass, A2 fail
+- p2 (attempt 1): A1 pass, A2 pass, A3 pass, A4 pass, A5 pass, dep_reality pass, done_when pass
+- p1-r1 (attempt 1): A1 pass, A2 pass, A3 pass, A4 pass, A5 pass, dep_reality pass, done_when pass
+
+Checkpoints:
+- none were declared or reached
+
+`behavior_not_independently_verified`: no independent checkpoint passed, so the static gates are the whole of the evidence.
+
+## Second author
+
+- p1: returned `SPLIT_OR_REPLAN`
+
+## Effects
+
+| operation | kind | outcome |
+|---|---|---|
+| apply:p1:1:1 | patch_apply | succeeded |
+| rollback:p1:1:1 | patch_rollback | succeeded |
+| apply:p1:2:2 | patch_apply | succeeded |
+| rollback:p1:2:2 | patch_rollback | succeeded |
+| apply:p1-r1:1:1 | patch_apply | succeeded |
+| commit:p1-r1:1:2 | packet_commit | succeeded |
+| apply:p2:1:1 | patch_apply | succeeded |
+| commit:p2:1:2 | packet_commit | succeeded |
+
+Every effect completed and was recorded.
+
+## Cost
+
+- p1 (coder-model): 240 tokens, $0.0040
+- p2 (coder-model): 120 tokens, $0.0020
+- p1-r1 (coder-model): 120 tokens, $0.0020
+- total: 480 tokens, $0.0080
+
+## Next
+
+The worktree branch is the person's to apply or squash, keep, or discard (D55).
+Nothing was pushed.

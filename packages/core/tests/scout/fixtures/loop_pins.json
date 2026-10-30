@@ -1,0 +1,1498 @@
+{
+ "call_cap": {
+  "navigated": [
+   "symbol a",
+   "symbol b"
+  ],
+  "records": [
+   "scout_start",
+   "scout_tool",
+   "scout_tool",
+   "scout_report"
+  ],
+  "report": {
+   "calls": 2,
+   "cost_usd": 0.02,
+   "detail": "",
+   "notes": [],
+   "outcome": "found",
+   "render": "## FINDINGS    scout: local-mid \u00b7 2 calls \u00b7 0 escape(s) \u00b7 240 tokens\ntargets:\n  - pkg/net/client.py:6-11   HttpClient\ntruncated: true",
+   "searched": [
+    "symbol 'a'",
+    "symbol 'b'"
+   ],
+   "targets": 1,
+   "tokens": 240,
+   "truncated": true,
+   "unavailable": null
+  },
+  "requests": [
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ]
+   ],
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ],
+    [
+     "assistant",
+     "",
+     null,
+     [
+      "symbol",
+      "symbol",
+      "symbol"
+     ]
+    ],
+    [
+     "tool",
+     "UNRESOLVED{query: 'a'}",
+     "c0",
+     []
+    ],
+    [
+     "tool",
+     "UNRESOLVED{query: 'b'}",
+     "c1",
+     []
+    ],
+    [
+     "tool",
+     "BOUND_REACHED{bound: locate.max_tool_calls, used: 2, limit: 2} \u2014 not dispatched",
+     "c2",
+     []
+    ]
+   ]
+  ],
+  "tools": [
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ],
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ]
+  ],
+  "unused_replies": 0
+ },
+ "calls_after_the_end": {
+  "navigated": [
+   "symbol a"
+  ],
+  "records": [
+   "scout_start",
+   "scout_tool",
+   "scout_report"
+  ],
+  "report": {
+   "calls": 1,
+   "cost_usd": 0.03,
+   "detail": "",
+   "notes": [
+    "the model kept calling tools after the search ended; no findings"
+   ],
+   "outcome": "unresolved",
+   "render": "## FINDINGS    scout: local-mid \u00b7 1 calls \u00b7 0 escape(s) \u00b7 360 tokens\nnote: the model kept calling tools after the search ended; no findings\nUNRESOLVED{question: 'where is the timeout for outgoing requests set', searched: [symbol 'a']}\ntruncated: true",
+   "searched": [
+    "symbol 'a'"
+   ],
+   "targets": 0,
+   "tokens": 360,
+   "truncated": true,
+   "unavailable": null
+  },
+  "requests": [
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ]
+   ],
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ],
+    [
+     "assistant",
+     "",
+     null,
+     [
+      "symbol",
+      "symbol"
+     ]
+    ],
+    [
+     "tool",
+     "UNRESOLVED{query: 'a'}",
+     "c0",
+     []
+    ],
+    [
+     "tool",
+     "BOUND_REACHED{bound: locate.max_tool_calls, used: 1, limit: 1} \u2014 not dispatched",
+     "c1",
+     []
+    ]
+   ],
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ],
+    [
+     "assistant",
+     "",
+     null,
+     [
+      "symbol",
+      "symbol"
+     ]
+    ],
+    [
+     "tool",
+     "UNRESOLVED{query: 'a'}",
+     "c0",
+     []
+    ],
+    [
+     "tool",
+     "BOUND_REACHED{bound: locate.max_tool_calls, used: 1, limit: 1} \u2014 not dispatched",
+     "c1",
+     []
+    ],
+    [
+     "assistant",
+     "",
+     null,
+     [
+      "symbol"
+     ]
+    ],
+    [
+     "tool",
+     "BOUND_REACHED{bound: the search ended, used: 1, limit: 1} \u2014 not dispatched",
+     "c0",
+     []
+    ]
+   ]
+  ],
+  "tools": [
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ],
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ],
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ]
+  ],
+  "unused_replies": 0
+ },
+ "calls_after_the_end_then_report": {
+  "navigated": [
+   "symbol a"
+  ],
+  "records": [
+   "scout_start",
+   "scout_tool",
+   "scout_report"
+  ],
+  "report": {
+   "calls": 1,
+   "cost_usd": 0.03,
+   "detail": "",
+   "notes": [],
+   "outcome": "found",
+   "render": "## FINDINGS    scout: local-mid \u00b7 1 calls \u00b7 0 escape(s) \u00b7 360 tokens\ntargets:\n  - pkg/net/client.py:6-11   HttpClient\ntruncated: true",
+   "searched": [
+    "symbol 'a'"
+   ],
+   "targets": 1,
+   "tokens": 360,
+   "truncated": true,
+   "unavailable": null
+  },
+  "requests": [
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ]
+   ],
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ],
+    [
+     "assistant",
+     "",
+     null,
+     [
+      "symbol",
+      "symbol"
+     ]
+    ],
+    [
+     "tool",
+     "UNRESOLVED{query: 'a'}",
+     "c0",
+     []
+    ],
+    [
+     "tool",
+     "BOUND_REACHED{bound: locate.max_tool_calls, used: 1, limit: 1} \u2014 not dispatched",
+     "c1",
+     []
+    ]
+   ],
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ],
+    [
+     "assistant",
+     "",
+     null,
+     [
+      "symbol",
+      "symbol"
+     ]
+    ],
+    [
+     "tool",
+     "UNRESOLVED{query: 'a'}",
+     "c0",
+     []
+    ],
+    [
+     "tool",
+     "BOUND_REACHED{bound: locate.max_tool_calls, used: 1, limit: 1} \u2014 not dispatched",
+     "c1",
+     []
+    ],
+    [
+     "assistant",
+     "",
+     null,
+     [
+      "symbol"
+     ]
+    ],
+    [
+     "tool",
+     "BOUND_REACHED{bound: the search ended, used: 1, limit: 1} \u2014 not dispatched",
+     "c0",
+     []
+    ]
+   ]
+  ],
+  "tools": [
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ],
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ],
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ]
+  ],
+  "unused_replies": 0
+ },
+ "cancelled_between_calls": {
+  "navigated": [
+   "symbol HttpClient"
+  ],
+  "records": [
+   "scout_start",
+   "scout_tool",
+   "scout_report"
+  ],
+  "report": {
+   "calls": 1,
+   "cost_usd": 0.01,
+   "detail": "",
+   "notes": [],
+   "outcome": "cancelled",
+   "render": "## FINDINGS    scout: local-mid \u00b7 1 calls \u00b7 0 escape(s) \u00b7 120 tokens\nCANCELLED \u2014 the session's stop ended the search; partial: true\nUNRESOLVED{question: 'where is the timeout for outgoing requests set', searched: [symbol 'HttpClient']}\ntruncated: true",
+   "searched": [
+    "symbol 'HttpClient'"
+   ],
+   "targets": 0,
+   "tokens": 120,
+   "truncated": true,
+   "unavailable": null
+  },
+  "requests": [
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ]
+   ]
+  ],
+  "tools": [
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ]
+  ],
+  "unused_replies": 0
+ },
+ "cancelled_request": {
+  "navigated": [],
+  "records": [
+   "scout_start",
+   "scout_report"
+  ],
+  "report": {
+   "calls": 0,
+   "cost_usd": 0.0,
+   "detail": "",
+   "notes": [],
+   "outcome": "cancelled",
+   "render": "## FINDINGS    scout: local-mid \u00b7 0 calls \u00b7 0 escape(s) \u00b7 0 tokens\nCANCELLED \u2014 the session's stop ended the search; partial: true\nUNRESOLVED{question: 'where is the timeout for outgoing requests set', searched: [the snapshot]}\ntruncated: true",
+   "searched": [],
+   "targets": 0,
+   "tokens": 0,
+   "truncated": true,
+   "unavailable": null
+  },
+  "requests": [
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ]
+   ]
+  ],
+  "tools": [
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ]
+  ],
+  "unused_replies": 0
+ },
+ "failed_mid_search": {
+  "navigated": [
+   "symbol HttpClient"
+  ],
+  "records": [
+   "scout_start",
+   "scout_tool",
+   "scout_report"
+  ],
+  "report": {
+   "calls": 1,
+   "cost_usd": 0.01,
+   "detail": "after 1 model call(s) and 1 tool call(s): transport exhausted after 3 attempt(s): reset by peer",
+   "notes": [],
+   "outcome": "unavailable",
+   "render": "UNAVAILABLE{rung: 'local-mid', reason: failed_mid_search, detail: 'after 1 model call(s) and 1 tool call(s): transport exhausted after 3 attempt(s): reset by peer'} \u2014 no search ran to completion; use symbol, find, grep_in or shell(\"rg\") directly, or ask the user",
+   "searched": [
+    "symbol 'HttpClient'"
+   ],
+   "targets": 0,
+   "tokens": 120,
+   "truncated": true,
+   "unavailable": "failed_mid_search"
+  },
+  "requests": [
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ]
+   ],
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ],
+    [
+     "assistant",
+     "",
+     null,
+     [
+      "symbol"
+     ]
+    ],
+    [
+     "tool",
+     "pkg/net/client.py:6-11 pkg.net.client.HttpClient",
+     "c0",
+     []
+    ]
+   ]
+  ],
+  "tools": [
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ],
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ]
+  ],
+  "unused_replies": 0
+ },
+ "found": {
+  "navigated": [
+   "symbol HttpClient"
+  ],
+  "records": [
+   "scout_start",
+   "scout_tool",
+   "scout_tool",
+   "scout_report"
+  ],
+  "report": {
+   "calls": 2,
+   "cost_usd": 0.02,
+   "detail": "",
+   "notes": [],
+   "outcome": "found",
+   "render": "## FINDINGS    scout: local-mid \u00b7 2 calls \u00b7 0 escape(s) \u00b7 240 tokens\ntargets:\n  - pkg/net/client.py:6-11   HttpClient\ntruncated: false",
+   "searched": [
+    "symbol 'HttpClient'",
+    "grep 'timeout'"
+   ],
+   "targets": 1,
+   "tokens": 240,
+   "truncated": false,
+   "unavailable": null
+  },
+  "requests": [
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ]
+   ],
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ],
+    [
+     "assistant",
+     "",
+     null,
+     [
+      "symbol",
+      "grep"
+     ]
+    ],
+    [
+     "tool",
+     "pkg/net/client.py:6-11 pkg.net.client.HttpClient",
+     "c0",
+     []
+    ],
+    [
+     "tool",
+     "grep 'timeout' \u00b7 in-process, literal (no rg)\nconfig/app.yaml:2: timeout: 30\npkg/net/client.py:9: def request(self, url: str, timeout: int = DEFAULT_TIMEOUT) -> str:",
+     "c1",
+     []
+    ]
+   ]
+  ],
+  "tools": [
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ],
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ]
+  ],
+  "unused_replies": 0
+ },
+ "max_tokens_once": {
+  "navigated": [],
+  "records": [
+   "scout_start",
+   "scout_report"
+  ],
+  "report": {
+   "calls": 0,
+   "cost_usd": 0.02,
+   "detail": "",
+   "notes": [],
+   "outcome": "found",
+   "render": "## FINDINGS    scout: local-mid \u00b7 0 calls \u00b7 0 escape(s) \u00b7 240 tokens\ntargets:\n  - pkg/net/client.py:6-11   HttpClient\ntruncated: false",
+   "searched": [],
+   "targets": 1,
+   "tokens": 240,
+   "truncated": false,
+   "unavailable": null
+  },
+  "requests": [
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ]
+   ],
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ],
+    [
+     "assistant",
+     "{\"targets\": []}",
+     null,
+     []
+    ],
+    [
+     "user",
+     "The last JSON did not validate. Emit one object matching the schema in this prompt.\nClose any fence. Do not add fields the schema forbids.\n\nyour output hit max_tokens; send the findings JSON alone, shorter",
+     null,
+     []
+    ]
+   ]
+  ],
+  "tools": [
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ],
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ]
+  ],
+  "unused_replies": 0
+ },
+ "max_tokens_twice": {
+  "navigated": [],
+  "records": [
+   "scout_start",
+   "scout_report"
+  ],
+  "report": {
+   "calls": 0,
+   "cost_usd": 0.02,
+   "detail": "",
+   "notes": [
+    "the findings did not parse (truncated); none were taken"
+   ],
+   "outcome": "unresolved",
+   "render": "## FINDINGS    scout: local-mid \u00b7 0 calls \u00b7 0 escape(s) \u00b7 4 tokens\nnote: the findings did not parse (truncated); none were taken\nUNRESOLVED{question: 'where is the timeout for outgoing requests set', searched: [the snapshot]}\ntruncated: false",
+   "searched": [],
+   "targets": 0,
+   "tokens": 4,
+   "truncated": false,
+   "unavailable": null
+  },
+  "requests": [
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ]
+   ],
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ],
+    [
+     "assistant",
+     "{\"targets\": [",
+     null,
+     []
+    ],
+    [
+     "user",
+     "The last JSON did not validate. Emit one object matching the schema in this prompt.\nClose any fence. Do not add fields the schema forbids.\n\nyour output hit max_tokens; send the findings JSON alone, shorter",
+     null,
+     []
+    ]
+   ]
+  ],
+  "tools": [
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ],
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ]
+  ],
+  "unused_replies": 0
+ },
+ "no_progress": {
+  "navigated": [
+   "symbol HttpClient"
+  ],
+  "records": [
+   "scout_start",
+   "scout_tool",
+   "scout_tool",
+   "scout_tool",
+   "scout_tool",
+   "scout_report"
+  ],
+  "report": {
+   "calls": 4,
+   "cost_usd": 0.05,
+   "detail": "",
+   "notes": [
+    "3 consecutive calls repeated earlier ones and were answered from the dedup cache: no progress"
+   ],
+   "outcome": "found",
+   "render": "## FINDINGS    scout: local-mid \u00b7 4 calls \u00b7 0 escape(s) \u00b7 600 tokens\nnote: 3 consecutive calls repeated earlier ones and were answered from the dedup cache: no progress\ntargets:\n  - pkg/net/client.py:6-11   HttpClient\ntruncated: true",
+   "searched": [
+    "symbol 'HttpClient'"
+   ],
+   "targets": 1,
+   "tokens": 600,
+   "truncated": true,
+   "unavailable": null
+  },
+  "requests": [
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ]
+   ],
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ],
+    [
+     "assistant",
+     "",
+     null,
+     [
+      "symbol"
+     ]
+    ],
+    [
+     "tool",
+     "pkg/net/client.py:6-11 pkg.net.client.HttpClient",
+     "c0",
+     []
+    ]
+   ],
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ],
+    [
+     "assistant",
+     "",
+     null,
+     [
+      "symbol"
+     ]
+    ],
+    [
+     "tool",
+     "pkg/net/client.py:6-11 pkg.net.client.HttpClient",
+     "c0",
+     []
+    ],
+    [
+     "assistant",
+     "",
+     null,
+     [
+      "symbol"
+     ]
+    ],
+    [
+     "tool",
+     "[dedup: the same symbol call as call #1; nothing re-run]",
+     "c0",
+     []
+    ]
+   ],
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ],
+    [
+     "assistant",
+     "",
+     null,
+     [
+      "symbol"
+     ]
+    ],
+    [
+     "tool",
+     "pkg/net/client.py:6-11 pkg.net.client.HttpClient",
+     "c0",
+     []
+    ],
+    [
+     "assistant",
+     "",
+     null,
+     [
+      "symbol"
+     ]
+    ],
+    [
+     "tool",
+     "[dedup: the same symbol call as call #1; nothing re-run]",
+     "c0",
+     []
+    ],
+    [
+     "assistant",
+     "",
+     null,
+     [
+      "symbol"
+     ]
+    ],
+    [
+     "tool",
+     "[dedup: the same symbol call as call #1; nothing re-run]",
+     "c0",
+     []
+    ]
+   ],
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ],
+    [
+     "assistant",
+     "",
+     null,
+     [
+      "symbol"
+     ]
+    ],
+    [
+     "tool",
+     "pkg/net/client.py:6-11 pkg.net.client.HttpClient",
+     "c0",
+     []
+    ],
+    [
+     "assistant",
+     "",
+     null,
+     [
+      "symbol"
+     ]
+    ],
+    [
+     "tool",
+     "[dedup: the same symbol call as call #1; nothing re-run]",
+     "c0",
+     []
+    ],
+    [
+     "assistant",
+     "",
+     null,
+     [
+      "symbol"
+     ]
+    ],
+    [
+     "tool",
+     "[dedup: the same symbol call as call #1; nothing re-run]",
+     "c0",
+     []
+    ],
+    [
+     "assistant",
+     "",
+     null,
+     [
+      "symbol"
+     ]
+    ],
+    [
+     "tool",
+     "[dedup: the same symbol call as call #1; nothing re-run]",
+     "c0",
+     []
+    ]
+   ]
+  ],
+  "tools": [
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ],
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ],
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ],
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ],
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ]
+  ],
+  "unused_replies": 0
+ },
+ "result_cap": {
+  "navigated": [],
+  "records": [
+   "scout_start",
+   "scout_tool",
+   "scout_report"
+  ],
+  "report": {
+   "calls": 1,
+   "cost_usd": 0.02,
+   "detail": "",
+   "notes": [],
+   "outcome": "found",
+   "render": "## FINDINGS    scout: local-mid \u00b7 1 calls \u00b7 0 escape(s) \u00b7 240 tokens\ntargets:\n  - pkg/net/client.py:6-11   HttpClient\ntruncated: true",
+   "searched": [
+    "read 'pkg/net/client.py'"
+   ],
+   "targets": 1,
+   "tokens": 240,
+   "truncated": true,
+   "unavailable": null
+  },
+  "requests": [
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ]
+   ],
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ],
+    [
+     "assistant",
+     "",
+     null,
+     [
+      "read"
+     ]
+    ],
+    [
+     "tool",
+     "BOUND_REACHED{bound: locate.max_cumulative_result_tokens, used: 70, limit: 5} \u2014 not dispatched",
+     "c0",
+     []
+    ]
+   ]
+  ],
+  "tools": [
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ],
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ]
+  ],
+  "unused_replies": 0
+ },
+ "spend_cap": {
+  "navigated": [],
+  "records": [
+   "scout_start",
+   "scout_report"
+  ],
+  "report": {
+   "calls": 0,
+   "cost_usd": 0.0,
+   "detail": "",
+   "notes": [
+    "the session's spend cap is crossed; no further call started"
+   ],
+   "outcome": "unresolved",
+   "render": "## FINDINGS    scout: local-mid \u00b7 0 calls \u00b7 0 escape(s) \u00b7 0 tokens\nnote: the session's spend cap is crossed; no further call started\nUNRESOLVED{question: 'where is the timeout for outgoing requests set', searched: [the snapshot]}\ntruncated: true",
+   "searched": [],
+   "targets": 0,
+   "tokens": 0,
+   "truncated": true,
+   "unavailable": null
+  },
+  "requests": [],
+  "tools": [],
+  "unused_replies": 0
+ },
+ "unparsed_once": {
+  "navigated": [],
+  "records": [
+   "scout_start",
+   "scout_report"
+  ],
+  "report": {
+   "calls": 0,
+   "cost_usd": 0.02,
+   "detail": "",
+   "notes": [],
+   "outcome": "found",
+   "render": "## FINDINGS    scout: local-mid \u00b7 0 calls \u00b7 0 escape(s) \u00b7 240 tokens\ntargets:\n  - pkg/net/client.py:6-11   HttpClient\ntruncated: false",
+   "searched": [],
+   "targets": 1,
+   "tokens": 240,
+   "truncated": false,
+   "unavailable": null
+  },
+  "requests": [
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ]
+   ],
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ],
+    [
+     "assistant",
+     "the client is in pkg/net",
+     null,
+     []
+    ],
+    [
+     "user",
+     "The last JSON did not validate. Emit one object matching the schema in this prompt.\nClose any fence. Do not add fields the schema forbids.\n\nemit one JSON object matching the schema in the prompt",
+     null,
+     []
+    ]
+   ]
+  ],
+  "tools": [
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ],
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ]
+  ],
+  "unused_replies": 0
+ },
+ "unparsed_twice": {
+  "navigated": [],
+  "records": [
+   "scout_start",
+   "scout_report"
+  ],
+  "report": {
+   "calls": 0,
+   "cost_usd": 0.02,
+   "detail": "",
+   "notes": [
+    "the findings did not parse (bad_format); none were taken"
+   ],
+   "outcome": "unresolved",
+   "render": "## FINDINGS    scout: local-mid \u00b7 0 calls \u00b7 0 escape(s) \u00b7 240 tokens\nnote: the findings did not parse (bad_format); none were taken\nUNRESOLVED{question: 'where is the timeout for outgoing requests set', searched: [the snapshot]}\ntruncated: false",
+   "searched": [],
+   "targets": 0,
+   "tokens": 240,
+   "truncated": false,
+   "unavailable": null
+  },
+  "requests": [
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ]
+   ],
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ],
+    [
+     "assistant",
+     "the client is in pkg/net",
+     null,
+     []
+    ],
+    [
+     "user",
+     "The last JSON did not validate. Emit one object matching the schema in this prompt.\nClose any fence. Do not add fields the schema forbids.\n\nemit one JSON object matching the schema in the prompt",
+     null,
+     []
+    ]
+   ]
+  ],
+  "tools": [
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ],
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ]
+  ],
+  "unused_replies": 0
+ },
+ "unreachable": {
+  "navigated": [],
+  "records": [
+   "scout_start",
+   "scout_report"
+  ],
+  "report": {
+   "calls": 0,
+   "cost_usd": 0.0,
+   "detail": "transport exhausted after 3 attempt(s): connection refused",
+   "notes": [],
+   "outcome": "unavailable",
+   "render": "UNAVAILABLE{rung: 'local-mid', reason: unreachable, detail: 'transport exhausted after 3 attempt(s): connection refused'} \u2014 no search ran to completion; use symbol, find, grep_in or shell(\"rg\") directly, or ask the user",
+   "searched": [],
+   "targets": 0,
+   "tokens": 0,
+   "truncated": true,
+   "unavailable": "unreachable"
+  },
+  "requests": [
+   [
+    [
+     "system",
+     "locate",
+     null,
+     []
+    ],
+    [
+     "user",
+     "## SNAPSHOT\nrepo: <repo> \u00b7 main @ <head> \u00b7 worktree\ndirty: 0\nrecent commits:\n  - first commit\ntree:\n./ (12): .env, .gitignore, Makefile, pyproject.toml\n  config/ (1): app.yaml\n  pkg/ (6): __init__.py, __main__.py\n    pkg/api/ (2): __init__.py, fetcher.py\n    pkg/net/ (2): __init__.py, client.py\n  tests/ (1): test_client.py\nlanguages: python \u00b7 profile: none\nmanifests: none\ntests: 0 file(s) in none \u00b7 runner: none \u00b7 naming: none\ntoolchain: none \u00b7 make: yes \u00b7 just: no \u00b7 docker: no\ngraph: 7 files, 4 symbols \u00b7 edges fallback 4\nentrypoints: pkg/__main__.py\npromoted: none\n\n## QUESTION\nwhere is the timeout for outgoing requests set",
+     null,
+     []
+    ]
+   ]
+  ],
+  "tools": [
+   [
+    "glob",
+    "grep",
+    "grep_in",
+    "impact",
+    "neighbors",
+    "read",
+    "symbol"
+   ]
+  ],
+  "unused_replies": 0
+ }
+}

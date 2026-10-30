@@ -1,0 +1,187 @@
+{
+  "$defs": {
+    "HookPoint": {
+      "enum": [
+        "session_start",
+        "prompt_submitted",
+        "before_request",
+        "before_tool",
+        "after_tool",
+        "after_step",
+        "after_batch",
+        "before_stop",
+        "permission_asked",
+        "round_ended",
+        "task_reviewed",
+        "task_committed",
+        "episode_ended",
+        "before_compact",
+        "job_exited",
+        "session_end"
+      ],
+      "title": "HookPoint",
+      "type": "string"
+    },
+    "JsonValue": {}
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "chickadee_event": {
+      "$ref": "#/$defs/HookPoint"
+    },
+    "cwd": {
+      "title": "Cwd",
+      "type": "string"
+    },
+    "hook_event_name": {
+      "title": "Hook Event Name",
+      "type": "string"
+    },
+    "last_assistant_message": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Last Assistant Message"
+    },
+    "model": {
+      "title": "Model",
+      "type": "string"
+    },
+    "role": {
+      "title": "Role",
+      "type": "string"
+    },
+    "round": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Round"
+    },
+    "run_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Run Id"
+    },
+    "session_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Session Id"
+    },
+    "stop_hook_active": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Stop Hook Active"
+    },
+    "task_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Task Id"
+    },
+    "tool_input": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tool Input"
+    },
+    "tool_name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tool Name"
+    },
+    "tool_name_sent": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tool Name Sent"
+    },
+    "tool_response": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tool Response"
+    },
+    "turns": {
+      "title": "Turns",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "turns",
+    "hook_event_name",
+    "chickadee_event",
+    "session_id",
+    "cwd",
+    "role",
+    "model",
+    "run_id",
+    "task_id",
+    "round"
+  ],
+  "title": "SessionEndInput",
+  "type": "object"
+}

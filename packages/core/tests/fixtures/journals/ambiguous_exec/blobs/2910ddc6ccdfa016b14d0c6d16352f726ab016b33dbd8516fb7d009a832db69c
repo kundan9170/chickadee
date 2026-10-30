@@ -1,0 +1,39 @@
+# Handoff — run 2026-09-30-0a1b2c3d
+
+- **Terminal:** `ESCALATED`
+- **Goal:** the goal
+- **Isolation:** worktree
+- **Head:** `8f41436956eeeab0285e28a1ca6b028d0976bd30`
+
+## Packets
+
+| packet | kind | state | attempts | commit | note |
+|---|---|---|---|---|---|
+| a1 | action | ESCALATED | 1 |  | action operation exec:a1:1:1 started and its outcome was never recorded; it may have run, and it is never retried blind (D40) |
+
+## Verification
+
+- a1 (attempt 1): no gate ran
+
+Checkpoints:
+- none were declared or reached
+
+`behavior_not_independently_verified`: no independent checkpoint passed, so the static gates are the whole of the evidence.
+
+## Effects
+
+| operation | kind | outcome |
+|---|---|---|
+| exec:a1:1:1 | action_exec | ambiguous |
+
+Incomplete or ambiguous — reconcile before trusting the tree:
+- exec:a1:1:1
+
+## Cost
+
+- no model was called
+
+## Next
+
+The worktree branch is the person's to apply or squash, keep, or discard (D55).
+Nothing was pushed.

@@ -1,0 +1,276 @@
+{
+  "$defs": {
+    "ApprovedDesign": {
+      "additionalProperties": false,
+      "description": "A design as approved at stop 1.",
+      "properties": {
+        "sha": {
+          "title": "Sha",
+          "type": "string"
+        },
+        "template_sha": {
+          "title": "Template Sha",
+          "type": "string"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "work": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WorkPin"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "text",
+        "sha",
+        "template_sha"
+      ],
+      "title": "ApprovedDesign",
+      "type": "object"
+    },
+    "AttachedFile": {
+      "additionalProperties": false,
+      "description": "A file the person sent with the turn the work answers: named as the\nsession numbered it, its bytes the session blob `sha` names. The Request section lists it,\nso it was approved with the work.",
+      "properties": {
+        "id": {
+          "pattern": "^A-[1-9][0-9]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "sha": {
+          "minLength": 1,
+          "title": "Sha",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "sha"
+      ],
+      "title": "AttachedFile",
+      "type": "object"
+    },
+    "Continuation": {
+      "additionalProperties": false,
+      "description": "A run that continues a work an ended or superseded run left: what it inherits, read back\non resume from the run's config\nsnapshot, so the seed never depends on a record that may have changed since.",
+      "properties": {
+        "amended_from": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Amended From"
+        },
+        "mode": {
+          "enum": [
+            "CONTINUE",
+            "AMEND"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "plan_bound_to": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Plan Bound To"
+        },
+        "plan_run": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Plan Run"
+        },
+        "plan_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Plan Sha"
+        },
+        "plan_version": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Plan Version"
+        },
+        "prior_runs": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Prior Runs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "mode",
+        "prior_runs"
+      ],
+      "title": "Continuation",
+      "type": "object"
+    },
+    "OneTask": {
+      "additionalProperties": false,
+      "description": "Zeus's one-task plan as approved at stop 2.",
+      "properties": {
+        "brief": {
+          "minLength": 1,
+          "title": "Brief",
+          "type": "string"
+        },
+        "sha": {
+          "title": "Sha",
+          "type": "string"
+        },
+        "template_sha": {
+          "title": "Template Sha",
+          "type": "string"
+        },
+        "title": {
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "brief",
+        "sha",
+        "template_sha"
+      ],
+      "title": "OneTask",
+      "type": "object"
+    },
+    "WorkPin": {
+      "additionalProperties": false,
+      "description": "The work folder a design was approved in: its name, `work.dir`\nthen, and the `design/` tree stop 1 pinned, which every later read of it is answered from\n(`workspace.pinned_text`).",
+      "properties": {
+        "dir": {
+          "minLength": 1,
+          "title": "Dir",
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "tree": {
+          "minLength": 1,
+          "title": "Tree",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "dir",
+        "tree"
+      ],
+      "title": "WorkPin",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "`design` or `task`, exactly one, and where the work runs.",
+  "properties": {
+    "attachments": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/AttachedFile"
+      },
+      "title": "Attachments",
+      "type": "array"
+    },
+    "continues": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Continuation"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "design": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ApprovedDesign"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "task": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/OneTask"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "workspace": {
+      "default": "worktree",
+      "enum": [
+        "worktree",
+        "in_place"
+      ],
+      "title": "Workspace",
+      "type": "string"
+    }
+  },
+  "title": "CoderRequest",
+  "type": "object"
+}

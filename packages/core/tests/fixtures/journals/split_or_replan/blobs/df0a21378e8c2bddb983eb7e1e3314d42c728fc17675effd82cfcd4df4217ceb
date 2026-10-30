@@ -1,0 +1,1 @@
+{"patches":[{"mode":"replace","file":"src/m.py","intent":"edit","new_content":"def f() -> None:\n    return 2\n","hunks":[]}],"atomic":false,"ordered_files":["src/m.py"]}

@@ -1,0 +1,41 @@
+name = "csharp"
+extensions = [".cs"]
+tree_sitter_grammar = "c_sharp"
+
+[syntax]
+# The grammar's parse, in process (D203 decision 3): the compiler needs the project file and
+# its restored packages to say anything about one file.
+mode = "parse"
+
+[tests]
+globs = ["**/*.Tests/**", "**/*Tests/**", "**/tests/**", "*Tests.cs", "*Test.cs"]
+# `dotnet test` takes a project or solution, not a test file: the whole solution runs.
+runner = "dotnet test"
+timeout_s = 600
+
+[build]
+compile_cmd = "dotnet build"
+import_smoke = ""
+
+[deps]
+# A project's own `.csproj` and `.sln` have no fixed name, so they cannot be listed here;
+# these are the solution-wide files that do.
+manifests = ["global.json", "Directory.Build.props", "Directory.Packages.props"]
+install_cmd = "dotnet add package {name}"
+
+[examples]
+snippet = """
+Assert.Equal({output}, {symbol}({input}));
+"""
+
+[conventions]
+file = "conventions/csharp.md"
+
+[lsp]
+server = "csharp-ls"
+# Run by `chickadee setup` when the server is missing and the person says yes.
+install = "dotnet tool install --tool-path {dir}/bin csharp-ls"
+
+[toolchain]
+# D109: the NuGet packages the projects name, once at worktree creation.
+bootstrap = ["dotnet", "restore"]

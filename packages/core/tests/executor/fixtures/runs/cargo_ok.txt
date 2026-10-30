@@ -1,0 +1,25 @@
+   Compiling rs v0.1.0 (/work/rs)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.18s
+     Running unittests src/lib.rs (target/debug/deps/rs-ffdf3d4f8e2db1ed)
+
+running 2 tests
+test tests::bad ... ok
+test tests::ok ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/it.rs (target/debug/deps/it-e5cbd2b070ff957d)
+
+running 1 test
+test integ ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests rs
+
+running 1 test
+test src/lib.rs - one (line 1) ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+all doctests ran in 0.36s; merged doctests compilation took 0.35s

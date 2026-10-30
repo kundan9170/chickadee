@@ -1,0 +1,41 @@
+name = "go"
+extensions = [".go"]
+tree_sitter_grammar = "go"
+
+[syntax]
+# The grammar's parse, in process (D203 decision 3). `gofmt -e` would also parse, but needs
+# Go installed in the sandbox and a spawn after every edit.
+mode = "parse"
+
+[tests]
+globs = ["*_test.go"]
+# `go test` selects packages, not files: a test file alone does not build without the rest of
+# its package. So the whole module runs, which is honest about what was tested.
+runner = "go test ./..."
+timeout_s = 300
+
+[build]
+compile_cmd = "go build ./..."
+import_smoke = ""
+
+[deps]
+manifests = ["go.mod"]
+install_cmd = "go get {name}"
+
+[examples]
+snippet = """
+got := {symbol}({input})
+if got != {output} { t.Fatalf("{symbol}(%v) = %v", {input}, got) }
+"""
+
+[conventions]
+file = "conventions/go.md"
+
+[lsp]
+server = "gopls"
+# Run by `chickadee setup` when the server is missing and the person says yes.
+install = "env GOBIN={dir}/bin go install golang.org/x/tools/gopls@latest"
+
+[toolchain]
+# D109: the module cache from go.sum, once at worktree creation.
+bootstrap = ["go", "mod", "download"]

@@ -1,0 +1,24 @@
+name = "vitest"
+
+[[summary]]
+line = '^\s*Tests\s+.*\(\d+\)$'
+passed = '(\d+) passed'
+failed = '(\d+) failed'
+
+# A test file that failed to load names no test; it is an error.
+[[summary]]
+line = '^\s*Test Files\s+.*\(\d+\)$'
+errors = '(\d+) failed'
+
+[[summary]]
+line = '^No test files found, exiting with code \d+$'
+
+[names]
+failing = ['^ FAIL\s+(\S+\.[cm]?[jt]sx? > .+?)\s*$']
+passing = ['^\s*✓ (\S+\.[cm]?[jt]sx? > .+?) \d+(?:\.\d+)?m?s$']
+
+[command]
+words = ["vitest", "run"]
+selects = "paths"
+flags = ["--silent", "--no-coverage", "--coverage", "--bail", "--passWithNoTests", "--no-color"]
+values = ["--reporter", "--maxWorkers", "--testTimeout", "--pool"]

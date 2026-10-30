@@ -1,0 +1,33 @@
+name = "scala"
+extensions = [".scala", ".sc"]
+tree_sitter_grammar = "scala"
+
+[syntax]
+# The grammar's parse, in process (D203 decision 3): the compiler needs sbt's classpath.
+mode = "parse"
+
+[tests]
+globs = ["**/src/test/**", "*Spec.scala", "*Test.scala", "*Suite.scala"]
+# sbt selects by class name (`testOnly`), not by file: the whole suite runs.
+runner = "sbt test"
+timeout_s = 900
+
+[build]
+compile_cmd = ""
+import_smoke = ""
+
+[deps]
+manifests = ["build.sbt"]
+
+[examples]
+snippet = """
+assert({symbol}({input}) == {output})
+"""
+
+[conventions]
+file = "conventions/scala.md"
+
+[lsp]
+server = "metals"
+# Run by `chickadee setup` when the server is missing and the person says yes.
+install = "cs install metals --install-dir {dir}/bin"

@@ -1,0 +1,3580 @@
+{
+  "$defs": {
+    "AgentMessageP": {
+      "additionalProperties": false,
+      "description": "One message of an agent's conversation, journaled before it joins it, so a follow-up\nafter a resume rebuilds it exactly, as `box_message` is.",
+      "properties": {
+        "agent": {
+          "pattern": "^A[1-9][0-9]*$",
+          "title": "Agent",
+          "type": "string"
+        },
+        "round": {
+          "minimum": 0,
+          "title": "Round",
+          "type": "integer"
+        },
+        "sha": {
+          "title": "Sha",
+          "type": "string"
+        },
+        "side": {
+          "enum": [
+            "system",
+            "user",
+            "assistant",
+            "tool"
+          ],
+          "title": "Side",
+          "type": "string"
+        }
+      },
+      "required": [
+        "agent",
+        "round",
+        "side",
+        "sha"
+      ],
+      "title": "AgentMessageP",
+      "type": "object"
+    },
+    "AgentReportP": {
+      "additionalProperties": false,
+      "description": "A round's end and its report: the report itself is a blob, and its\nchecked counts are here.",
+      "properties": {
+        "agent": {
+          "pattern": "^A[1-9][0-9]*$",
+          "title": "Agent",
+          "type": "string"
+        },
+        "cost_usd": {
+          "minimum": 0,
+          "title": "Cost Usd",
+          "type": "number"
+        },
+        "findings": {
+          "minimum": 0,
+          "title": "Findings",
+          "type": "integer"
+        },
+        "flagged": {
+          "minimum": 0,
+          "title": "Flagged",
+          "type": "integer"
+        },
+        "report_sha": {
+          "title": "Report Sha",
+          "type": "string"
+        },
+        "round": {
+          "minimum": 0,
+          "title": "Round",
+          "type": "integer"
+        },
+        "status": {
+          "enum": [
+            "complete",
+            "partial",
+            "failed",
+            "cancelled"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "tokens": {
+          "minimum": 0,
+          "title": "Tokens",
+          "type": "integer"
+        },
+        "tool_calls": {
+          "minimum": 0,
+          "title": "Tool Calls",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "agent",
+        "round",
+        "status",
+        "findings",
+        "flagged",
+        "tool_calls",
+        "tokens",
+        "cost_usd",
+        "report_sha"
+      ],
+      "title": "AgentReportP",
+      "type": "object"
+    },
+    "AgentStartP": {
+      "additionalProperties": false,
+      "description": "A round of an agent begins: before anything of it runs, so a round\nwith this line and no `agent_report` is one a crash cut. Round 0 is the spawn.",
+      "properties": {
+        "agent": {
+          "pattern": "^A[1-9][0-9]*$",
+          "title": "Agent",
+          "type": "string"
+        },
+        "call_id": {
+          "title": "Call Id",
+          "type": "string"
+        },
+        "handles": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Handles",
+          "type": "array"
+        },
+        "model": {
+          "minLength": 1,
+          "title": "Model",
+          "type": "string"
+        },
+        "profile": {
+          "minLength": 1,
+          "title": "Profile",
+          "type": "string"
+        },
+        "round": {
+          "minimum": 0,
+          "title": "Round",
+          "type": "integer"
+        },
+        "rung": {
+          "minLength": 1,
+          "title": "Rung",
+          "type": "string"
+        },
+        "skill": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Skill"
+        },
+        "source": {
+          "enum": [
+            "built-in",
+            "user",
+            "project",
+            "external"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "task_sha": {
+          "title": "Task Sha",
+          "type": "string"
+        }
+      },
+      "required": [
+        "agent",
+        "round",
+        "source",
+        "profile",
+        "rung",
+        "model",
+        "task_sha",
+        "call_id"
+      ],
+      "title": "AgentStartP",
+      "type": "object"
+    },
+    "BoxCompactionP": {
+      "additionalProperties": false,
+      "description": "A box compaction (`box_compaction`, moved to the run journal): what became\nreceipts, folded, demoted or collapsed, and the tokens on both sides. The session-log kind\nretired with the packet loop; the ladder's other steps stay empty until the\nparked compaction returns.",
+      "properties": {
+        "collapse": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Collapse",
+          "type": "array"
+        },
+        "demote": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Demote",
+          "type": "array"
+        },
+        "evict": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Evict",
+          "type": "array"
+        },
+        "fold": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Fold",
+          "type": "array"
+        },
+        "role": {
+          "enum": [
+            "athena",
+            "worker"
+          ],
+          "title": "Role",
+          "type": "string"
+        },
+        "steps": {
+          "items": {
+            "enum": [
+              "evict",
+              "fold",
+              "demote_history",
+              "collapse_unrelated",
+              "reset"
+            ],
+            "type": "string"
+          },
+          "title": "Steps",
+          "type": "array"
+        },
+        "tokens_after": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Tokens After",
+          "type": "integer"
+        },
+        "tokens_before": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Tokens Before",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "role",
+        "steps"
+      ],
+      "title": "BoxCompactionP",
+      "type": "object"
+    },
+    "BoxMessageP": {
+      "additionalProperties": false,
+      "description": "One message of a box role's conversation, journaled before it joins it, so resume\nrebuilds the conversation exactly.",
+      "properties": {
+        "role": {
+          "enum": [
+            "athena",
+            "worker"
+          ],
+          "title": "Role",
+          "type": "string"
+        },
+        "sha": {
+          "title": "Sha",
+          "type": "string"
+        },
+        "side": {
+          "enum": [
+            "system",
+            "user",
+            "assistant",
+            "tool"
+          ],
+          "title": "Side",
+          "type": "string"
+        }
+      },
+      "required": [
+        "role",
+        "side",
+        "sha"
+      ],
+      "title": "BoxMessageP",
+      "type": "object"
+    },
+    "BudgetP": {
+      "additionalProperties": false,
+      "properties": {
+        "cap_usd": {
+          "title": "Cap Usd",
+          "type": "number"
+        },
+        "kind": {
+          "enum": [
+            "warning",
+            "hard_cap"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "rung": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rung"
+        },
+        "scope": {
+          "enum": [
+            "run",
+            "packet"
+          ],
+          "title": "Scope",
+          "type": "string"
+        },
+        "spent_usd": {
+          "title": "Spent Usd",
+          "type": "number"
+        },
+        "terminal": {
+          "title": "Terminal",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "scope",
+        "kind",
+        "spent_usd",
+        "cap_usd",
+        "terminal"
+      ],
+      "title": "BudgetP",
+      "type": "object"
+    },
+    "CallbackErrorP": {
+      "additionalProperties": false,
+      "properties": {
+        "error_sha": {
+          "title": "Error Sha",
+          "type": "string"
+        },
+        "event": {
+          "title": "Event",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "event",
+        "error_sha"
+      ],
+      "title": "CallbackErrorP",
+      "type": "object"
+    },
+    "CitationGateP": {
+      "additionalProperties": false,
+      "properties": {
+        "checked": {
+          "title": "Checked",
+          "type": "integer"
+        },
+        "coverage": {
+          "title": "Coverage",
+          "type": "number"
+        },
+        "pass": {
+          "title": "Pass",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "pass",
+        "checked",
+        "coverage"
+      ],
+      "title": "CitationGateP",
+      "type": "object"
+    },
+    "CommandFactP": {
+      "additionalProperties": false,
+      "description": "One command a task ran, from its step and its `exec` line.",
+      "properties": {
+        "command": {
+          "title": "Command",
+          "type": "string"
+        },
+        "exit_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exit Code"
+        },
+        "failing": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Failing",
+          "type": "array"
+        },
+        "operation_id": {
+          "title": "Operation Id",
+          "type": "string"
+        },
+        "output_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Output Sha"
+        },
+        "tail": {
+          "title": "Tail",
+          "type": "string"
+        },
+        "test_outcome": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Test Outcome"
+        },
+        "timed_out": {
+          "title": "Timed Out",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "operation_id",
+        "command",
+        "timed_out",
+        "tail"
+      ],
+      "title": "CommandFactP",
+      "type": "object"
+    },
+    "ContextTokensP": {
+      "additionalProperties": false,
+      "properties": {
+        "compacted": {
+          "title": "Compacted",
+          "type": "integer"
+        },
+        "layer1": {
+          "title": "Layer1",
+          "type": "integer"
+        },
+        "raw_window": {
+          "title": "Raw Window",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "layer1",
+        "compacted",
+        "raw_window"
+      ],
+      "title": "ContextTokensP",
+      "type": "object"
+    },
+    "EffectCompletedP": {
+      "additionalProperties": false,
+      "properties": {
+        "observed_surface": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Observed Surface",
+          "type": "array"
+        },
+        "operation_id": {
+          "title": "Operation Id",
+          "type": "string"
+        },
+        "outcome": {
+          "enum": [
+            "succeeded",
+            "failed",
+            "ambiguous"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        },
+        "post_state_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Post State Sha"
+        },
+        "result_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Result Sha"
+        }
+      },
+      "required": [
+        "operation_id",
+        "outcome",
+        "observed_surface"
+      ],
+      "title": "EffectCompletedP",
+      "type": "object"
+    },
+    "EffectIntendedP": {
+      "additionalProperties": false,
+      "properties": {
+        "approved_sha": {
+          "title": "Approved Sha",
+          "type": "string"
+        },
+        "declared_surface": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Declared Surface",
+          "type": "array"
+        },
+        "effect_kind": {
+          "title": "Effect Kind",
+          "type": "string"
+        },
+        "idempotent": {
+          "title": "Idempotent",
+          "type": "boolean"
+        },
+        "operation_id": {
+          "title": "Operation Id",
+          "type": "string"
+        },
+        "preconditions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Preconditions",
+          "type": "array"
+        },
+        "preimages_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Preimages Sha"
+        }
+      },
+      "required": [
+        "operation_id",
+        "effect_kind",
+        "approved_sha",
+        "preconditions",
+        "idempotent",
+        "declared_surface"
+      ],
+      "title": "EffectIntendedP",
+      "type": "object"
+    },
+    "EffectStartedP": {
+      "additionalProperties": false,
+      "properties": {
+        "operation_id": {
+          "title": "Operation Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation_id"
+      ],
+      "title": "EffectStartedP",
+      "type": "object"
+    },
+    "EventKind": {
+      "enum": [
+        "run_start",
+        "effect_intended",
+        "effect_started",
+        "effect_completed",
+        "budget",
+        "exec",
+        "route",
+        "read_tier",
+        "citation_gate",
+        "read_answered",
+        "scout_start",
+        "scout_tool",
+        "scout_escape",
+        "scout_escalated",
+        "scout_report",
+        "session_start",
+        "turn",
+        "interrupt",
+        "session_end",
+        "question_asked",
+        "question_answered",
+        "context_tokens",
+        "untrusted_read",
+        "mcp_connect",
+        "mcp_call",
+        "external_call",
+        "secret_denied",
+        "secret_suspected",
+        "redaction",
+        "hook",
+        "callback_error",
+        "run_end",
+        "tool_call",
+        "model_call",
+        "task_delegated",
+        "task_reported",
+        "box_message",
+        "box_compaction",
+        "task_reviewed",
+        "plan_written",
+        "plan_outgrown",
+        "agent_start",
+        "agent_message",
+        "agent_report",
+        "tell_delivered",
+        "tell_reply"
+      ],
+      "title": "EventKind",
+      "type": "string"
+    },
+    "ExecP": {
+      "additionalProperties": false,
+      "properties": {
+        "argv_sha": {
+          "title": "Argv Sha",
+          "type": "string"
+        },
+        "cwd": {
+          "title": "Cwd",
+          "type": "string"
+        },
+        "escalation_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Escalation Id"
+        },
+        "exit_code": {
+          "title": "Exit Code",
+          "type": "integer"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "network": {
+          "title": "Network",
+          "type": "boolean"
+        },
+        "operation_id": {
+          "title": "Operation Id",
+          "type": "string"
+        },
+        "policy": {
+          "title": "Policy",
+          "type": "string"
+        },
+        "sandbox": {
+          "title": "Sandbox",
+          "type": "string"
+        },
+        "stderr_sha": {
+          "title": "Stderr Sha",
+          "type": "string"
+        },
+        "stdout_sha": {
+          "title": "Stdout Sha",
+          "type": "string"
+        },
+        "timed_out": {
+          "title": "Timed Out",
+          "type": "boolean"
+        },
+        "violations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Violations",
+          "type": "array"
+        },
+        "wall_ms": {
+          "title": "Wall Ms",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "operation_id",
+        "policy",
+        "label",
+        "argv_sha",
+        "cwd",
+        "exit_code",
+        "wall_ms",
+        "timed_out",
+        "sandbox",
+        "network",
+        "stdout_sha",
+        "stderr_sha",
+        "violations"
+      ],
+      "title": "ExecP",
+      "type": "object"
+    },
+    "ExternalCallP": {
+      "additionalProperties": false,
+      "description": "One call that left the machine on a model's behalf, through the external-call policy\n(`chickadee.external`): a web search or fetch now, an MCP tool's call\nlater, which writes this in place of `McpCallP`. Additive under the owner's grant.",
+      "properties": {
+        "args_sha": {
+          "title": "Args Sha",
+          "type": "string"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error"
+        },
+        "ok": {
+          "title": "Ok",
+          "type": "boolean"
+        },
+        "operation_id": {
+          "title": "Operation Id",
+          "type": "string"
+        },
+        "policy": {
+          "enum": [
+            "discovery",
+            "action"
+          ],
+          "title": "Policy",
+          "type": "string"
+        },
+        "provider": {
+          "minLength": 1,
+          "title": "Provider",
+          "type": "string"
+        },
+        "result_bytes": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Result Bytes",
+          "type": "integer"
+        },
+        "result_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Result Sha"
+        },
+        "tool": {
+          "minLength": 1,
+          "title": "Tool",
+          "type": "string"
+        },
+        "truncated": {
+          "default": false,
+          "title": "Truncated",
+          "type": "boolean"
+        },
+        "wall_ms": {
+          "minimum": 0,
+          "title": "Wall Ms",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "operation_id",
+        "provider",
+        "tool",
+        "args_sha",
+        "policy",
+        "ok",
+        "wall_ms"
+      ],
+      "title": "ExternalCallP",
+      "type": "object"
+    },
+    "FileFactP": {
+      "additionalProperties": false,
+      "description": "One file a task changed, measured between its start tree and its end tree.",
+      "properties": {
+        "added": {
+          "minimum": 0,
+          "title": "Added",
+          "type": "integer"
+        },
+        "kind": {
+          "enum": [
+            "created",
+            "edited",
+            "deleted"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "removed": {
+          "minimum": 0,
+          "title": "Removed",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "path",
+        "added",
+        "removed",
+        "kind"
+      ],
+      "title": "FileFactP",
+      "type": "object"
+    },
+    "HookP": {
+      "additionalProperties": false,
+      "description": "One hook's verdict, error or bound reached, or, as `event = \"bound\"`,\nthe set an episode or a session bound (decision 14). A silent `Pass` writes none. Fields\nafter `timed_out` are additive.",
+      "properties": {
+        "bounded": {
+          "default": false,
+          "title": "Bounded",
+          "type": "boolean"
+        },
+        "call_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Call Id"
+        },
+        "decision": {
+          "title": "Decision",
+          "type": "string"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error"
+        },
+        "event": {
+          "title": "Event",
+          "type": "string"
+        },
+        "input_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Input Sha"
+        },
+        "message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Message"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "role": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Role"
+        },
+        "text_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text Sha"
+        },
+        "timed_out": {
+          "default": false,
+          "title": "Timed Out",
+          "type": "boolean"
+        },
+        "wall_ms": {
+          "title": "Wall Ms",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "event",
+        "name",
+        "decision",
+        "wall_ms"
+      ],
+      "title": "HookP",
+      "type": "object"
+    },
+    "InterruptP": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "title": "Action",
+          "type": "string"
+        },
+        "level": {
+          "title": "Level",
+          "type": "string"
+        }
+      },
+      "required": [
+        "level",
+        "action"
+      ],
+      "title": "InterruptP",
+      "type": "object"
+    },
+    "McpCallP": {
+      "additionalProperties": false,
+      "properties": {
+        "args_sha": {
+          "title": "Args Sha",
+          "type": "string"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error"
+        },
+        "ok": {
+          "title": "Ok",
+          "type": "boolean"
+        },
+        "operation_id": {
+          "title": "Operation Id",
+          "type": "string"
+        },
+        "policy": {
+          "title": "Policy",
+          "type": "string"
+        },
+        "result_tokens": {
+          "title": "Result Tokens",
+          "type": "integer"
+        },
+        "server": {
+          "title": "Server",
+          "type": "string"
+        },
+        "tool": {
+          "title": "Tool",
+          "type": "string"
+        },
+        "truncated": {
+          "title": "Truncated",
+          "type": "boolean"
+        },
+        "wall_ms": {
+          "title": "Wall Ms",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "operation_id",
+        "server",
+        "tool",
+        "args_sha",
+        "policy",
+        "ok",
+        "result_tokens",
+        "wall_ms",
+        "truncated"
+      ],
+      "title": "McpCallP",
+      "type": "object"
+    },
+    "McpConnectP": {
+      "additionalProperties": false,
+      "properties": {
+        "hints": {
+          "additionalProperties": true,
+          "default": {},
+          "title": "Hints",
+          "type": "object"
+        },
+        "ok": {
+          "title": "Ok",
+          "type": "boolean"
+        },
+        "server": {
+          "title": "Server",
+          "type": "string"
+        },
+        "tools": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tools",
+          "type": "array"
+        },
+        "transport": {
+          "title": "Transport",
+          "type": "string"
+        }
+      },
+      "required": [
+        "server",
+        "transport",
+        "tools",
+        "ok"
+      ],
+      "title": "McpConnectP",
+      "type": "object"
+    },
+    "ModelCallP": {
+      "additionalProperties": false,
+      "description": "One model call of a box role (Athena's, the worker's), so a reader sees what each\ncall was and what it said. Written once the call is answered and charged..",
+      "properties": {
+        "cost_usd": {
+          "minimum": 0,
+          "title": "Cost Usd",
+          "type": "number"
+        },
+        "model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model"
+        },
+        "refusal": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Refusal"
+        },
+        "request": {
+          "minLength": 1,
+          "title": "Request",
+          "type": "string"
+        },
+        "role": {
+          "minLength": 1,
+          "title": "Role",
+          "type": "string"
+        },
+        "rung": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rung"
+        },
+        "sent_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sent Sha"
+        },
+        "stop_reason": {
+          "title": "Stop Reason",
+          "type": "string"
+        },
+        "text_preview": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text Preview"
+        },
+        "tokens_in": {
+          "minimum": 0,
+          "title": "Tokens In",
+          "type": "integer"
+        },
+        "tokens_out": {
+          "minimum": 0,
+          "title": "Tokens Out",
+          "type": "integer"
+        },
+        "tools": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Tools",
+          "type": "array"
+        }
+      },
+      "required": [
+        "role",
+        "request",
+        "tokens_in",
+        "tokens_out",
+        "cost_usd",
+        "stop_reason"
+      ],
+      "title": "ModelCallP",
+      "type": "object"
+    },
+    "PlanOutgrownP": {
+      "additionalProperties": false,
+      "description": "A one-task plan ended `OUTGROWN` by Athena: its finishing\nneeds a decision, a problem or a scope its brief does not hold. Journaled once, by her\n`outgrown` call, so a resume ends the episode as she did; her report is her reply after it.",
+      "properties": {
+        "call_id": {
+          "title": "Call Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "call_id"
+      ],
+      "title": "PlanOutgrownP",
+      "type": "object"
+    },
+    "PlanTaskP": {
+      "additionalProperties": false,
+      "description": "One task an approved plan lists: its `Tasks` line's id and title, as\n`work.plan_tasks` reads them, the reading `delegate(task)` resolves an id through.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title"
+      ],
+      "title": "PlanTaskP",
+      "type": "object"
+    },
+    "PlanWrittenP": {
+      "additionalProperties": false,
+      "description": "A plan written: Athena's, by her `plan` call,\nor Zeus's one-task plan, its brief alone. The first is asked at stop 2; every\nlater one is a revision, shown and never asked.\n\nThe spec's row named a `text_sha` beside `sha`: blobs are content-addressed by the sha256\nof their bytes, so the text's blob is `sha` itself, and one field holds both.",
+      "properties": {
+        "asked": {
+          "title": "Asked",
+          "type": "boolean"
+        },
+        "bound": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bound"
+        },
+        "by": {
+          "enum": [
+            "zeus",
+            "athena"
+          ],
+          "title": "By",
+          "type": "string"
+        },
+        "call_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Call Id"
+        },
+        "inherited_from": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Inherited From"
+        },
+        "note_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note Sha"
+        },
+        "outcome": {
+          "default": "approved",
+          "enum": [
+            "approved",
+            "cancelled"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        },
+        "sha": {
+          "title": "Sha",
+          "type": "string"
+        },
+        "tasks": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/PlanTaskP"
+          },
+          "title": "Tasks",
+          "type": "array"
+        },
+        "version": {
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "sha",
+        "by",
+        "version",
+        "asked"
+      ],
+      "title": "PlanWrittenP",
+      "type": "object"
+    },
+    "QuestionAnsweredP": {
+      "additionalProperties": false,
+      "properties": {
+        "choice": {
+          "title": "Choice",
+          "type": "string"
+        },
+        "elapsed_ms": {
+          "title": "Elapsed Ms",
+          "type": "integer"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "source": {
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "choice",
+        "source",
+        "elapsed_ms"
+      ],
+      "title": "QuestionAnsweredP",
+      "type": "object"
+    },
+    "QuestionAskedP": {
+      "additionalProperties": false,
+      "properties": {
+        "blocking": {
+          "title": "Blocking",
+          "type": "boolean"
+        },
+        "evidence": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "options": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Options",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "options",
+        "evidence",
+        "blocking"
+      ],
+      "title": "QuestionAskedP",
+      "type": "object"
+    },
+    "ReadAnsweredP": {
+      "additionalProperties": false,
+      "properties": {
+        "cost_usd": {
+          "title": "Cost Usd",
+          "type": "number"
+        },
+        "low_confidence": {
+          "title": "Low Confidence",
+          "type": "boolean"
+        },
+        "rung": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rung"
+        },
+        "tier": {
+          "title": "Tier",
+          "type": "string"
+        },
+        "tokens": {
+          "title": "Tokens",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "tier",
+        "tokens",
+        "cost_usd",
+        "low_confidence"
+      ],
+      "title": "ReadAnsweredP",
+      "type": "object"
+    },
+    "ReadTierP": {
+      "additionalProperties": false,
+      "properties": {
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "tier": {
+          "title": "Tier",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tier",
+        "reason"
+      ],
+      "title": "ReadTierP",
+      "type": "object"
+    },
+    "RedactionP": {
+      "additionalProperties": false,
+      "properties": {
+        "count": {
+          "title": "Count",
+          "type": "integer"
+        },
+        "kinds": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Kinds",
+          "type": "array"
+        },
+        "target_blob": {
+          "title": "Target Blob",
+          "type": "string"
+        }
+      },
+      "required": [
+        "target_blob",
+        "count",
+        "kinds"
+      ],
+      "title": "RedactionP",
+      "type": "object"
+    },
+    "RouteP": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "title": "Confidence",
+          "type": "number"
+        },
+        "mode": {
+          "title": "Mode",
+          "type": "string"
+        },
+        "read_type": {
+          "title": "Read Type",
+          "type": "string"
+        },
+        "signals": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Signals",
+          "type": "array"
+        }
+      },
+      "required": [
+        "mode",
+        "read_type",
+        "confidence",
+        "signals"
+      ],
+      "title": "RouteP",
+      "type": "object"
+    },
+    "RunCapsP": {
+      "additionalProperties": false,
+      "description": "Every cap a run started under, and every one the person lifted.\n\n\"Lifted\" is said, never left as a `null`: the journal writes with `exclude_none`, so a\n`null` total would vanish on the way to disk and read back as a writer that forgot it.\nA rung with no cap configured is in neither `rungs` nor `lifted_rungs`.",
+      "properties": {
+        "lifted_rungs": {
+          "default": [],
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Lifted Rungs",
+          "type": "array"
+        },
+        "rungs": {
+          "additionalProperties": {
+            "exclusiveMinimum": 0,
+            "type": "number"
+          },
+          "propertyNames": {
+            "minLength": 1
+          },
+          "title": "Rungs",
+          "type": "object"
+        },
+        "total": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Total"
+        },
+        "total_lifted": {
+          "default": false,
+          "title": "Total Lifted",
+          "type": "boolean"
+        }
+      },
+      "title": "RunCapsP",
+      "type": "object"
+    },
+    "RunEndP": {
+      "additionalProperties": false,
+      "properties": {
+        "committed": {
+          "minimum": 0,
+          "title": "Committed",
+          "type": "integer"
+        },
+        "cost_usd": {
+          "title": "Cost Usd",
+          "type": "number"
+        },
+        "handoff_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Handoff Path"
+        },
+        "outcome": {
+          "enum": [
+            "COMPLETED",
+            "PARTIAL",
+            "BLOCKED",
+            "ASK",
+            "BUDGET_CAP",
+            "ABORTED",
+            "OUTGROWN"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        },
+        "tasks": {
+          "minimum": 0,
+          "title": "Tasks",
+          "type": "integer"
+        },
+        "tokens": {
+          "title": "Tokens",
+          "type": "integer"
+        },
+        "wall_ms": {
+          "title": "Wall Ms",
+          "type": "integer"
+        },
+        "why": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Why"
+        }
+      },
+      "required": [
+        "outcome",
+        "tasks",
+        "committed",
+        "tokens",
+        "cost_usd",
+        "wall_ms"
+      ],
+      "title": "RunEndP",
+      "type": "object"
+    },
+    "RunStartP": {
+      "additionalProperties": false,
+      "properties": {
+        "caps": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RunCapsP"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "config_sha": {
+          "title": "Config Sha",
+          "type": "string"
+        },
+        "engine_version": {
+          "title": "Engine Version",
+          "type": "string"
+        },
+        "goal": {
+          "title": "Goal",
+          "type": "string"
+        },
+        "hard_cost_cap_usd": {
+          "title": "Hard Cost Cap Usd",
+          "type": "number"
+        },
+        "isolation": {
+          "enum": [
+            "worktree",
+            "in_place"
+          ],
+          "title": "Isolation",
+          "type": "string"
+        },
+        "repo_head": {
+          "title": "Repo Head",
+          "type": "string"
+        },
+        "schema_version": {
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "template_shas": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Template Shas",
+          "type": "object"
+        },
+        "work_sha": {
+          "title": "Work Sha",
+          "type": "string"
+        }
+      },
+      "required": [
+        "goal",
+        "work_sha",
+        "config_sha",
+        "repo_head",
+        "engine_version",
+        "schema_version",
+        "isolation",
+        "hard_cost_cap_usd"
+      ],
+      "title": "RunStartP",
+      "type": "object"
+    },
+    "ScoutEscalatedP": {
+      "additionalProperties": false,
+      "properties": {
+        "dropped_pointers": {
+          "title": "Dropped Pointers",
+          "type": "integer"
+        },
+        "from_rung": {
+          "title": "From Rung",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "to_rung": {
+          "title": "To Rung",
+          "type": "string"
+        },
+        "truncated": {
+          "title": "Truncated",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "reason",
+        "from_rung",
+        "to_rung",
+        "dropped_pointers",
+        "truncated"
+      ],
+      "title": "ScoutEscalatedP",
+      "type": "object"
+    },
+    "ScoutEscapeP": {
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "title": "Command",
+          "type": "string"
+        },
+        "exec_seq": {
+          "title": "Exec Seq",
+          "type": "integer"
+        },
+        "granted": {
+          "title": "Granted",
+          "type": "boolean"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "command",
+        "granted",
+        "reason",
+        "exec_seq"
+      ],
+      "title": "ScoutEscapeP",
+      "type": "object"
+    },
+    "ScoutReportP": {
+      "additionalProperties": false,
+      "properties": {
+        "cost_usd": {
+          "title": "Cost Usd",
+          "type": "number"
+        },
+        "facts": {
+          "title": "Facts",
+          "type": "integer"
+        },
+        "rung": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rung"
+        },
+        "targets": {
+          "title": "Targets",
+          "type": "integer"
+        },
+        "tokens": {
+          "title": "Tokens",
+          "type": "integer"
+        },
+        "truncated": {
+          "title": "Truncated",
+          "type": "boolean"
+        },
+        "unresolved": {
+          "title": "Unresolved",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "targets",
+        "facts",
+        "unresolved",
+        "truncated",
+        "tokens",
+        "cost_usd"
+      ],
+      "title": "ScoutReportP",
+      "type": "object"
+    },
+    "ScoutStartP": {
+      "additionalProperties": false,
+      "properties": {
+        "goal_sha": {
+          "title": "Goal Sha",
+          "type": "string"
+        },
+        "rung": {
+          "title": "Rung",
+          "type": "string"
+        },
+        "snapshot_sha": {
+          "title": "Snapshot Sha",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rung",
+        "goal_sha",
+        "snapshot_sha"
+      ],
+      "title": "ScoutStartP",
+      "type": "object"
+    },
+    "ScoutToolP": {
+      "additionalProperties": false,
+      "properties": {
+        "args_sha": {
+          "title": "Args Sha",
+          "type": "string"
+        },
+        "dedup_hit": {
+          "title": "Dedup Hit",
+          "type": "boolean"
+        },
+        "result_tokens": {
+          "title": "Result Tokens",
+          "type": "integer"
+        },
+        "tool": {
+          "title": "Tool",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tool",
+        "args_sha",
+        "result_tokens",
+        "dedup_hit"
+      ],
+      "title": "ScoutToolP",
+      "type": "object"
+    },
+    "SecretDeniedP": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "rung": {
+          "title": "Rung",
+          "type": "string"
+        },
+        "surface": {
+          "title": "Surface",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "rung",
+        "surface"
+      ],
+      "title": "SecretDeniedP",
+      "type": "object"
+    },
+    "SecretSuspectedP": {
+      "additionalProperties": false,
+      "description": "Advisory only: the content was read; nothing was withheld.",
+      "properties": {
+        "detector": {
+          "title": "Detector",
+          "type": "string"
+        },
+        "line": {
+          "title": "Line",
+          "type": "integer"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "line",
+        "detector"
+      ],
+      "title": "SecretSuspectedP",
+      "type": "object"
+    },
+    "SessionEndP": {
+      "additionalProperties": false,
+      "properties": {
+        "cost_usd": {
+          "title": "Cost Usd",
+          "type": "number"
+        },
+        "turns": {
+          "title": "Turns",
+          "type": "integer"
+        },
+        "wall_ms": {
+          "title": "Wall Ms",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "turns",
+        "cost_usd",
+        "wall_ms"
+      ],
+      "title": "SessionEndP",
+      "type": "object"
+    },
+    "SessionStartP": {
+      "additionalProperties": false,
+      "properties": {
+        "profile": {
+          "title": "Profile",
+          "type": "string"
+        },
+        "repo": {
+          "title": "Repo",
+          "type": "string"
+        },
+        "rungs_sha": {
+          "title": "Rungs Sha",
+          "type": "string"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "session_id",
+        "repo",
+        "profile",
+        "rungs_sha"
+      ],
+      "title": "SessionStartP",
+      "type": "object"
+    },
+    "SyntaxFactP": {
+      "additionalProperties": false,
+      "description": "One changed file's syntax, judged by its own language's profile over the file as the\ntask left it: the same check the edit tool reported.",
+      "properties": {
+        "depth": {
+          "anyOf": [
+            {
+              "enum": [
+                "compiled",
+                "command",
+                "parsed"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Depth"
+        },
+        "detail": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Detail"
+        },
+        "ok": {
+          "title": "Ok",
+          "type": "boolean"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "ok"
+      ],
+      "title": "SyntaxFactP",
+      "type": "object"
+    },
+    "TaskDelegatedP": {
+      "additionalProperties": false,
+      "description": "A task given to the worker: by Athena's `delegate` call, or by Zeus as a\none-task plan. Its id is the harness's, never the model's.",
+      "properties": {
+        "brief_sha": {
+          "title": "Brief Sha",
+          "type": "string"
+        },
+        "by": {
+          "enum": [
+            "zeus",
+            "athena"
+          ],
+          "title": "By",
+          "type": "string"
+        },
+        "call_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Call Id"
+        },
+        "depth": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Depth",
+          "type": "integer"
+        },
+        "plan_task": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Plan Task"
+        },
+        "start_commit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Commit"
+        },
+        "start_tree": {
+          "title": "Start Tree",
+          "type": "string"
+        },
+        "task_id": {
+          "pattern": "^T[1-9][0-9]{0,5}(\\.[1-9][0-9]{0,3}){0,4}(@([2-9]|[1-9][0-9]{1,3}))?$",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "template_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Template Sha"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "task_id",
+        "title",
+        "brief_sha",
+        "by",
+        "start_tree"
+      ],
+      "title": "TaskDelegatedP",
+      "type": "object"
+    },
+    "TaskFactsP": {
+      "additionalProperties": false,
+      "description": "What a task did, measured from the trees and the journal, never from the\nreport.",
+      "properties": {
+        "commands": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/CommandFactP"
+          },
+          "title": "Commands",
+          "type": "array"
+        },
+        "end_tree": {
+          "title": "End Tree",
+          "type": "string"
+        },
+        "files": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/FileFactP"
+          },
+          "title": "Files",
+          "type": "array"
+        },
+        "skipped": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Skipped",
+          "type": "array"
+        },
+        "start_tree": {
+          "title": "Start Tree",
+          "type": "string"
+        },
+        "symbols_added": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Symbols Added",
+          "type": "array"
+        },
+        "symbols_known": {
+          "default": true,
+          "title": "Symbols Known",
+          "type": "boolean"
+        },
+        "symbols_removed": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Symbols Removed",
+          "type": "array"
+        },
+        "syntax": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/SyntaxFactP"
+          },
+          "title": "Syntax",
+          "type": "array"
+        },
+        "tests_added": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Tests Added",
+          "type": "array"
+        },
+        "tests_edited": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Tests Edited",
+          "type": "array"
+        }
+      },
+      "required": [
+        "start_tree",
+        "end_tree"
+      ],
+      "title": "TaskFactsP",
+      "type": "object"
+    },
+    "TaskReportedP": {
+      "additionalProperties": false,
+      "description": "One worker round's end: why it stopped, its words, and the facts measured.",
+      "properties": {
+        "facts": {
+          "$ref": "#/$defs/TaskFactsP"
+        },
+        "report_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Report Sha"
+        },
+        "round": {
+          "minimum": 1,
+          "title": "Round",
+          "type": "integer"
+        },
+        "stopped": {
+          "enum": [
+            "replied",
+            "limit",
+            "looped",
+            "context_full",
+            "model_error",
+            "harness_error",
+            "halted",
+            "held"
+          ],
+          "title": "Stopped",
+          "type": "string"
+        },
+        "task_id": {
+          "pattern": "^T[1-9][0-9]{0,5}(\\.[1-9][0-9]{0,3}){0,4}(@([2-9]|[1-9][0-9]{1,3}))?$",
+          "title": "Task Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "task_id",
+        "round",
+        "stopped",
+        "facts"
+      ],
+      "title": "TaskReportedP",
+      "type": "object"
+    },
+    "TaskReviewedP": {
+      "additionalProperties": false,
+      "description": "Athena's answer to a task's report, by her\n`review` call. On `feedback` the text is the worker's next message; on `re_cut` the tasks\nshe delegates next are its replacements.",
+      "properties": {
+        "answer": {
+          "enum": [
+            "accept",
+            "feedback",
+            "continue",
+            "take_over",
+            "abandon",
+            "re_cut",
+            "drop"
+          ],
+          "title": "Answer",
+          "type": "string"
+        },
+        "by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "By"
+        },
+        "call_id": {
+          "title": "Call Id",
+          "type": "string"
+        },
+        "fresh": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fresh"
+        },
+        "task_id": {
+          "pattern": "^T[1-9][0-9]{0,5}(\\.[1-9][0-9]{0,3}){0,4}(@([2-9]|[1-9][0-9]{1,3}))?$",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "text_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text Sha"
+        }
+      },
+      "required": [
+        "task_id",
+        "call_id",
+        "answer"
+      ],
+      "title": "TaskReviewedP",
+      "type": "object"
+    },
+    "TellDeliveredP": {
+      "additionalProperties": false,
+      "description": "A message from Zeus (a session's `tell` line) delivered to Athena in this run: at the\nboundary of the worker's round it held, or before her next model call with no\nround open.",
+      "properties": {
+        "round": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Round"
+        },
+        "task_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Task Id"
+        },
+        "tell": {
+          "pattern": "^tell-[1-9][0-9]*$",
+          "title": "Tell",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tell"
+      ],
+      "title": "TellDeliveredP",
+      "type": "object"
+    },
+    "TellReplyP": {
+      "additionalProperties": false,
+      "description": "Athena's reply to a delivered tell, by her `reply` call: owed for each one.",
+      "properties": {
+        "call_id": {
+          "title": "Call Id",
+          "type": "string"
+        },
+        "outcome": {
+          "enum": [
+            "applied",
+            "planned",
+            "needs_design",
+            "declined"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        },
+        "tell": {
+          "pattern": "^tell-[1-9][0-9]*$",
+          "title": "Tell",
+          "type": "string"
+        },
+        "text_sha": {
+          "title": "Text Sha",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tell",
+        "outcome",
+        "text_sha",
+        "call_id"
+      ],
+      "title": "TellReplyP",
+      "type": "object"
+    },
+    "ToolCallP": {
+      "additionalProperties": false,
+      "description": "One tool call by any role, through the one dispatcher.\n`scout_tool` stays, and `journal.projection.tool_call` reads both as this. A call was\nrefused exactly when `denied_reason` is set.",
+      "properties": {
+        "args_preview": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Args Preview"
+        },
+        "args_sha": {
+          "title": "Args Sha",
+          "type": "string"
+        },
+        "dedup_hit": {
+          "default": false,
+          "title": "Dedup Hit",
+          "type": "boolean"
+        },
+        "denied_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Denied Reason"
+        },
+        "form": {
+          "anyOf": [
+            {
+              "enum": [
+                "native",
+                "tool_line",
+                "need",
+                "json",
+                "json_fenced"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Form"
+        },
+        "outcome": {
+          "enum": [
+            "served",
+            "repack"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        },
+        "result_preview": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Result Preview"
+        },
+        "result_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Result Sha"
+        },
+        "result_tokens": {
+          "minimum": 0,
+          "title": "Result Tokens",
+          "type": "integer"
+        },
+        "role": {
+          "minLength": 1,
+          "title": "Role",
+          "type": "string"
+        },
+        "tool": {
+          "minLength": 1,
+          "title": "Tool",
+          "type": "string"
+        }
+      },
+      "required": [
+        "role",
+        "tool",
+        "args_sha",
+        "outcome",
+        "result_tokens"
+      ],
+      "title": "ToolCallP",
+      "type": "object"
+    },
+    "TurnP": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "input_sha": {
+          "title": "Input Sha",
+          "type": "string"
+        },
+        "mode": {
+          "title": "Mode",
+          "type": "string"
+        }
+      },
+      "required": [
+        "input_sha",
+        "mode",
+        "artifact_id"
+      ],
+      "title": "TurnP",
+      "type": "object"
+    },
+    "UntrustedReadP": {
+      "additionalProperties": false,
+      "properties": {
+        "bytes": {
+          "title": "Bytes",
+          "type": "integer"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "rung": {
+          "title": "Rung",
+          "type": "string"
+        },
+        "span": {
+          "title": "Span",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "span",
+        "rung",
+        "bytes"
+      ],
+      "title": "UntrustedReadP",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "run_start"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/RunStartP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "effect_intended"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/EffectIntendedP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "effect_started"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/EffectStartedP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "effect_completed"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/EffectCompletedP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "budget"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/BudgetP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "exec"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/ExecP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "route"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/RouteP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "read_tier"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/ReadTierP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "citation_gate"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/CitationGateP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "read_answered"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/ReadAnsweredP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "scout_start"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/ScoutStartP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "scout_tool"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/ScoutToolP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "scout_escape"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/ScoutEscapeP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "scout_escalated"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/ScoutEscalatedP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "scout_report"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/ScoutReportP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "session_start"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/SessionStartP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "turn"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/TurnP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "interrupt"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/InterruptP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "session_end"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/SessionEndP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "question_asked"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/QuestionAskedP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "question_answered"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/QuestionAnsweredP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "context_tokens"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/ContextTokensP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "untrusted_read"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/UntrustedReadP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "mcp_connect"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/McpConnectP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "mcp_call"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/McpCallP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "external_call"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/ExternalCallP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "secret_denied"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/SecretDeniedP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "secret_suspected"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/SecretSuspectedP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "redaction"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/RedactionP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "hook"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/HookP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "callback_error"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/CallbackErrorP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "run_end"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/RunEndP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "tool_call"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/ToolCallP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "model_call"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/ModelCallP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "task_delegated"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/TaskDelegatedP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "task_reported"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/TaskReportedP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "box_message"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/BoxMessageP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "box_compaction"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/BoxCompactionP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "task_reviewed"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/TaskReviewedP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "plan_written"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/PlanWrittenP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "plan_outgrown"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/PlanOutgrownP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "agent_start"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/AgentStartP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "agent_message"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/AgentMessageP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "agent_report"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/AgentReportP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "tell_delivered"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/TellDeliveredP"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "tell_reply"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/TellReplyP"
+          }
+        }
+      }
+    }
+  ],
+  "description": "The envelope. Identical for every kind; `payload` is kind-discriminated.",
+  "properties": {
+    "kind": {
+      "$ref": "#/$defs/EventKind"
+    },
+    "payload": {
+      "type": "object"
+    },
+    "round": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Round"
+    },
+    "run_id": {
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}-[0-9a-f]{8}$",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "seq": {
+      "minimum": 1,
+      "title": "Seq",
+      "type": "integer"
+    },
+    "task_id": {
+      "anyOf": [
+        {
+          "pattern": "^T[1-9][0-9]{0,5}(\\.[1-9][0-9]{0,3}){0,4}(@([2-9]|[1-9][0-9]{1,3}))?$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Task Id"
+    },
+    "ts": {
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z?$",
+      "title": "Ts",
+      "type": "string"
+    },
+    "v": {
+      "default": 2,
+      "title": "V",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "run_id",
+    "seq",
+    "ts",
+    "kind",
+    "payload"
+  ],
+  "title": "JournalEvent",
+  "type": "object"
+}

@@ -1,0 +1,1 @@
+[progress watchdog] You were asked to stop and report, and made {{calls}} more calls. Your tool calls for this round have ended. Reply now, in plain text and with no tool call, with your report: what you were trying to do, what you tried and what happened, where you are stuck and why, and what you would try next.

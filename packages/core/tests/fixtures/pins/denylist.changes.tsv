@@ -1,0 +1,65 @@
+# Every answer that moved when the deny list began to match through paths.glob_match (D170).
+# caller	pattern	path	before	after	why
+mask	*	keys	False	True	D170 rule 3: `dir/**` and `dir/` deny `dir` itself
+mask	*	prod.env	False	True	D170 rule 2 (D168 rule 2): `**/` is zero or more directories
+mask	*	secrets/x/b.yaml	True	False	D170 rule 2 (D168 rule 1): `*` stays within one segment
+mask	*	state.tfstate	False	True	D170 rule 2 (D168 rule 2): `**/` is zero or more directories
+mask	*	sub/keys	False	True	D170 rule 3: `dir/**` and `dir/` deny `dir` itself
+mask	*	vault/a.hcl	False	True	D170 rule 2 (D168 rule 2): `**/` is zero or more directories
+match	**/*.tfstate	state.tfstate	None	**/*.tfstate	D170 rule 2 (D168 rule 2): `**/` is zero or more directories
+match	**/prod.env	prod.env	None	**/prod.env	D170 rule 2 (D168 rule 2): `**/` is zero or more directories
+match	.docker/*.json	sub/.docker/config.json	None	.docker/*.json	D170 rule 1: the write rule judges every tail of a path, as the read rule does
+match	.docker/*.json	sub/.docker/other.json	None	.docker/*.json	D170 rule 1: the write rule judges every tail of a path, as the read rule does
+match	.docker/config.json	sub/.docker/config.json	None	.docker/config.json	D170 rule 1: the write rule judges every tail of a path, as the read rule does
+match	.ssh/**	a/.ssh/ (dir)	None	.ssh/**	D170 rule 1: the write rule judges every tail of a path, as the read rule does
+match	/root.key	root.key	None	/root.key	D170 rule 2 (D168 rule 4): `/` anchors at the root, and every tail is a root (D154)
+match	/root.key	sub/root.key	None	/root.key	D170 rule 2 (D168 rule 4): `/` anchors at the root, and every tail is a root (D154)
+match	[^a]*.key	a.key	[^a]*.key	None	D170 rule 2 (D168 rule 7): `[^…]` negates
+match	[^a]*.key	a/b.key	None	[^a]*.key	D170 rule 2 (D168 rule 7): `[^…]` negates
+match	[^a]*.key	a/x/y/b.key	None	[^a]*.key	D170 rule 2 (D168 rule 7): `[^…]` negates
+match	[^a]*.key	b.key	None	[^a]*.key	D170 rule 2 (D168 rule 7): `[^…]` negates
+match	[^a]*.key	root.key	None	[^a]*.key	D170 rule 2 (D168 rule 7): `[^…]` negates
+match	[^a]*.key	sub/root.key	None	[^a]*.key	D170 rule 2 (D168 rule 7): `[^…]` negates
+match	a/**/b.key	a/b.key	None	a/**/b.key	D170 rule 2 (D168 rule 2): `**/` is zero or more directories
+match	config/**	.kube/config	None	config/**	D170 rule 1: the write rule judges every tail of a path, as the read rule does
+match	deploy/*	deploy/a/b	deploy/*	None	D170 rule 2 (D168 rule 1): `*` stays within one segment
+match	keys/	keys/ (dir)	None	keys/	D170 rule 3: `dir/**` and `dir/` deny `dir` itself
+match	keys/	keys/a	None	keys/	D170 rule 2 (D168 rule 5): a trailing `/` is everything inside the directory
+match	keys/	sub/keys/a	None	keys/	D170 rule 2 (D168 rule 5): a trailing `/` is everything inside the directory
+match	secrets/*.yaml	secrets/x/b.yaml	secrets/*.yaml	None	D170 rule 2 (D168 rule 1): `*` stays within one segment
+match	vault/**/*.hcl	vault/a.hcl	None	vault/**/*.hcl	D170 rule 2 (D168 rule 2): `**/` is zero or more directories
+name_denied	**/*.tfstate	state.tfstate	None	**/*.tfstate	D170 rule 2 (D168 rule 2): `**/` is zero or more directories
+name_denied	**/prod.env	prod.env	None	**/prod.env	D170 rule 2 (D168 rule 2): `**/` is zero or more directories
+name_denied	/root.key	root.key	None	/root.key	D170 rule 2 (D168 rule 4): `/` anchors at the root, and every tail is a root (D154)
+name_denied	/root.key	sub/root.key	None	/root.key	D170 rule 2 (D168 rule 4): `/` anchors at the root, and every tail is a root (D154)
+name_denied	[^a]*.key	a.key	[^a]*.key	None	D170 rule 2 (D168 rule 7): `[^…]` negates
+name_denied	[^a]*.key	a/b.key	None	[^a]*.key	D170 rule 2 (D168 rule 7): `[^…]` negates
+name_denied	[^a]*.key	a/x/y/b.key	None	[^a]*.key	D170 rule 2 (D168 rule 7): `[^…]` negates
+name_denied	[^a]*.key	b.key	None	[^a]*.key	D170 rule 2 (D168 rule 7): `[^…]` negates
+name_denied	[^a]*.key	root.key	None	[^a]*.key	D170 rule 2 (D168 rule 7): `[^…]` negates
+name_denied	[^a]*.key	sub/root.key	None	[^a]*.key	D170 rule 2 (D168 rule 7): `[^…]` negates
+name_denied	a/**/b.key	a/b.key	None	a/**/b.key	D170 rule 2 (D168 rule 2): `**/` is zero or more directories
+name_denied	deploy/*	deploy/a/b	deploy/*	None	D170 rule 2 (D168 rule 1): `*` stays within one segment
+name_denied	keys/	keys/ (dir)	None	keys/	D170 rule 3: `dir/**` and `dir/` deny `dir` itself
+name_denied	keys/	keys/a	None	keys/	D170 rule 2 (D168 rule 5): a trailing `/` is everything inside the directory
+name_denied	keys/	sub/keys/a	None	keys/	D170 rule 2 (D168 rule 5): a trailing `/` is everything inside the directory
+name_denied	secrets/*.yaml	secrets/x/b.yaml	secrets/*.yaml	None	D170 rule 2 (D168 rule 1): `*` stays within one segment
+name_denied	vault/**/*.hcl	vault/a.hcl	None	vault/**/*.hcl	D170 rule 2 (D168 rule 2): `**/` is zero or more directories
+rows	*.[pk]em	-	['/[^/]*\\.[pk]em$']	['/[^/]*\\.[KPkp][Ee][Mm]$']	D170 rule 5: a Seatbelt row ignores case, as the list does
+rows	*.kdbx	-	['/[^/]*\\.kdbx$']	['/[^/]*\\.[Kk][Dd][Bb][Xx]$']	D170 rule 5: a Seatbelt row ignores case, as the list does
+rows	*.key	-	['/[^/]*\\.key$']	['/[^/]*\\.[Kk][Ee][Yy]$']	D170 rule 5: a Seatbelt row ignores case, as the list does
+rows	*.p12	-	['/[^/]*\\.p12$']	['/[^/]*\\.[Pp]12$']	D170 rule 5: a Seatbelt row ignores case, as the list does
+rows	*.pem	-	['/[^/]*\\.pem$']	['/[^/]*\\.[Pp][Ee][Mm]$']	D170 rule 5: a Seatbelt row ignores case, as the list does
+rows	*.pfx	-	['/[^/]*\\.pfx$']	['/[^/]*\\.[Pp][Ff][Xx]$']	D170 rule 5: a Seatbelt row ignores case, as the list does
+rows	*secret*	-	['/[^/]*secret[^/]*$']	['/[^/]*[Ss][Ee][Cc][Rr][Ee][Tt][^/]*$']	D170 rule 5: a Seatbelt row ignores case, as the list does
+rows	.env	-	['/\\.env$']	['/\\.[Ee][Nn][Vv]$']	D170 rule 5: a Seatbelt row ignores case, as the list does
+rows	.env.*	-	['/\\.env\\.[^/]*$']	['/\\.[Ee][Nn][Vv]\\.[^/]*$']	D170 rule 5: a Seatbelt row ignores case, as the list does
+rows	.netrc	-	['/\\.netrc$']	['/\\.[Nn][Ee][Tt][Rr][Cc]$']	D170 rule 5: a Seatbelt row ignores case, as the list does
+rows	.npmrc	-	['/\\.npmrc$']	['/\\.[Nn][Pp][Mm][Rr][Cc]$']	D170 rule 5: a Seatbelt row ignores case, as the list does
+rows	.pypirc	-	['/\\.pypirc$']	['/\\.[Pp][Yy][Pp][Ii][Rr][Cc]$']	D170 rule 5: a Seatbelt row ignores case, as the list does
+rows	Secret?.txt	-	['/Secret[^/]\\.txt$']	['/[Ss][Ee][Cc][Rr][Ee][Tt][^/]\\.[Tt][Xx][Tt]$']	D170 rule 5: a Seatbelt row ignores case, as the list does
+rows	[!a]*.key	-	['/[^a/][^/]*\\.key$']	['/[^Aa/][^/]*\\.[Kk][Ee][Yy]$']	D170 rule 5: a Seatbelt row ignores case, as the list does
+rows	[^a]*.key	-	['/[a^][^/]*\\.key$']	['/[^Aa/][^/]*\\.[Kk][Ee][Yy]$']	D170 rule 2 (D168 rule 7): `[^…]` negates; and D170 rule 5: a row ignores case
+rows	id_ed25519*	-	['/id_ed25519[^/]*$']	['/[Ii][Dd]_[Ee][Dd]25519[^/]*$']	D170 rule 5: a Seatbelt row ignores case, as the list does
+rows	id_rsa*	-	['/id_rsa[^/]*$']	['/[Ii][Dd]_[Rr][Ss][Aa][^/]*$']	D170 rule 5: a Seatbelt row ignores case, as the list does
+rows	service-account*.json	-	['/service\\-account[^/]*\\.json$']	['/[Ss][Ee][Rr][Vv][Ii][Cc][Ee]\\-[Aa][Cc][Cc][Oo][Uu][Nn][Tt][^/]*\\.[Jj][Ss][Oo][Nn]$']	D170 rule 5: a Seatbelt row ignores case, as the list does

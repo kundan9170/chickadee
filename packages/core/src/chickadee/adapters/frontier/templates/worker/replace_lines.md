@@ -1,0 +1,1 @@
+replace_lines(path, start, end, content): replace lines start to end of the file, each given by its anchor as the file is shown, with content's lines; empty content deletes them. A line that moved since you read it is refused with the lines there now.

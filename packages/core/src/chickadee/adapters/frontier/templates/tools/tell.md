@@ -1,0 +1,3 @@
+Tell the team something the user said while they work: `text` in your words, `from` the user's turns it came from, by their [turn N].
+
+Use it for how the work is done: a library to use, a file to leave alone, a test that matters. It is delivered at the worker's next tool boundary, or when a paused run continues, and the team replies; a reply that needs you wakes you. A change to what the work does (behaviour, an interface, a dependency, the scope) is an amendment, not a tell: pause the team, change the design, then call coder. A tell grants no tool, command or path the approved design does not.

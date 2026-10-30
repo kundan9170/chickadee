@@ -1,0 +1,1 @@
+edit(path, old, new): replace the exact text old, which must occur once, with new in the file; replace_all=true replaces every occurrence, and edits=[{old, new}] makes several edits of the file in order as one call. Give old and new, or edits, never both.

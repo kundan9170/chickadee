@@ -1,0 +1,34 @@
+name = "cpp"
+# `.h` is C's (D203 decision 5); a C++-only header is `.hpp`, `.hh` or `.hxx`.
+extensions = [".cc", ".cpp", ".cxx", ".hpp", ".hh", ".hxx"]
+tree_sitter_grammar = "cpp"
+
+[syntax]
+# The grammar's parse, in process (D203 decision 3): a compiler needs the build's include
+# paths and macros to say anything about one file.
+mode = "parse"
+
+[tests]
+globs = ["**/test/**", "**/tests/**", "*_test.cc", "*_test.cpp", "test_*.cpp", "*_unittest.cc"]
+# CTest runs what the build registered, from the build tree; it selects by test name, not by
+# file, so every registered test runs. A repository that builds elsewhere overrides this.
+runner = "ctest --test-dir build --output-on-failure"
+timeout_s = 600
+
+[build]
+compile_cmd = ""
+import_smoke = ""
+
+[deps]
+manifests = ["CMakeLists.txt", "meson.build"]
+
+[examples]
+snippet = """
+EXPECT_EQ({symbol}({input}), {output});
+"""
+
+[conventions]
+file = "conventions/cpp.md"
+
+[lsp]
+server = "clangd"

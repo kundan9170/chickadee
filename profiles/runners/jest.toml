@@ -1,0 +1,29 @@
+name = "jest"
+
+[[summary]]
+line = '^Tests:\s+.*\d+ total$'
+passed = '(\d+) passed'
+failed = '(\d+) failed'
+
+# A suite that failed to run (it would not load) names no test; it is an error.
+[[summary]]
+line = '^Test Suites:\s+.*\d+ total$'
+errors = '(\d+) failed'
+
+[[summary]]
+line = '^No tests found, exiting with code \d+$'
+
+[names]
+# A name is printed under its file's `PASS` or `FAIL` line, and read as `file > name`.
+file = '^(?:PASS|FAIL) (\S+)'
+failing = ['^\s*● (?!Test suite failed to run$|Console$)(.+?)\s*$']
+
+[command]
+words = ["jest"]
+selects = "paths"
+flags = [
+  "--silent", "--verbose", "--ci", "--runInBand", "-i", "--no-coverage", "--coverage",
+  "--colors", "--no-colors", "--bail", "--passWithNoTests", "--detectOpenHandles",
+  "--forceExit", "--no-cache",
+]
+values = ["--maxWorkers", "-w", "--watchAll", "--testTimeout"]

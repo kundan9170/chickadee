@@ -1,0 +1,9 @@
+Test project /work/ct/b
+    Start 1: good
+1/2 Test #1: good .............................   Passed    0.00 sec
+    Start 3: also_good
+2/2 Test #3: also_good ........................   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   0.01 sec

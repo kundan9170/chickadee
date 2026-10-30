@@ -1,0 +1,51 @@
+
+ RUN  v3.2.7 /work/vt
+
+ ✓ t/b.test.js (1 test) 2ms
+ ❯ t/a.test.js (2 tests | 1 failed) 10ms
+   ✓ grp > ok 1ms
+   × grp > bad 7ms
+     → expected 1 to be 2 // Object.is equality
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  t/c.test.js [ t/c.test.js ]
+Error: Cannot find module './nope.js' imported from '/work/vt/t/c.test.js'
+ ❯ t/c.test.js:1:30
+      1| import {test} from 'vitest'; import './nope.js'; test('x', () => {});
+       |                              ^
+      2| 
+
+Caused by: Error: Failed to load url ./nope.js (resolved id: ./nope.js) in /work/vt/t/c.test.js. Does the file exist?
+ ❯ loadAndTransform ../js/node_modules/vite/dist/node/chunks/config.js:22907:33
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  t/a.test.js > grp > bad
+AssertionError: expected 1 to be 2 // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 2[39m
+[31m+ 1[39m
+
+ ❯ t/a.test.js:4:33
+      2| describe('grp', () => {
+      3|   test('ok', () => { expect(1).toBe(1); });
+      4|   test('bad', () => { expect(1).toBe(2); });
+       |                                 ^
+      5| });
+      6| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed | 1 passed (3)
+      Tests  1 failed | 2 passed (3)
+   Start at  01:24:49
+   Duration  359ms (transform 57ms, setup 0ms, collect 48ms, tests 11ms, environment 1ms, prepare 304ms)
+

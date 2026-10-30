@@ -1,0 +1,1943 @@
+{
+ "deny": {
+  "*": [
+   "a.py",
+   "ab",
+   "a/b",
+   "a/x/b",
+   "a/x/y/b",
+   "app.yaml",
+   "config/app.yaml",
+   "a/b/c.yaml",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js",
+   "tests",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "test/a.js",
+   "x/__tests__/a.js",
+   "conftest.py",
+   "pkg/conftest.py",
+   "notes.txt",
+   "app.txt",
+   "bin.txt",
+   "docs/x.md",
+   "docs/a/y.md",
+   "db/migrations/0001.py",
+   "migrations",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema.sql",
+   "sql/a.sql",
+   "schema/a.py",
+   "prisma/schema.prisma",
+   ".env",
+   ".github/workflows/ci.yml",
+   "a**b.py",
+   "axb.py"
+  ],
+  "**": [
+   "a.py",
+   "ab",
+   "a/b",
+   "a/x/b",
+   "a/x/y/b",
+   "app.yaml",
+   "config/app.yaml",
+   "a/b/c.yaml",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js",
+   "tests",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "test/a.js",
+   "x/__tests__/a.js",
+   "conftest.py",
+   "pkg/conftest.py",
+   "notes.txt",
+   "app.txt",
+   "bin.txt",
+   "docs/x.md",
+   "docs/a/y.md",
+   "db/migrations/0001.py",
+   "migrations",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema.sql",
+   "sql/a.sql",
+   "schema/a.py",
+   "prisma/schema.prisma",
+   ".env",
+   ".github/workflows/ci.yml",
+   "a**b.py",
+   "axb.py"
+  ],
+  "**.py": [
+   "a.py",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "conftest.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "**/*.py": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py"
+  ],
+  "**/*.yaml": [
+   "config/app.yaml",
+   "a/b/c.yaml"
+  ],
+  "**/__tests__/**": [
+   "x/__tests__/a.js"
+  ],
+  "**/alembic/versions/**": [
+   "x/alembic/versions/a.py"
+  ],
+  "**/migrate/**": [],
+  "**/migrations/**": [
+   "db/migrations/0001.py"
+  ],
+  "**/prisma/**": [],
+  "**/schema/**": [],
+  "**/test/**": [
+   "src/test/a.js"
+  ],
+  "**/test_*.py": [
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/test_x.py"
+  ],
+  "**/tests": [],
+  "**/tests/**": [
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py"
+  ],
+  "*.py": [
+   "a.py",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "conftest.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "*.spec.js": [],
+  "*.sql": [
+   "schema.sql",
+   "sql/a.sql"
+  ],
+  "*.test.js": [
+   "src/a.test.js"
+  ],
+  "*.yaml": [
+   "app.yaml",
+   "config/app.yaml",
+   "a/b/c.yaml"
+  ],
+  "*/*.py": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py"
+  ],
+  "*_test.py": [
+   "src/a_test.py"
+  ],
+  "/src/*.py": [],
+  "[!a]*.txt": [
+   "notes.txt",
+   "bin.txt"
+  ],
+  "[ab]*.py": [
+   "a.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "__tests__/**": [],
+  "a**b.py": [
+   "a**b.py",
+   "axb.py"
+  ],
+  "a/**/b": [
+   "a/x/b",
+   "a/x/y/b"
+  ],
+  "config/*": [
+   "config/app.yaml"
+  ],
+  "conftest.py": [
+   "conftest.py"
+  ],
+  "docs/*.md": [
+   "docs/x.md",
+   "docs/a/y.md"
+  ],
+  "migrations/**": [
+   "migrations/x.py"
+  ],
+  "src/*": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js"
+  ],
+  "src/**": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js"
+  ],
+  "src/**.py": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py"
+  ],
+  "src/**/*.py": [
+   "src/a/b.py",
+   "src/a/b/c.py"
+  ],
+  "src/*.py": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py"
+  ],
+  "src/*/b.py": [
+   "src/a/b.py"
+  ],
+  "src/a/": [],
+  "test/**": [
+   "test/a.js"
+  ],
+  "test_*.py": [
+   "test_utils/helpers.py",
+   "test_1.py"
+  ],
+  "test_?.py": [
+   "test_1.py"
+  ],
+  "tests": [
+   "tests"
+  ],
+  "tests/": [],
+  "tests/**": [
+   "tests/test_a.py",
+   "tests/unit/test_b.py"
+  ]
+ },
+ "effects": {
+  "*": [
+   "a.py",
+   "ab",
+   "a/b",
+   "a/x/b",
+   "a/x/y/b",
+   "app.yaml",
+   "config/app.yaml",
+   "a/b/c.yaml",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js",
+   "tests",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "test/a.js",
+   "x/__tests__/a.js",
+   "conftest.py",
+   "pkg/conftest.py",
+   "notes.txt",
+   "app.txt",
+   "bin.txt",
+   "docs/x.md",
+   "docs/a/y.md",
+   "db/migrations/0001.py",
+   "migrations",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema.sql",
+   "sql/a.sql",
+   "schema/a.py",
+   "prisma/schema.prisma",
+   ".env",
+   ".github/workflows/ci.yml",
+   "a**b.py",
+   "axb.py"
+  ],
+  "**": [
+   "a.py",
+   "ab",
+   "a/b",
+   "a/x/b",
+   "a/x/y/b",
+   "app.yaml",
+   "config/app.yaml",
+   "a/b/c.yaml",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js",
+   "tests",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "test/a.js",
+   "x/__tests__/a.js",
+   "conftest.py",
+   "pkg/conftest.py",
+   "notes.txt",
+   "app.txt",
+   "bin.txt",
+   "docs/x.md",
+   "docs/a/y.md",
+   "db/migrations/0001.py",
+   "migrations",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema.sql",
+   "sql/a.sql",
+   "schema/a.py",
+   "prisma/schema.prisma",
+   ".env",
+   ".github/workflows/ci.yml",
+   "a**b.py",
+   "axb.py"
+  ],
+  "**.py": [
+   "a.py",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "conftest.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "**/*.py": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py"
+  ],
+  "**/*.yaml": [
+   "config/app.yaml",
+   "a/b/c.yaml"
+  ],
+  "**/__tests__/**": [
+   "x/__tests__/a.js"
+  ],
+  "**/alembic/versions/**": [
+   "x/alembic/versions/a.py"
+  ],
+  "**/migrate/**": [],
+  "**/migrations/**": [
+   "db/migrations/0001.py"
+  ],
+  "**/prisma/**": [],
+  "**/schema/**": [],
+  "**/test/**": [
+   "src/test/a.js"
+  ],
+  "**/test_*.py": [
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/test_x.py"
+  ],
+  "**/tests": [],
+  "**/tests/**": [
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py"
+  ],
+  "*.py": [
+   "a.py",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "conftest.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "*.spec.js": [],
+  "*.sql": [
+   "schema.sql",
+   "sql/a.sql"
+  ],
+  "*.test.js": [
+   "src/a.test.js"
+  ],
+  "*.yaml": [
+   "app.yaml",
+   "config/app.yaml",
+   "a/b/c.yaml"
+  ],
+  "*/*.py": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py"
+  ],
+  "*_test.py": [
+   "src/a_test.py"
+  ],
+  "/src/*.py": [],
+  "[!a]*.txt": [
+   "notes.txt",
+   "bin.txt"
+  ],
+  "[ab]*.py": [
+   "a.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "__tests__/**": [],
+  "a**b.py": [
+   "a**b.py",
+   "axb.py"
+  ],
+  "a/**/b": [
+   "a/x/b",
+   "a/x/y/b"
+  ],
+  "config/*": [
+   "config/app.yaml"
+  ],
+  "conftest.py": [
+   "conftest.py"
+  ],
+  "docs/*.md": [
+   "docs/x.md",
+   "docs/a/y.md"
+  ],
+  "migrations/**": [
+   "migrations",
+   "migrations/x.py"
+  ],
+  "src/*": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js"
+  ],
+  "src/**": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js"
+  ],
+  "src/**.py": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py"
+  ],
+  "src/**/*.py": [
+   "src/a/b.py",
+   "src/a/b/c.py"
+  ],
+  "src/*.py": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py"
+  ],
+  "src/*/b.py": [
+   "src/a/b.py"
+  ],
+  "src/a/": [],
+  "test/**": [
+   "test/a.js"
+  ],
+  "test_*.py": [
+   "test_utils/helpers.py",
+   "test_1.py"
+  ],
+  "test_?.py": [
+   "test_1.py"
+  ],
+  "tests": [
+   "tests"
+  ],
+  "tests/": [],
+  "tests/**": [
+   "tests",
+   "tests/test_a.py",
+   "tests/unit/test_b.py"
+  ]
+ },
+ "ignore": {
+  "*": [
+   "a.py",
+   "ab",
+   "a/b",
+   "a/x/b",
+   "a/x/y/b",
+   "app.yaml",
+   "config/app.yaml",
+   "a/b/c.yaml",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js",
+   "tests",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "test/a.js",
+   "x/__tests__/a.js",
+   "conftest.py",
+   "pkg/conftest.py",
+   "notes.txt",
+   "app.txt",
+   "bin.txt",
+   "docs/x.md",
+   "docs/a/y.md",
+   "db/migrations/0001.py",
+   "migrations",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema.sql",
+   "sql/a.sql",
+   "schema/a.py",
+   "prisma/schema.prisma",
+   ".env",
+   ".github/workflows/ci.yml",
+   "a**b.py",
+   "axb.py"
+  ],
+  "**": [
+   "a.py",
+   "ab",
+   "a/b",
+   "a/x/b",
+   "a/x/y/b",
+   "app.yaml",
+   "config/app.yaml",
+   "a/b/c.yaml",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js",
+   "tests",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "test/a.js",
+   "x/__tests__/a.js",
+   "conftest.py",
+   "pkg/conftest.py",
+   "notes.txt",
+   "app.txt",
+   "bin.txt",
+   "docs/x.md",
+   "docs/a/y.md",
+   "db/migrations/0001.py",
+   "migrations",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema.sql",
+   "sql/a.sql",
+   "schema/a.py",
+   "prisma/schema.prisma",
+   ".env",
+   ".github/workflows/ci.yml",
+   "a**b.py",
+   "axb.py"
+  ],
+  "**.py": [
+   "a.py",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "conftest.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "**/*.py": [
+   "a.py",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "conftest.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "**/*.yaml": [
+   "app.yaml",
+   "config/app.yaml",
+   "a/b/c.yaml"
+  ],
+  "**/__tests__/**": [
+   "x/__tests__/a.js"
+  ],
+  "**/alembic/versions/**": [
+   "x/alembic/versions/a.py"
+  ],
+  "**/migrate/**": [],
+  "**/migrations/**": [
+   "db/migrations/0001.py",
+   "migrations/x.py"
+  ],
+  "**/prisma/**": [
+   "prisma/schema.prisma"
+  ],
+  "**/schema/**": [
+   "schema/a.py"
+  ],
+  "**/test/**": [
+   "src/test/a.js",
+   "test/a.js"
+  ],
+  "**/test_*.py": [
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/test_x.py",
+   "test_1.py"
+  ],
+  "**/tests": [
+   "tests",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py"
+  ],
+  "**/tests/**": [
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py"
+  ],
+  "*.py": [
+   "a.py",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "conftest.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "*.spec.js": [],
+  "*.sql": [
+   "schema.sql",
+   "sql/a.sql"
+  ],
+  "*.test.js": [
+   "src/a.test.js"
+  ],
+  "*.yaml": [
+   "app.yaml",
+   "config/app.yaml",
+   "a/b/c.yaml"
+  ],
+  "*/*.py": [
+   "src/a.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "test_utils/helpers.py",
+   "pkg/conftest.py",
+   "migrations/x.py",
+   "schema/a.py"
+  ],
+  "*_test.py": [
+   "src/a_test.py"
+  ],
+  "/src/*.py": [
+   "src/a.py",
+   "src/.hidden.py",
+   "src/a_test.py"
+  ],
+  "[!a]*.txt": [
+   "app.txt"
+  ],
+  "[ab]*.py": [
+   "a.py",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a_test.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "__tests__/**": [],
+  "a**b.py": [
+   "src/a/b.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "a/**/b": [
+   "a/b",
+   "a/x/b",
+   "a/x/y/b",
+   "a/b/c.yaml"
+  ],
+  "config/*": [
+   "config/app.yaml"
+  ],
+  "conftest.py": [
+   "conftest.py",
+   "pkg/conftest.py"
+  ],
+  "docs/*.md": [
+   "docs/x.md"
+  ],
+  "migrations/**": [
+   "migrations/x.py"
+  ],
+  "src/*": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js"
+  ],
+  "src/**": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js"
+  ],
+  "src/**.py": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py"
+  ],
+  "src/**/*.py": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py"
+  ],
+  "src/*.py": [
+   "src/a.py",
+   "src/.hidden.py",
+   "src/a_test.py"
+  ],
+  "src/*/b.py": [
+   "src/a/b.py"
+  ],
+  "src/a/": [
+   "src/a/b.py",
+   "src/a/b/c.py"
+  ],
+  "test/**": [
+   "test/a.js"
+  ],
+  "test_*.py": [
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/test_x.py",
+   "test_1.py"
+  ],
+  "test_?.py": [
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/test_x.py",
+   "test_1.py"
+  ],
+  "tests": [
+   "tests",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py"
+  ],
+  "tests/": [
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py"
+  ],
+  "tests/**": [
+   "tests/test_a.py",
+   "tests/unit/test_b.py"
+  ]
+ },
+ "paths": {
+  "*": [
+   "a.py",
+   "ab",
+   "a/b",
+   "a/x/b",
+   "a/x/y/b",
+   "app.yaml",
+   "config/app.yaml",
+   "a/b/c.yaml",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js",
+   "tests",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "test/a.js",
+   "x/__tests__/a.js",
+   "conftest.py",
+   "pkg/conftest.py",
+   "notes.txt",
+   "app.txt",
+   "bin.txt",
+   "docs/x.md",
+   "docs/a/y.md",
+   "db/migrations/0001.py",
+   "migrations",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema.sql",
+   "sql/a.sql",
+   "schema/a.py",
+   "prisma/schema.prisma",
+   ".env",
+   ".github/workflows/ci.yml",
+   "a**b.py",
+   "axb.py"
+  ],
+  "**": [
+   "a.py",
+   "ab",
+   "a/b",
+   "a/x/b",
+   "a/x/y/b",
+   "app.yaml",
+   "config/app.yaml",
+   "a/b/c.yaml",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js",
+   "tests",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "test/a.js",
+   "x/__tests__/a.js",
+   "conftest.py",
+   "pkg/conftest.py",
+   "notes.txt",
+   "app.txt",
+   "bin.txt",
+   "docs/x.md",
+   "docs/a/y.md",
+   "db/migrations/0001.py",
+   "migrations",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema.sql",
+   "sql/a.sql",
+   "schema/a.py",
+   "prisma/schema.prisma",
+   ".env",
+   ".github/workflows/ci.yml",
+   "a**b.py",
+   "axb.py"
+  ],
+  "**.py": [
+   "a.py",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "conftest.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "**/*.py": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py"
+  ],
+  "**/*.yaml": [
+   "config/app.yaml",
+   "a/b/c.yaml"
+  ],
+  "**/__tests__/**": [
+   "x/__tests__/a.js"
+  ],
+  "**/alembic/versions/**": [
+   "x/alembic/versions/a.py"
+  ],
+  "**/migrate/**": [],
+  "**/migrations/**": [
+   "db/migrations/0001.py",
+   "migrations",
+   "migrations/x.py"
+  ],
+  "**/prisma/**": [
+   "prisma/schema.prisma"
+  ],
+  "**/schema/**": [
+   "schema/a.py"
+  ],
+  "**/test/**": [
+   "src/test/a.js",
+   "test/a.js"
+  ],
+  "**/test_*.py": [
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/test_x.py"
+  ],
+  "**/tests": [],
+  "**/tests/**": [
+   "tests",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py"
+  ],
+  "*.py": [
+   "a.py",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "conftest.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "*.spec.js": [],
+  "*.sql": [
+   "schema.sql",
+   "sql/a.sql"
+  ],
+  "*.test.js": [
+   "src/a.test.js"
+  ],
+  "*.yaml": [
+   "app.yaml",
+   "config/app.yaml",
+   "a/b/c.yaml"
+  ],
+  "*/*.py": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py"
+  ],
+  "*_test.py": [
+   "src/a_test.py"
+  ],
+  "/src/*.py": [],
+  "[!a]*.txt": [
+   "notes.txt",
+   "bin.txt"
+  ],
+  "[ab]*.py": [
+   "a.py",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a_test.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "__tests__/**": [],
+  "a**b.py": [
+   "a**b.py",
+   "axb.py"
+  ],
+  "a/**/b": [
+   "a/x/b",
+   "a/x/y/b"
+  ],
+  "config/*": [
+   "config/app.yaml"
+  ],
+  "conftest.py": [
+   "conftest.py",
+   "pkg/conftest.py"
+  ],
+  "docs/*.md": [
+   "docs/x.md",
+   "docs/a/y.md"
+  ],
+  "migrations/**": [
+   "migrations",
+   "migrations/x.py"
+  ],
+  "src/*": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js"
+  ],
+  "src/**": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js"
+  ],
+  "src/**.py": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py"
+  ],
+  "src/**/*.py": [
+   "src/a/b.py",
+   "src/a/b/c.py"
+  ],
+  "src/*.py": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py"
+  ],
+  "src/*/b.py": [
+   "src/a/b.py"
+  ],
+  "src/a/": [],
+  "test/**": [
+   "test/a.js"
+  ],
+  "test_*.py": [
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/test_x.py",
+   "test_1.py"
+  ],
+  "test_?.py": [
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/test_x.py",
+   "test_1.py"
+  ],
+  "tests": [
+   "tests"
+  ],
+  "tests/": [],
+  "tests/**": [
+   "tests",
+   "tests/test_a.py",
+   "tests/unit/test_b.py"
+  ]
+ },
+ "preferences": {
+  "*": [
+   "a.py",
+   "ab",
+   "a/b",
+   "a/x/b",
+   "a/x/y/b",
+   "app.yaml",
+   "config/app.yaml",
+   "a/b/c.yaml",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js",
+   "tests",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "test/a.js",
+   "x/__tests__/a.js",
+   "conftest.py",
+   "pkg/conftest.py",
+   "notes.txt",
+   "app.txt",
+   "bin.txt",
+   "docs/x.md",
+   "docs/a/y.md",
+   "db/migrations/0001.py",
+   "migrations",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema.sql",
+   "sql/a.sql",
+   "schema/a.py",
+   "prisma/schema.prisma",
+   ".env",
+   ".github/workflows/ci.yml",
+   "a**b.py",
+   "axb.py"
+  ],
+  "**": [
+   "a.py",
+   "ab",
+   "a/b",
+   "a/x/b",
+   "a/x/y/b",
+   "app.yaml",
+   "config/app.yaml",
+   "a/b/c.yaml",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js",
+   "tests",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "test/a.js",
+   "x/__tests__/a.js",
+   "conftest.py",
+   "pkg/conftest.py",
+   "notes.txt",
+   "app.txt",
+   "bin.txt",
+   "docs/x.md",
+   "docs/a/y.md",
+   "db/migrations/0001.py",
+   "migrations",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema.sql",
+   "sql/a.sql",
+   "schema/a.py",
+   "prisma/schema.prisma",
+   ".env",
+   ".github/workflows/ci.yml",
+   "a**b.py",
+   "axb.py"
+  ],
+  "**.py": [
+   "a.py",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "conftest.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "**/*.py": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py"
+  ],
+  "**/*.yaml": [
+   "config/app.yaml",
+   "a/b/c.yaml"
+  ],
+  "**/__tests__/**": [
+   "x/__tests__/a.js"
+  ],
+  "**/alembic/versions/**": [
+   "x/alembic/versions/a.py"
+  ],
+  "**/migrate/**": [],
+  "**/migrations/**": [
+   "db/migrations/0001.py"
+  ],
+  "**/prisma/**": [],
+  "**/schema/**": [],
+  "**/test/**": [
+   "src/test/a.js"
+  ],
+  "**/test_*.py": [
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/test_x.py"
+  ],
+  "**/tests": [],
+  "**/tests/**": [
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py"
+  ],
+  "*.py": [
+   "a.py",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "conftest.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "*.spec.js": [],
+  "*.sql": [
+   "schema.sql",
+   "sql/a.sql"
+  ],
+  "*.test.js": [
+   "src/a.test.js"
+  ],
+  "*.yaml": [
+   "app.yaml",
+   "config/app.yaml",
+   "a/b/c.yaml"
+  ],
+  "*/*.py": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py"
+  ],
+  "*_test.py": [
+   "src/a_test.py"
+  ],
+  "/src/*.py": [],
+  "[!a]*.txt": [
+   "notes.txt",
+   "bin.txt"
+  ],
+  "[ab]*.py": [
+   "a.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "__tests__/**": [],
+  "a**b.py": [
+   "a**b.py",
+   "axb.py"
+  ],
+  "a/**/b": [
+   "a/x/b",
+   "a/x/y/b"
+  ],
+  "config/*": [
+   "config/app.yaml"
+  ],
+  "conftest.py": [
+   "conftest.py"
+  ],
+  "docs/*.md": [
+   "docs/x.md",
+   "docs/a/y.md"
+  ],
+  "migrations/**": [
+   "migrations/x.py"
+  ],
+  "src/*": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js"
+  ],
+  "src/**": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js"
+  ],
+  "src/**.py": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py"
+  ],
+  "src/**/*.py": [
+   "src/a/b.py",
+   "src/a/b/c.py"
+  ],
+  "src/*.py": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py"
+  ],
+  "src/*/b.py": [
+   "src/a/b.py"
+  ],
+  "src/a/": [],
+  "test/**": [
+   "test/a.js"
+  ],
+  "test_*.py": [
+   "test_utils/helpers.py",
+   "test_1.py"
+  ],
+  "test_?.py": [
+   "test_1.py"
+  ],
+  "tests": [
+   "tests"
+  ],
+  "tests/": [],
+  "tests/**": [
+   "tests/test_a.py",
+   "tests/unit/test_b.py"
+  ]
+ },
+ "scout": {
+  "*": [
+   "a.py",
+   "ab",
+   "a/b",
+   "a/x/b",
+   "a/x/y/b",
+   "app.yaml",
+   "config/app.yaml",
+   "a/b/c.yaml",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js",
+   "tests",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "test/a.js",
+   "x/__tests__/a.js",
+   "conftest.py",
+   "pkg/conftest.py",
+   "notes.txt",
+   "app.txt",
+   "bin.txt",
+   "docs/x.md",
+   "docs/a/y.md",
+   "db/migrations/0001.py",
+   "migrations",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema.sql",
+   "sql/a.sql",
+   "schema/a.py",
+   "prisma/schema.prisma",
+   ".env",
+   ".github/workflows/ci.yml",
+   "a**b.py",
+   "axb.py"
+  ],
+  "**": [
+   "a.py",
+   "ab",
+   "a/b",
+   "a/x/b",
+   "a/x/y/b",
+   "app.yaml",
+   "config/app.yaml",
+   "a/b/c.yaml",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js",
+   "tests",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "test/a.js",
+   "x/__tests__/a.js",
+   "conftest.py",
+   "pkg/conftest.py",
+   "notes.txt",
+   "app.txt",
+   "bin.txt",
+   "docs/x.md",
+   "docs/a/y.md",
+   "db/migrations/0001.py",
+   "migrations",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema.sql",
+   "sql/a.sql",
+   "schema/a.py",
+   "prisma/schema.prisma",
+   ".env",
+   ".github/workflows/ci.yml",
+   "a**b.py",
+   "axb.py"
+  ],
+  "**.py": [
+   "a.py",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "conftest.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "**/*.py": [
+   "a.py",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "conftest.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "**/*.yaml": [
+   "app.yaml",
+   "config/app.yaml",
+   "a/b/c.yaml"
+  ],
+  "**/__tests__/**": [
+   "x/__tests__/a.js"
+  ],
+  "**/alembic/versions/**": [
+   "x/alembic/versions/a.py"
+  ],
+  "**/migrate/**": [],
+  "**/migrations/**": [
+   "db/migrations/0001.py",
+   "migrations/x.py"
+  ],
+  "**/prisma/**": [
+   "prisma/schema.prisma"
+  ],
+  "**/schema/**": [
+   "schema/a.py"
+  ],
+  "**/test/**": [
+   "src/test/a.js",
+   "test/a.js"
+  ],
+  "**/test_*.py": [
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/test_x.py",
+   "test_1.py"
+  ],
+  "**/tests": [
+   "tests"
+  ],
+  "**/tests/**": [
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py"
+  ],
+  "*.py": [
+   "a.py",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/helpers.py",
+   "pkg/tests/test_x.py",
+   "test_utils/helpers.py",
+   "test_1.py",
+   "conftest.py",
+   "pkg/conftest.py",
+   "db/migrations/0001.py",
+   "migrations/x.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "*.spec.js": [],
+  "*.sql": [
+   "schema.sql",
+   "sql/a.sql"
+  ],
+  "*.test.js": [
+   "src/a.test.js"
+  ],
+  "*.yaml": [
+   "app.yaml",
+   "config/app.yaml",
+   "a/b/c.yaml"
+  ],
+  "*/*.py": [
+   "src/a.py",
+   "src/.hidden.py",
+   "src/a_test.py",
+   "tests/test_a.py",
+   "test_utils/helpers.py",
+   "pkg/conftest.py",
+   "migrations/x.py",
+   "schema/a.py"
+  ],
+  "*_test.py": [
+   "src/a_test.py"
+  ],
+  "/src/*.py": [],
+  "[!a]*.txt": [
+   "notes.txt",
+   "bin.txt"
+  ],
+  "[ab]*.py": [
+   "a.py",
+   "src/a.py",
+   "src/a/b.py",
+   "src/a_test.py",
+   "x/alembic/versions/a.py",
+   "schema/a.py",
+   "a**b.py",
+   "axb.py"
+  ],
+  "__tests__/**": [],
+  "a**b.py": [
+   "a**b.py",
+   "axb.py"
+  ],
+  "a/**/b": [
+   "a/b",
+   "a/x/b",
+   "a/x/y/b"
+  ],
+  "config/*": [
+   "config/app.yaml"
+  ],
+  "conftest.py": [
+   "conftest.py",
+   "pkg/conftest.py"
+  ],
+  "docs/*.md": [
+   "docs/x.md"
+  ],
+  "migrations/**": [
+   "migrations/x.py"
+  ],
+  "src/*": [
+   "src/a.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py"
+  ],
+  "src/**": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a.test.js",
+   "src/a.spec.ts",
+   "src/a_test.py",
+   "src/test/a.js"
+  ],
+  "src/**.py": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py"
+  ],
+  "src/**/*.py": [
+   "src/a.py",
+   "src/a/b.py",
+   "src/a/b/c.py",
+   "src/.hidden.py",
+   "src/a_test.py"
+  ],
+  "src/*.py": [
+   "src/a.py",
+   "src/.hidden.py",
+   "src/a_test.py"
+  ],
+  "src/*/b.py": [
+   "src/a/b.py"
+  ],
+  "src/a/": [],
+  "test/**": [
+   "test/a.js"
+  ],
+  "test_*.py": [
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/test_x.py",
+   "test_1.py"
+  ],
+  "test_?.py": [
+   "tests/test_a.py",
+   "tests/unit/test_b.py",
+   "pkg/tests/test_x.py",
+   "test_1.py"
+  ],
+  "tests": [
+   "tests"
+  ],
+  "tests/": [],
+  "tests/**": [
+   "tests/test_a.py",
+   "tests/unit/test_b.py"
+  ]
+ }
+}

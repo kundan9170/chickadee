@@ -1,0 +1,11 @@
+edit_target
+src/n.py
+def f() -> None:
+    return None
+
+---
+AFFECTED src/n.py
+---
+GAPS 
+---
+CUTS 

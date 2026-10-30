@@ -1,0 +1,13 @@
+name = "ctest"
+
+[[summary]]
+line = '^\d+% tests passed, \d+ tests? failed out of \d+$'
+total = 'out of (\d+)'
+failed = '(\d+) tests? failed'
+
+[[summary]]
+line = '^No tests were found!!!$'
+
+[names]
+failing = ['^\s+\d+ - (\S+) \((?:Failed|Not Run|Timeout|SEGFAULT|Subprocess aborted|Exception|Child aborted)\)']
+passing = ['^\s*\d+/\d+ Test\s+#\d+: (\S+) \.+\s+Passed\b']

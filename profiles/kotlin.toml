@@ -1,0 +1,33 @@
+name = "kotlin"
+extensions = [".kt", ".kts"]
+tree_sitter_grammar = "kotlin"
+
+[syntax]
+# The grammar's parse, in process (D203 decision 3): `kotlinc` needs the classpath and takes
+# seconds to start.
+mode = "parse"
+
+[tests]
+globs = ["**/src/test/**", "**/src/*Test/**", "*Test.kt", "*Tests.kt"]
+# Gradle selects by class name (`--tests`), not by file: the whole suite runs. A project with
+# the Gradle wrapper overrides this (`./gradlew test`).
+runner = "gradle test"
+timeout_s = 600
+
+[build]
+compile_cmd = ""
+import_smoke = ""
+
+[deps]
+manifests = ["build.gradle.kts", "settings.gradle.kts", "build.gradle"]
+
+[examples]
+snippet = """
+assertEquals({output}, {symbol}({input}))
+"""
+
+[conventions]
+file = "conventions/kotlin.md"
+
+[lsp]
+server = "kotlin-language-server"

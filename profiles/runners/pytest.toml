@@ -1,0 +1,26 @@
+name = "pytest"
+
+[[summary]]
+line = '^=*\s*(?:\d+ (?:failed|passed|errors?|skipped|deselected|xfailed|xpassed|warnings?|rerun)(?:, )?)+ in [\d.]+s\b.*$'
+passed = '(\d+) passed'
+failed = '(\d+) failed'
+errors = '(\d+) errors?\b'
+
+[[summary]]
+line = '^=*\s*no tests ran in [\d.]+s\b.*$'
+
+[names]
+failing = ['^(?:FAILED|ERROR) (\S+)', '^(\S+::\S+) (?:FAILED|ERROR)\b']
+passing = ['^(\S+::\S+) PASSED\b', '^PASSED (\S+)']
+
+# The cautious selection (D236 Amendment 1): the words that run it, its flags that select
+# nothing, and what its arguments select. Any other flag makes a run's selection unknown.
+[command]
+words = ["pytest"]
+selects = "paths"
+flags = [
+  "-q", "-qq", "-v", "-vv", "-x", "-s", "-l", "--exitfirst", "--quiet", "--verbose",
+  "--no-header", "--no-summary", "--disable-warnings", "--showlocals", "--strict-markers",
+  "-rA", "-ra", "-rf", "-rfE", "-rx", "-rs",
+]
+values = ["--tb", "-p", "--maxfail", "-n", "--color", "-W", "--durations", "--import-mode"]

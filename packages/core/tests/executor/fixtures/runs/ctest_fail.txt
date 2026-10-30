@@ -1,0 +1,17 @@
+Test project /work/ct/b
+    Start 1: good
+1/3 Test #1: good .............................   Passed    0.00 sec
+    Start 2: broken
+2/3 Test #2: broken ...........................***Failed    0.00 sec
+    Start 3: also_good
+3/3 Test #3: also_good ........................   Passed    0.00 sec
+
+67% tests passed, 1 tests failed out of 3
+
+Total Test time (real) =   0.01 sec
+
+The following tests FAILED:
+	  2 - broken (Failed)
+Errors while running CTest
+Output from these tests are in: /work/ct/b/Testing/Temporary/LastTest.log
+Use "--rerun-failed --output-on-failure" to re-run the failed cases verbosely.

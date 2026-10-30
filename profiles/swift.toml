@@ -1,0 +1,36 @@
+name = "swift"
+extensions = [".swift"]
+tree_sitter_grammar = "swift"
+
+[syntax]
+# The grammar's parse, in process (D203 decision 3): `swiftc -parse` needs Swift installed in
+# the sandbox and a spawn per edit.
+mode = "parse"
+
+[tests]
+globs = ["Tests/**", "**/Tests/**", "*Tests.swift"]
+# `swift test --filter` selects by test name, not by file: the whole package runs.
+runner = "swift test"
+timeout_s = 600
+
+[build]
+compile_cmd = "swift build"
+import_smoke = ""
+
+[deps]
+manifests = ["Package.swift"]
+
+[examples]
+snippet = """
+XCTAssertEqual({symbol}({input}), {output})
+"""
+
+[conventions]
+file = "conventions/swift.md"
+
+[lsp]
+server = "sourcekit-lsp"
+
+[toolchain]
+# D109: the packages Package.resolved names, once at worktree creation.
+bootstrap = ["swift", "package", "resolve"]

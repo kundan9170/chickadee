@@ -1,0 +1,39 @@
+// The V4A patch a constrained `apply_patch` call is decoded under (D172 §9), beside its
+// parser, `apply_patch.py`. Written for this project from that parser, not copied: the parser
+// takes everything this grammar admits (`test_apply_patch_grammar.py` holds the two together),
+// and is more lenient only where a reply needs it and a constrained call cannot (text around the
+// envelope, a blank line, no space after a header's colon).
+//
+// What the parser refuses, so does this: an `*** Add File` holds only `+` lines, a `*** Delete
+// File` none, a `*** Move to` only directly after its `*** Update File` line (D196 §10.3, which
+// amends D172 §10), and every hunk of an `*** Update File` changes a line, which a move may
+// leave with no hunk at all.
+// Two refusals stay the parser's alone, a grammar having no memory: one section per file, and a
+// hunk whose `-` and `+` lines say the same thing.
+//
+// Kept to the Lark that OpenAI's decoder (LLGuidance) reads: no lookarounds, no priorities, no
+// imports.
+
+start: begin section+ end
+
+begin: "*** Begin Patch" LF
+end: "*** End Patch" LF?
+
+section: add_file | update_file | delete_file
+
+add_file: "*** Add File: " PATH LF added*
+added: "+" TEXT? LF
+
+update_file: "*** Update File: " PATH LF (move_to body? | body)
+move_to: "*** Move to: " PATH LF
+body: scope* hunk (scope+ hunk?)* end_of_file?
+delete_file: "*** Delete File: " PATH LF
+scope: "@@" TEXT? LF
+hunk: kept* changed (kept | changed)*
+kept: " " TEXT? LF
+changed: ("-" | "+") TEXT? LF
+end_of_file: "*** End of File" LF
+
+PATH: /[^\s][^\n]*/
+TEXT: /[^\n]+/
+LF: "\n"

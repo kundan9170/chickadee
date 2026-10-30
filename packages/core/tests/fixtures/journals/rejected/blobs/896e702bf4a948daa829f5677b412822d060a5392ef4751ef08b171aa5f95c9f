@@ -1,0 +1,3 @@
+PREFIX
+p1|2|APPLY_REJECT: applier rejected the set: out_of_scope
+APPLY_REJECT out_of_scope: patch set writes ['src/n.py'], packet declares ['src/m.py']

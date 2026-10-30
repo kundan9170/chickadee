@@ -1,0 +1,12 @@
+name = "unittest"
+
+[[summary]]
+line = '^Ran \d+ tests? in [\d.]+s\n\n(?:OK|FAILED|NO TESTS RAN)\b.*$'
+total = '^Ran (\d+)'
+failed = 'failures=(\d+)'
+errors = 'errors=(\d+)'
+skipped = 'skipped=(\d+)'
+
+[names]
+failing = ['^(?:FAIL|ERROR): \S+ \((\S+)\)']
+passing = ['^\S+ \((\S+)\)(?: .*)? \.\.\. ok$']

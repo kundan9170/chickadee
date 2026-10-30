@@ -1,0 +1,13 @@
+Hand a change to the implementation team, the only way source is written, a new file included. Give exactly one of a design's `work`, or a one-task plan's `title` and `brief`.
+
+A design is the work folder you wrote with `doc`: `work` is its name, the open work's. Its `design/README.md` follows the design template, its sections the minimum, and lists every other file of `design/` under Files; the call is refused, naming what is wrong, until it does. The Request and Constraints sections are filled in for you with the user's words and every constraint that binds the work. The user reads the design before anything runs, and approves it, edits its files, or sends a note; a note comes back to you as this call's result, to revise by with `doc` and call again. What the user approves is pinned: the team plans the work as tasks from it, the user approves that plan, and each task is implemented, tested and reviewed. The design cannot be changed while the team works.
+
+A one-task plan is for work one engineer can finish in one sitting: a `title` and a `brief` written to the brief template. The user approves the brief, then it is implemented and reviewed. It may be cut into a few steps toward its goal; when it needs more than its brief holds, it ends `OUTGROWN`, keeping what it committed.
+
+`workspace` is `in_place` (the user's own checkout, the default) or `worktree` (a separate worktree for this conversation). Leave it out unless the user asked for one or the other: a design runs where its folder is, and a conversation already working in a worktree keeps working there.
+
+When the user is present, the call answers `RUNNING` once the run starts and the team works on its own; how it ended reaches you in a later turn as its report. With nobody present, the call waits and returns the report. The report says how the work ended and why; each task with its state, its review, its commit and the commands that failed; the team's own report; and what changed, counted. It carries a reference to the diff and the record, never the diff itself. Nothing in it is a verdict that the change is right: what ran and what it showed is in the report.
+
+A work that ran before continues where it stopped: call coder with the same work after any stop. A paused run resumes; an ended one continues in a new run from its approved plan, with no stop asked; a design changed since its approval is shown to the user as what changed, and the team decides what the plan needs; a work with nothing left answers `COMPLETE`. Nothing committed is done again.
+
+`exclusive`: a second call while a run is in flight is refused with the run named, not queued.

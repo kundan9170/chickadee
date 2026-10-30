@@ -1,0 +1,207 @@
+{
+  "$defs": {
+    "RetryOutput": {
+      "additionalProperties": false,
+      "properties": {
+        "fresh": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": true,
+          "title": "Fresh"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "title": "RetryOutput",
+      "type": "object"
+    },
+    "SpecificOutput": {
+      "additionalProperties": false,
+      "properties": {
+        "additionalContext": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Additionalcontext"
+        },
+        "hookEventName": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hookeventname"
+        },
+        "permissionDecision": {
+          "anyOf": [
+            {
+              "enum": [
+                "allow",
+                "deny",
+                "ask"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Permissiondecision"
+        },
+        "permissionDecisionReason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Permissiondecisionreason"
+        }
+      },
+      "title": "SpecificOutput",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "A script's JSON answer, every key it may write.",
+  "properties": {
+    "continue": {
+      "default": true,
+      "title": "Continue",
+      "type": "boolean"
+    },
+    "decision": {
+      "anyOf": [
+        {
+          "enum": [
+            "block",
+            "approve"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Decision"
+    },
+    "do": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Do"
+    },
+    "hookSpecificOutput": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SpecificOutput"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reason"
+    },
+    "retry_task": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RetryOutput"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "stopReason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Stopreason"
+    },
+    "suppressOutput": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Suppressoutput"
+    },
+    "systemMessage": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Systemmessage"
+    }
+  },
+  "title": "ScriptOutput",
+  "type": "object"
+}

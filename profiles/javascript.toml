@@ -1,0 +1,44 @@
+name = "javascript"
+extensions = [".js", ".mjs", ".cjs", ".jsx"]
+tree_sitter_grammar = "javascript"
+
+[syntax]
+# JavaScript has no in-process parser available to us, so A1 spawns. It still runs through
+# the sandboxed Executor — a profile never describes a command as inert (§2).
+mode = "cmd"
+cmd = "node --check {file}"
+
+[tests]
+globs = ["**/test/**", "**/tests/**", "**/__tests__/**", "*.test.js", "*.spec.js"]
+runner = "npx jest --silent {selector}"
+timeout_s = 120
+
+[build]
+compile_cmd = ""
+# D109: prints where the module came from; a path outside the worktree is ENV_MISMATCH.
+import_smoke = "node -e 'console.log(require.resolve(\"{module}\"))'"
+
+[deps]
+manifests = ["package.json"]
+install_cmd = "npm install {name}"
+
+[examples]
+snippet = """
+const { {symbol} } = require('{module}');
+console.assert({symbol}({input}) === {output});
+"""
+
+[conventions]
+file = "conventions/javascript.md"
+
+[lsp]
+# Asked at index time, sandboxed, for where each reference is defined (T-3.169, D19).
+server = "typescript-language-server --stdio"
+# Run by `chickadee setup` when the server is missing and the person says yes.
+install = "npm install --global --prefix {dir} typescript typescript-language-server"
+# The LSP languageId of each extension; JSX is its own (absent, the profile's name).
+language_id = { ".js" = "javascript", ".mjs" = "javascript", ".cjs" = "javascript", ".jsx" = "javascriptreact" }
+
+[toolchain]
+# D109: runs once at worktree creation (see python.toml). A worktree has no node_modules.
+bootstrap = ["npm", "ci"]

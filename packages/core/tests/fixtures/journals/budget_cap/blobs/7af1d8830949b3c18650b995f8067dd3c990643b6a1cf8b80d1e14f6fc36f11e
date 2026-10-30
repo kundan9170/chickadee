@@ -1,0 +1,41 @@
+# Handoff — run 2026-09-30-0a1b2c3d
+
+- **Terminal:** `BUDGET_CAP`
+- **Goal:** the goal
+- **Why:** the hard cost cap was crossed (D42)
+- **Isolation:** worktree
+- **Head:** `8f41436956eeeab0285e28a1ca6b028d0976bd30`
+
+## Packets
+
+| packet | kind | state | attempts | commit | note |
+|---|---|---|---|---|---|
+| p1 | code | DISPATCH_SLM | 2 |  |  |
+
+## Verification
+
+- p1 (attempt 2): no gate ran
+
+Checkpoints:
+- none were declared or reached
+
+`behavior_not_independently_verified`: no independent checkpoint passed, so the static gates are the whole of the evidence.
+
+## Effects
+
+| operation | kind | outcome |
+|---|---|---|
+| apply:p1:1:1 | patch_apply | succeeded |
+| rollback:p1:1:1 | patch_rollback | succeeded |
+
+Every effect completed and was recorded.
+
+## Cost
+
+- p1 (coder-model): 120 tokens, $0.0020
+- total: 120 tokens, $0.0020
+
+## Next
+
+The worktree branch is the person's to apply or squash, keep, or discard (D55).
+Nothing was pushed.

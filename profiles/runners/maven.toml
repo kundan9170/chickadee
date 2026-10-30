@@ -1,0 +1,13 @@
+name = "maven"
+
+# The run's total, once a module. Each class's line ends in its time and is not summed.
+[[summary]]
+line = '^\[(?:INFO|ERROR|WARNING)\] Tests run: \d+, Failures: \d+, Errors: \d+, Skipped: \d+$'
+total = 'Tests run: (\d+)'
+# Surefire's errors are tests that threw: failed tests, not a suite that could not run.
+failed = ['Failures: (\d+)', 'Errors: (\d+)']
+skipped = 'Skipped: (\d+)'
+
+[names]
+failing = ['^\[ERROR\] (\S+) -- Time elapsed: .* <<< (?:FAILURE|ERROR)!$']
+broken = ['^\[ERROR\] COMPILATION ERROR']

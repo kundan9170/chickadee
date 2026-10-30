@@ -55,6 +55,65 @@ uv run --project /path/to/chickadee chickadee --help     # every command
 `chickadee setup` reports whether the sandbox can run. On Linux it needs
 [bubblewrap](https://github.com/containers/bubblewrap) (`sudo apt install bubblewrap`).
 
+## Configuration
+
+Chickadee reads `~/.config/chickadee/config.toml`. `chickadee setup` writes a commented
+starting file there, and never overwrites one. The full guide, with every option, is in
+[docs/configuration.md](docs/configuration.md).
+
+A minimal working config declares your models, prices them, maps the three rungs to them and
+sets a spend cap:
+
+```toml
+[spend]
+hard_cost_usd = 5.00                 # required: the run stops here, resumably
+
+[models.frontier]                    # any OpenAI-compatible endpoint
+base_url = "https://api.example.com/v1"
+model_id = "your-frontier-model"
+api_key_env = "FRONTIER_API_KEY"     # the key is read from this environment variable
+context_window = 200000
+max_output_tokens = 32000
+
+[models.local]
+base_url = "http://localhost:8000/v1"
+model_id = "your-local-coder"
+context_window = 131072
+max_output_tokens = 16384
+
+[prices.frontier]                    # USD per million tokens
+price_in = 3.00
+price_out = 15.00
+
+[prices.local]
+price_in = 0.20
+price_out = 0.60
+
+[rungs]
+high-param = "frontier"              # Zeus and Athena
+mid-param = "frontier"               # locate, critic, reviewers
+low-param = "local"                  # the worker
+```
+
+The options you are most likely to change:
+
+| To do this | Set |
+|---|---|
+| Raise or lower the spend cap | `[spend] hard_cost_usd`, and `[spend.rungs]` for a cap per rung |
+| Use a different model for the worker | `[rungs] low-param = "<model>"` |
+| Run work in a git worktree instead of your checkout | `[workspace] mode = "worktree"`, or `chickadee --worktree` |
+| Change where designs and plans are written | `[work] dir`, and `commit` to keep them out of git |
+| Choose the sandbox backend | `[sandbox] backend` (`auto`, `native`, `none`) |
+| Keep extra files out of the model's reach | `[secrets] deny_add = ["**/credentials.json"]` |
+| Allow or ask about a class of commands | `approval.toml`, see [approval preferences](docs/configuration.md#approval-preferences) |
+| Change one setting for a single run | `CHICKADEE_SPEND__HARD_COST_USD=2 chickadee ...` |
+
+Settings are layered: built-in defaults, then your user file, then the repository's
+`.chickadee/config.toml`, then a local file, then `CHICKADEE_*` variables. A repository's file
+can only set `profiles`, `secrets`, `commands` and `hooks`. It can never change a model, a
+price or a spend cap. Two ready-made files are in [`examples/`](examples/): `config.toml` (the
+minimum) and `config.full.toml` (every table).
+
 ## How it works
 
 | Role | Job |
@@ -93,7 +152,7 @@ anything for untrusted repositories or several users. Expect rough edges.
 
 - [Architecture](docs/architecture.md)
 - [Safety](docs/safety.md)
-- [Configuration](docs/configuration.md)
+- [Configuration](docs/configuration.md), every option with its default
 - [Evaluation](docs/evaluation.md)
 
 ## Contributing

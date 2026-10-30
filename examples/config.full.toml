@@ -1,0 +1,102 @@
+# Every table of the engine config with a non-default example value.
+# Copy only what you need: anything you leave out keeps its default.
+
+[spend]
+hard_cost_usd = 10.00
+warning_fractions = [0.5, 0.8, 0.95]
+
+[spend.rungs]
+high-param = 6.00
+
+[models.frontier]
+provider = "openai"
+base_url = "https://api.example.com/v1"
+model_id = "your-frontier-model"
+api_key_env = "FRONTIER_API_KEY"
+context_window = 200000
+max_output_tokens = 32000
+first_token_s = 300          # how long to wait for the first token
+token_gap_s = 60             # how long a stream may go silent
+reasoning = { level = "high" }
+supports_images = true
+
+[models.local]
+base_url = "http://localhost:8000/v1"
+model_id = "your-local-coder"
+context_window = 131072
+max_output_tokens = 16384
+temperature = 0.2
+supports_images = false
+
+[prices.frontier]
+price_in = 3.00
+price_out = 15.00
+price_cached_in = 0.30
+
+[prices.local]
+price_in = 0.20
+price_out = 0.60
+
+[rungs]
+high-param = "frontier"
+mid-param = "frontier"
+low-param = "local"
+
+[roles]                      # move a role onto another rung
+critic = "high-param"
+
+[sandbox]
+backend = "auto"             # auto | native | container | none
+require_sandbox = true
+
+[sandbox.allow_unsandboxed_shell]
+zeus = false
+worker = false
+athena = false
+
+[workspace]
+mode = "worktree"            # worktree | in_place
+require_lease = true
+
+[work]
+dir = "docs/chickadee"       # where designs, plans and briefs are written
+commit = true
+
+[undo]
+keep_days = 7
+keep_turns = 50
+on_your_branch = "restore"   # restore | commit
+
+[interaction]
+question_timeout_s = 900
+max_questions_per_run = 3
+auto_title = true
+
+[skills]
+external = true
+
+[web.fetch]
+engine = "auto"              # auto | http | lightpanda
+approval = "never"           # never | per_domain
+docs_domains = ["docs.python.org"]
+
+[web.search]
+engine = "searxng"           # tavily | brave | exa | mojeek | searxng
+searxng_url = "http://localhost:8080"
+
+[secrets]
+deny_add = ["**/credentials.json"]
+allow_secret_read = false
+
+[tools.worker]
+edit_check = "report"        # reject | report | off
+
+[agents.profiles.quick-reader]
+base = "reader"
+max_tool_calls = 15
+seconds = 120
+
+[limits]
+"worker.max_tool_calls" = 150
+"worker.task_seconds" = 1200
+"zeus.max_jobs" = 2

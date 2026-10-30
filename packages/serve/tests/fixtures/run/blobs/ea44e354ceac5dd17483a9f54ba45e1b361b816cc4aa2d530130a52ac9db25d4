@@ -1,0 +1,3 @@
+exit 1
+FAILED tests/test_client.py::test_retries - assert 3 == 5
+1 failed

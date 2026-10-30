@@ -1,0 +1,22 @@
+[project]
+name = "chickadee-serve"
+version = "0.0.0"
+description = "Serves the Chickadee engine over a local socket."
+license = "AGPL-3.0-or-later"
+authors = [{ name = "Kundan Kumar", email = "kundan91700@gmail.com" }]
+requires-python = ">=3.12"
+dependencies = [
+    "chickadee-core",
+    "starlette>=0.40",
+    "uvicorn>=0.30",
+]
+
+[project.scripts]
+chickadee-serve = "chickadee_serve.__main__:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/chickadee_serve"]

@@ -1,0 +1,6825 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "frames": {
+    "AnswerBody": {
+      "additionalProperties": false,
+      "description": "The other half of a `question_asked`. Carries no source: who answered is the\ntoken's class, never anything a request says.",
+      "properties": {
+        "choice": {
+          "minLength": 1,
+          "title": "Choice",
+          "type": "string"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text"
+        }
+      },
+      "required": [
+        "choice"
+      ],
+      "title": "AnswerBody",
+      "type": "object"
+    },
+    "AnswerTaken": {
+      "additionalProperties": false,
+      "properties": {
+        "question_id": {
+          "title": "Question Id",
+          "type": "string"
+        },
+        "source": {
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "question_id",
+        "source"
+      ],
+      "title": "AnswerTaken",
+      "type": "object"
+    },
+    "CapBody": {
+      "additionalProperties": false,
+      "description": "The family's cap, or one rung's; `null` lifts it.",
+      "properties": {
+        "hard_cost_usd": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Hard Cost Usd"
+        },
+        "rung": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rung"
+        }
+      },
+      "required": [
+        "hard_cost_usd"
+      ],
+      "title": "CapBody",
+      "type": "object"
+    },
+    "CoderBody": {
+      "$defs": {
+        "JsonValue": {}
+      },
+      "additionalProperties": false,
+      "description": "A `CoderRequest` (`box/request.py`): work already approved at its stop. Kept as a JSON\nobject here so the wire stays core-free; the server validates it.",
+      "properties": {
+        "request": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Request",
+          "type": "object"
+        }
+      },
+      "required": [
+        "request"
+      ],
+      "title": "CoderBody",
+      "type": "object"
+    },
+    "CoderStarted": {
+      "additionalProperties": false,
+      "description": "`POST /coder`'s answer: the episode is named and holds the lease; it is read on the run's\nstream (`/run/{run_id}/events`) and its `episode` record on the session's.",
+      "properties": {
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id"
+      ],
+      "title": "CoderStarted",
+      "type": "object"
+    },
+    "CreateSessionBody": {
+      "additionalProperties": false,
+      "properties": {
+        "adopt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Adopt"
+        },
+        "session_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Session Id"
+        }
+      },
+      "title": "CreateSessionBody",
+      "type": "object"
+    },
+    "ErrorBody": {
+      "$defs": {
+        "ErrorCode": {
+          "enum": [
+            "BAD_REQUEST",
+            "UNAUTHORIZED",
+            "NOT_FOUND",
+            "CONFLICT",
+            "ANSWERED",
+            "BUSY",
+            "CONFIG",
+            "NOT_BUILT",
+            "REPLAY_READ_ONLY",
+            "INTERNAL"
+          ],
+          "title": "ErrorCode",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/ErrorCode"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "ErrorBody",
+      "type": "object"
+    },
+    "FileBody": {
+      "additionalProperties": false,
+      "description": "`POST /session/{sid}/file`: the one file to read, a path `/files` lists. In a\nbody, as `/locate`'s question is, so a path is never a URL segment to quote.",
+      "properties": {
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "title": "FileBody",
+      "type": "object"
+    },
+    "FinalizeBody": {
+      "additionalProperties": false,
+      "properties": {
+        "choice": {
+          "enum": [
+            "apply",
+            "squash",
+            "keep",
+            "discard",
+            "bring"
+          ],
+          "title": "Choice",
+          "type": "string"
+        }
+      },
+      "required": [
+        "choice"
+      ],
+      "title": "FinalizeBody",
+      "type": "object"
+    },
+    "ForkBody": {
+      "additionalProperties": false,
+      "description": "A child session from `at_seq`. `code` restores the workspace to the fork\npoint or keeps it as it is; absent, the engine asks the person (`question_asked`).",
+      "properties": {
+        "at_seq": {
+          "minimum": 1,
+          "title": "At Seq",
+          "type": "integer"
+        },
+        "code": {
+          "anyOf": [
+            {
+              "enum": [
+                "restore",
+                "keep"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Code"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "at_seq",
+        "reason"
+      ],
+      "title": "ForkBody",
+      "type": "object"
+    },
+    "Hello": {
+      "$defs": {
+        "AttachLimits": {
+          "additionalProperties": false,
+          "description": "The limits register's `turn.*` rows, as this server sets them, and the edge an image is\ndownscaled to. A client checks against these before it\nsends, so a refusal says why before the bytes travel. The wire's copy of core's\n`AttachCaps`, field for field, because this module stays core-free; `test_turn_attachments`\nholds the two to the same fields.",
+          "properties": {
+            "attachment_bytes_max": {
+              "title": "Attachment Bytes Max",
+              "type": "integer"
+            },
+            "attachment_file_max_bytes": {
+              "title": "Attachment File Max Bytes",
+              "type": "integer"
+            },
+            "attachments_max": {
+              "title": "Attachments Max",
+              "type": "integer"
+            },
+            "image_max_edge": {
+              "title": "Image Max Edge",
+              "type": "integer"
+            },
+            "pdf_file_max_bytes": {
+              "title": "Pdf File Max Bytes",
+              "type": "integer"
+            },
+            "pdf_pages_max": {
+              "title": "Pdf Pages Max",
+              "type": "integer"
+            },
+            "pdf_text_min_chars": {
+              "title": "Pdf Text Min Chars",
+              "type": "integer"
+            },
+            "text_file_max_bytes": {
+              "title": "Text File Max Bytes",
+              "type": "integer"
+            },
+            "text_inline_bytes": {
+              "title": "Text Inline Bytes",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "image_max_edge",
+            "attachments_max",
+            "attachment_bytes_max",
+            "attachment_file_max_bytes",
+            "pdf_file_max_bytes",
+            "pdf_pages_max",
+            "pdf_text_min_chars",
+            "text_file_max_bytes",
+            "text_inline_bytes"
+          ],
+          "title": "AttachLimits",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "description": "`GET /`: the one call a client makes before it knows anything, needing no token.",
+      "properties": {
+        "attach": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AttachLimits"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "capabilities": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Capabilities",
+          "type": "array"
+        },
+        "engine": {
+          "title": "Engine",
+          "type": "string"
+        },
+        "question_timeout_s": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Question Timeout S"
+        },
+        "replay": {
+          "default": false,
+          "title": "Replay",
+          "type": "boolean"
+        },
+        "wire": {
+          "title": "Wire",
+          "type": "string"
+        }
+      },
+      "required": [
+        "wire",
+        "engine",
+        "capabilities"
+      ],
+      "title": "Hello",
+      "type": "object"
+    },
+    "Hidden": {
+      "additionalProperties": false,
+      "description": "What the session's standing rewinds hide now: a client re-asks after each\n`undo` or `redo` record rather than re-implementing the rule.",
+      "properties": {
+        "seqs": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Seqs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "seqs"
+      ],
+      "title": "Hidden",
+      "type": "object"
+    },
+    "InterruptBody": {
+      "additionalProperties": false,
+      "properties": {
+        "hard": {
+          "default": false,
+          "title": "Hard",
+          "type": "boolean"
+        }
+      },
+      "title": "InterruptBody",
+      "type": "object"
+    },
+    "LocateBody": {
+      "additionalProperties": false,
+      "properties": {
+        "question": {
+          "minLength": 1,
+          "title": "Question",
+          "type": "string"
+        }
+      },
+      "required": [
+        "question"
+      ],
+      "title": "LocateBody",
+      "type": "object"
+    },
+    "ProgressFrame": {
+      "$defs": {
+        "JsonValue": {}
+      },
+      "additionalProperties": false,
+      "description": "Work in flight: droppable, unseekable, never the only place a fact appears.\n`scope` is the session it concerns; `payload` is a short description for display.",
+      "properties": {
+        "kind": {
+          "enum": [
+            "alive",
+            "thinking",
+            "tool_call",
+            "tool_result",
+            "delegation",
+            "answer",
+            "error",
+            "text",
+            "thought",
+            "tool_started",
+            "context"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "payload": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Payload",
+          "type": "object"
+        },
+        "scope": {
+          "title": "Scope",
+          "type": "string"
+        },
+        "type": {
+          "const": "progress",
+          "default": "progress",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "kind"
+      ],
+      "title": "ProgressFrame",
+      "type": "object"
+    },
+    "RecordFrame": {
+      "$defs": {
+        "JsonValue": {}
+      },
+      "additionalProperties": false,
+      "description": "One durable line of a scope, as stored. `scope` is the session or run it is\nnumbered in; a client's cursor for that scope is the highest `seq` it has seen.",
+      "properties": {
+        "at": {
+          "title": "At",
+          "type": "string"
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "payload": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Payload",
+          "type": "object"
+        },
+        "round": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Round"
+        },
+        "run_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Run Id"
+        },
+        "scope": {
+          "title": "Scope",
+          "type": "string"
+        },
+        "seq": {
+          "minimum": 1,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "task_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Task Id"
+        },
+        "type": {
+          "const": "record",
+          "default": "record",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "seq",
+        "at",
+        "kind",
+        "payload"
+      ],
+      "title": "RecordFrame",
+      "type": "object"
+    },
+    "RenameBody": {
+      "additionalProperties": false,
+      "description": "`POST /session/{sid}/title`: the person's name for the session, with words.",
+      "properties": {
+        "text": {
+          "pattern": "\\S",
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "title": "RenameBody",
+      "type": "object"
+    },
+    "Resumed": {
+      "additionalProperties": false,
+      "description": "`POST /resume`'s answer: the runs the session's journal shows unfinished,\noldest first, and the one continued, if any.",
+      "properties": {
+        "in_flight": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "In Flight"
+        },
+        "reconciled": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reconciled",
+          "type": "array"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "session_id",
+        "reconciled",
+        "in_flight"
+      ],
+      "title": "Resumed",
+      "type": "object"
+    },
+    "RungBody": {
+      "additionalProperties": false,
+      "description": "Move one rung to another catalog model, from its next call.",
+      "properties": {
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "rung": {
+          "title": "Rung",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rung",
+        "model"
+      ],
+      "title": "RungBody",
+      "type": "object"
+    },
+    "TokenFile": {
+      "additionalProperties": false,
+      "description": "`serve.token`: one token per class. Part of the wire because a client reads it.",
+      "properties": {
+        "automation": {
+          "title": "Automation",
+          "type": "string"
+        },
+        "interactive": {
+          "title": "Interactive",
+          "type": "string"
+        }
+      },
+      "required": [
+        "interactive",
+        "automation"
+      ],
+      "title": "TokenFile",
+      "type": "object"
+    },
+    "TurnAccepted": {
+      "additionalProperties": false,
+      "description": "`POST /turn`'s answer, at once: the turn itself is read on the session's stream.",
+      "properties": {
+        "queued": {
+          "title": "Queued",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "queued"
+      ],
+      "title": "TurnAccepted",
+      "type": "object"
+    },
+    "TurnBody": {
+      "$defs": {
+        "TurnAttachment": {
+          "additionalProperties": false,
+          "description": "A file the person sent with a turn: its name and its bytes, base64. The server\ndecides what it is from the bytes, never from the name.",
+          "properties": {
+            "data": {
+              "minLength": 1,
+              "title": "Data",
+              "type": "string"
+            },
+            "name": {
+              "maxLength": 200,
+              "minLength": 1,
+              "title": "Name",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "data"
+          ],
+          "title": "TurnAttachment",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "description": "The person's words to the session.",
+      "properties": {
+        "attachments": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/TurnAttachment"
+          },
+          "title": "Attachments",
+          "type": "array"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "workspace": {
+          "anyOf": [
+            {
+              "enum": [
+                "worktree",
+                "in_place"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workspace"
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "title": "TurnBody",
+      "type": "object"
+    },
+    "UndoBody": {
+      "additionalProperties": false,
+      "description": "Take back turns `to_turn` onward.",
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "boolean"
+        },
+        "commit": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Commit"
+        },
+        "conversation": {
+          "title": "Conversation",
+          "type": "boolean"
+        },
+        "to_turn": {
+          "minimum": 1,
+          "title": "To Turn",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "to_turn",
+        "code",
+        "conversation"
+      ],
+      "title": "UndoBody",
+      "type": "object"
+    }
+  },
+  "requests": {
+    "CoderRequest": {
+      "$defs": {
+        "ApprovedDesign": {
+          "additionalProperties": false,
+          "description": "A design as approved at stop 1.",
+          "properties": {
+            "sha": {
+              "title": "Sha",
+              "type": "string"
+            },
+            "template_sha": {
+              "title": "Template Sha",
+              "type": "string"
+            },
+            "text": {
+              "minLength": 1,
+              "title": "Text",
+              "type": "string"
+            },
+            "work": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/WorkPin"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            }
+          },
+          "required": [
+            "text",
+            "sha",
+            "template_sha"
+          ],
+          "title": "ApprovedDesign",
+          "type": "object"
+        },
+        "AttachedFile": {
+          "additionalProperties": false,
+          "description": "A file the person sent with the turn the work answers: named as the\nsession numbered it, its bytes the session blob `sha` names. The Request section lists it,\nso it was approved with the work.",
+          "properties": {
+            "id": {
+              "pattern": "^A-[1-9][0-9]*$",
+              "title": "Id",
+              "type": "string"
+            },
+            "name": {
+              "maxLength": 200,
+              "minLength": 1,
+              "title": "Name",
+              "type": "string"
+            },
+            "sha": {
+              "minLength": 1,
+              "title": "Sha",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "sha"
+          ],
+          "title": "AttachedFile",
+          "type": "object"
+        },
+        "Continuation": {
+          "additionalProperties": false,
+          "description": "A run that continues a work an ended or superseded run left: what it inherits, read back\non resume from the run's config\nsnapshot, so the seed never depends on a record that may have changed since.",
+          "properties": {
+            "amended_from": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Amended From"
+            },
+            "mode": {
+              "enum": [
+                "CONTINUE",
+                "AMEND"
+              ],
+              "title": "Mode",
+              "type": "string"
+            },
+            "plan_bound_to": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Plan Bound To"
+            },
+            "plan_run": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Plan Run"
+            },
+            "plan_sha": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Plan Sha"
+            },
+            "plan_version": {
+              "anyOf": [
+                {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Plan Version"
+            },
+            "prior_runs": {
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "title": "Prior Runs",
+              "type": "array"
+            }
+          },
+          "required": [
+            "mode",
+            "prior_runs"
+          ],
+          "title": "Continuation",
+          "type": "object"
+        },
+        "OneTask": {
+          "additionalProperties": false,
+          "description": "Zeus's one-task plan as approved at stop 2.",
+          "properties": {
+            "brief": {
+              "minLength": 1,
+              "title": "Brief",
+              "type": "string"
+            },
+            "sha": {
+              "title": "Sha",
+              "type": "string"
+            },
+            "template_sha": {
+              "title": "Template Sha",
+              "type": "string"
+            },
+            "title": {
+              "minLength": 1,
+              "title": "Title",
+              "type": "string"
+            }
+          },
+          "required": [
+            "title",
+            "brief",
+            "sha",
+            "template_sha"
+          ],
+          "title": "OneTask",
+          "type": "object"
+        },
+        "WorkPin": {
+          "additionalProperties": false,
+          "description": "The work folder a design was approved in: its name, `work.dir`\nthen, and the `design/` tree stop 1 pinned, which every later read of it is answered from\n(`workspace.pinned_text`).",
+          "properties": {
+            "dir": {
+              "minLength": 1,
+              "title": "Dir",
+              "type": "string"
+            },
+            "name": {
+              "minLength": 1,
+              "title": "Name",
+              "type": "string"
+            },
+            "tree": {
+              "minLength": 1,
+              "title": "Tree",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "dir",
+            "tree"
+          ],
+          "title": "WorkPin",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "description": "`design` or `task`, exactly one, and where the work runs.",
+      "properties": {
+        "attachments": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/AttachedFile"
+          },
+          "title": "Attachments",
+          "type": "array"
+        },
+        "continues": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Continuation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "design": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ApprovedDesign"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "task": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OneTask"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "workspace": {
+          "default": "worktree",
+          "enum": [
+            "worktree",
+            "in_place"
+          ],
+          "title": "Workspace",
+          "type": "string"
+        }
+      },
+      "title": "CoderRequest",
+      "type": "object"
+    }
+  },
+  "responses": {
+    "AttachmentPreview": {
+      "description": "What a file would be on this session's turn, before it is sent:\nwhat the check found, how Zeus's rung would be sent it and what that costs, and whether\nits text holds a secret. What a client's chip shows; nothing is recorded to make it.",
+      "properties": {
+        "bytes": {
+          "title": "Bytes",
+          "type": "integer"
+        },
+        "delivery": {
+          "enum": [
+            "native",
+            "text",
+            "outline",
+            "none"
+          ],
+          "title": "Delivery",
+          "type": "string"
+        },
+        "est_tokens": {
+          "title": "Est Tokens",
+          "type": "integer"
+        },
+        "kind": {
+          "enum": [
+            "image",
+            "pdf",
+            "text"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "media_type": {
+          "title": "Media Type",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "secret": {
+          "title": "Secret",
+          "type": "boolean"
+        },
+        "size": {
+          "title": "Size",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "kind",
+        "media_type",
+        "bytes",
+        "size",
+        "est_tokens",
+        "delivery",
+        "secret"
+      ],
+      "title": "AttachmentPreview",
+      "type": "object"
+    },
+    "FileText": {
+      "description": "A workspace file as a frontend reads it: its text, or why there is none.",
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "size": {
+          "title": "Size",
+          "type": "integer"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Text"
+        },
+        "withheld": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Withheld"
+        }
+      },
+      "required": [
+        "path",
+        "size",
+        "text"
+      ],
+      "title": "FileText",
+      "type": "object"
+    },
+    "Findings": {
+      "$defs": {
+        "Pointer": {
+          "additionalProperties": false,
+          "properties": {
+            "edge_class": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Edge Class"
+            },
+            "line_end": {
+              "title": "Line End",
+              "type": "integer"
+            },
+            "line_start": {
+              "title": "Line Start",
+              "type": "integer"
+            },
+            "path": {
+              "title": "Path",
+              "type": "string"
+            },
+            "symbol": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Symbol"
+            }
+          },
+          "required": [
+            "path",
+            "line_start",
+            "line_end"
+          ],
+          "title": "Pointer",
+          "type": "object"
+        },
+        "Unresolved": {
+          "additionalProperties": false,
+          "properties": {
+            "candidates": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Candidates",
+              "type": "array"
+            },
+            "question": {
+              "title": "Question",
+              "type": "string"
+            }
+          },
+          "required": [
+            "question"
+          ],
+          "title": "Unresolved",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "callers": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Pointer"
+          },
+          "title": "Callers",
+          "type": "array"
+        },
+        "evidence": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Pointer"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "facts": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Facts",
+          "type": "array"
+        },
+        "targets": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Pointer"
+          },
+          "title": "Targets",
+          "type": "array"
+        },
+        "truncated": {
+          "default": false,
+          "title": "Truncated",
+          "type": "boolean"
+        },
+        "unresolved": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Unresolved"
+          },
+          "title": "Unresolved",
+          "type": "array"
+        }
+      },
+      "title": "Findings",
+      "type": "object"
+    },
+    "Forked": {
+      "$defs": {
+        "CodeOutcome": {
+          "description": "What an undo or redo did to one workspace's code.",
+          "properties": {
+            "committed": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Committed"
+            },
+            "kept": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Kept",
+              "type": "array"
+            },
+            "kept_by_default": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Kept By Default",
+              "type": "array"
+            },
+            "key": {
+              "title": "Key",
+              "type": "string"
+            },
+            "note": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Note"
+            },
+            "restored": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Restored",
+              "type": "array"
+            },
+            "root": {
+              "title": "Root",
+              "type": "string"
+            },
+            "skipped": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Skipped",
+              "type": "array"
+            },
+            "where": {
+              "enum": [
+                "worktree",
+                "checkout",
+                "in_place"
+              ],
+              "title": "Where",
+              "type": "string"
+            }
+          },
+          "required": [
+            "key",
+            "where",
+            "root"
+          ],
+          "title": "CodeOutcome",
+          "type": "object"
+        }
+      },
+      "description": "What a fork made: the child, what it was told on arrival, and its code.",
+      "properties": {
+        "child_id": {
+          "title": "Child Id",
+          "type": "string"
+        },
+        "code": {
+          "enum": [
+            "restore",
+            "keep"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "notices": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notices",
+          "type": "array"
+        },
+        "workspaces": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/CodeOutcome"
+          },
+          "title": "Workspaces",
+          "type": "array"
+        },
+        "worktree": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Worktree"
+        }
+      },
+      "required": [
+        "child_id",
+        "code",
+        "notices"
+      ],
+      "title": "Forked",
+      "type": "object"
+    },
+    "HandoffResult": {
+      "$defs": {
+        "GitHandoffChoice": {
+          "description": "What the user does with the run's worktree branch.\n\n`APPLY` and `SQUASH` are separate because they are different git operations, not two\nspellings of one. Each packet's commit is a rollback unit, and that property\nonly survives `APPLY` \u2014 after `SQUASH` the packets are welded into a single commit and\nundoing one means undoing all of them. Collapsing them into a single `apply_squash`\nmember would put that choice in the engine, where the user cannot reach it.",
+          "enum": [
+            "apply",
+            "squash",
+            "keep",
+            "discard",
+            "bring"
+          ],
+          "title": "GitHandoffChoice",
+          "type": "string"
+        }
+      },
+      "description": "What a completed handoff did. `pushed` is a field rather than a docstring claim\nbecause a host that has to trust prose is a host that cannot assert on it.",
+      "properties": {
+        "branch": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Branch"
+        },
+        "choice": {
+          "$ref": "#/$defs/GitHandoffChoice"
+        },
+        "commits_applied": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Commits Applied",
+          "type": "array"
+        },
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        },
+        "operation_id": {
+          "title": "Operation Id",
+          "type": "string"
+        },
+        "pushed": {
+          "const": false,
+          "default": false,
+          "title": "Pushed",
+          "type": "boolean"
+        },
+        "source_branch": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Source Branch"
+        },
+        "source_head": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Source Head"
+        },
+        "worktree_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Worktree Path"
+        }
+      },
+      "required": [
+        "choice",
+        "operation_id",
+        "source_branch",
+        "source_head",
+        "commits_applied",
+        "branch",
+        "worktree_path",
+        "detail"
+      ],
+      "title": "HandoffResult",
+      "type": "object"
+    },
+    "HandoffSummary": {
+      "$defs": {
+        "HandoffPreview": {
+          "description": "Everything `01-orchestrator` \u00a73.5.1 requires the handoff to identify, plus whether\nthe source has moved underneath the run.\n\nRead-only and non-raising on drift: the review surface has to *show* the user that the\nbranch moved, which it cannot do if learning that fact is an exception.",
+          "properties": {
+            "base": {
+              "title": "Base",
+              "type": "string"
+            },
+            "branch": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Branch"
+            },
+            "commits": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Commits",
+              "type": "array"
+            },
+            "drift": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Drift"
+            },
+            "lease_id": {
+              "title": "Lease Id",
+              "type": "string"
+            },
+            "mode": {
+              "enum": [
+                "worktree",
+                "in_place"
+              ],
+              "title": "Mode",
+              "type": "string"
+            },
+            "overlapping": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Overlapping",
+              "type": "array"
+            },
+            "seed": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Seed"
+            },
+            "source_branch": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Source Branch"
+            },
+            "source_clean": {
+              "title": "Source Clean",
+              "type": "boolean"
+            },
+            "source_head": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Source Head"
+            },
+            "tip": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Tip"
+            },
+            "uncommitted": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Uncommitted",
+              "type": "array"
+            },
+            "worktree_path": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Worktree Path"
+            }
+          },
+          "required": [
+            "mode",
+            "lease_id",
+            "branch",
+            "worktree_path",
+            "base",
+            "tip",
+            "commits",
+            "source_branch",
+            "source_head",
+            "source_clean",
+            "drift"
+          ],
+          "title": "HandoffPreview",
+          "type": "object"
+        },
+        "Spend": {
+          "description": "A read-only snapshot for the stream and the handoff.",
+          "properties": {
+            "cache_writes": {
+              "default": 0,
+              "title": "Cache Writes",
+              "type": "integer"
+            },
+            "cached_in": {
+              "title": "Cached In",
+              "type": "integer"
+            },
+            "cost_usd": {
+              "title": "Cost Usd",
+              "type": "number"
+            },
+            "estimated_calls": {
+              "default": 0,
+              "title": "Estimated Calls",
+              "type": "integer"
+            },
+            "scope": {
+              "enum": [
+                "session",
+                "run",
+                "packet"
+              ],
+              "title": "Scope",
+              "type": "string"
+            },
+            "tokens_in": {
+              "title": "Tokens In",
+              "type": "integer"
+            },
+            "tokens_out": {
+              "title": "Tokens Out",
+              "type": "integer"
+            },
+            "wall_ms": {
+              "title": "Wall Ms",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "scope",
+            "tokens_in",
+            "tokens_out",
+            "cached_in",
+            "cost_usd",
+            "wall_ms"
+          ],
+          "title": "Spend",
+          "type": "object"
+        },
+        "WorkspaceRef": {
+          "description": "The durable pointer a turn keeps to the workspace it ran in.\n\nA reference, deliberately: the worktree may be gone by the time anyone reads the turn\nback, and recording ids rather than a live object is what lets a resumed session say so\ninstead of failing to open something it assumed was there.",
+          "properties": {
+            "branch": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Branch"
+            },
+            "handoff": {
+              "enum": [
+                "pending",
+                "apply",
+                "squash",
+                "keep",
+                "discard",
+                "bring"
+              ],
+              "title": "Handoff",
+              "type": "string"
+            },
+            "lease_id": {
+              "title": "Lease Id",
+              "type": "string"
+            },
+            "mode": {
+              "enum": [
+                "worktree",
+                "in_place"
+              ],
+              "title": "Mode",
+              "type": "string"
+            },
+            "source_head": {
+              "title": "Source Head",
+              "type": "string"
+            },
+            "source_ref": {
+              "title": "Source Ref",
+              "type": "string"
+            },
+            "worktree_path": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Worktree Path"
+            }
+          },
+          "required": [
+            "mode",
+            "lease_id",
+            "source_ref",
+            "source_head",
+            "handoff"
+          ],
+          "title": "WorkspaceRef",
+          "type": "object"
+        }
+      },
+      "description": "What a session leaves behind, and which completion choices are live right now. The\ngit half is `HandoffPreview` carried whole, whose `refusal(choice)` `finalize()` itself\nasks, so a summary never offers a choice `finalize` then refuses.",
+      "properties": {
+        "diff": {
+          "default": "",
+          "title": "Diff",
+          "type": "string"
+        },
+        "episodes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Episodes",
+          "type": "array"
+        },
+        "git": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HandoffPreview"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "last_outcome": {
+          "anyOf": [
+            {
+              "enum": [
+                "COMPLETED",
+                "PARTIAL",
+                "BLOCKED",
+                "ASK",
+                "BUDGET_CAP",
+                "ABORTED",
+                "OUTGROWN"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Last Outcome"
+        },
+        "message": {
+          "default": "",
+          "title": "Message",
+          "type": "string"
+        },
+        "notes": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        },
+        "offers": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Offers",
+          "type": "object"
+        },
+        "refused": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Refused",
+          "type": "object"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "spend": {
+          "$ref": "#/$defs/Spend"
+        },
+        "unverified": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Unverified",
+          "type": "array"
+        },
+        "workspace": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WorkspaceRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "session_id",
+        "git",
+        "spend",
+        "episodes",
+        "last_outcome",
+        "unverified"
+      ],
+      "title": "HandoffSummary",
+      "type": "object"
+    },
+    "JobView": {
+      "$defs": {
+        "JobReport": {
+          "description": "A job's own facts, the blob its `JOB` effect's completion names.",
+          "properties": {
+            "alongside": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Alongside",
+              "type": "array"
+            },
+            "by": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "By"
+            },
+            "dropped": {
+              "title": "Dropped",
+              "type": "integer"
+            },
+            "ended": {
+              "enum": [
+                "exited",
+                "timed_out",
+                "killed",
+                "ceiling",
+                "lost"
+              ],
+              "title": "Ended",
+              "type": "string"
+            },
+            "err_bytes": {
+              "title": "Err Bytes",
+              "type": "integer"
+            },
+            "exit_code": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Exit Code"
+            },
+            "git_restored": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Git Restored",
+              "type": "array"
+            },
+            "job_id": {
+              "title": "Job Id",
+              "type": "string"
+            },
+            "kept": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Kept"
+            },
+            "kind": {
+              "enum": [
+                "task",
+                "server"
+              ],
+              "title": "Kind",
+              "type": "string"
+            },
+            "line": {
+              "title": "Line",
+              "type": "string"
+            },
+            "moved": {
+              "title": "Moved",
+              "type": "boolean"
+            },
+            "notify": {
+              "title": "Notify",
+              "type": "boolean"
+            },
+            "out_bytes": {
+              "title": "Out Bytes",
+              "type": "integer"
+            },
+            "output": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Output"
+            },
+            "overwrote": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Overwrote",
+              "type": "array"
+            },
+            "wall_ms": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Wall Ms"
+            },
+            "wrote": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Wrote",
+              "type": "array"
+            }
+          },
+          "required": [
+            "job_id",
+            "kind",
+            "line",
+            "exit_code",
+            "ended",
+            "by",
+            "notify",
+            "wall_ms",
+            "wrote",
+            "overwrote",
+            "alongside",
+            "moved",
+            "git_restored",
+            "output",
+            "kept",
+            "dropped",
+            "out_bytes",
+            "err_bytes"
+          ],
+          "title": "JobReport",
+          "type": "object"
+        }
+      },
+      "description": "One job as `job list` and `/jobs` show it: from its effect, and its report once ended.",
+      "properties": {
+        "job_id": {
+          "title": "Job Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "task",
+            "server"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "operation_id": {
+          "title": "Operation Id",
+          "type": "string"
+        },
+        "report": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JobReport"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "row": {
+          "title": "Row",
+          "type": "string"
+        },
+        "running": {
+          "title": "Running",
+          "type": "boolean"
+        },
+        "state": {
+          "title": "State",
+          "type": "string"
+        },
+        "step": {
+          "title": "Step",
+          "type": "string"
+        }
+      },
+      "required": [
+        "job_id",
+        "operation_id",
+        "step",
+        "kind",
+        "running",
+        "report",
+        "state",
+        "row"
+      ],
+      "title": "JobView",
+      "type": "object"
+    },
+    "Liveness": {
+      "$defs": {
+        "IndexProgress": {
+          "description": "How far a pass has got: what a person watching a build is shown.",
+          "properties": {
+            "done": {
+              "default": 0,
+              "title": "Done",
+              "type": "integer"
+            },
+            "stage": {
+              "enum": [
+                "preparing",
+                "reading",
+                "linking"
+              ],
+              "title": "Stage",
+              "type": "string"
+            },
+            "total": {
+              "default": 0,
+              "title": "Total",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "stage"
+          ],
+          "title": "IndexProgress",
+          "type": "object"
+        },
+        "LivenessKind": {
+          "enum": [
+            "idle",
+            "awaiting",
+            "working",
+            "abandoned",
+            "unknown"
+          ],
+          "title": "LivenessKind",
+          "type": "string"
+        }
+      },
+      "description": "Computed on every read, stored nowhere. It carries why: `abandoned` with no `last_seq`\nwould be an accusation rather than a finding.",
+      "properties": {
+        "index_progress": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/IndexProgress"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "indexing": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Indexing"
+        },
+        "kind": {
+          "$ref": "#/$defs/LivenessKind"
+        },
+        "last_seq": {
+          "title": "Last Seq",
+          "type": "integer"
+        },
+        "outcome": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Outcome"
+        },
+        "owner_host": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Owner Host"
+        },
+        "paused_run": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Paused Run"
+        },
+        "question_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Question Id"
+        },
+        "team_run": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Team Run"
+        },
+        "why": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Why"
+        }
+      },
+      "required": [
+        "kind",
+        "last_seq"
+      ],
+      "title": "Liveness",
+      "type": "object"
+    },
+    "ModelSwitch": {
+      "description": "What `switch_model` changed: the payload `model_switched` journals.",
+      "properties": {
+        "from_model": {
+          "title": "From Model",
+          "type": "string"
+        },
+        "model_id": {
+          "title": "Model Id",
+          "type": "string"
+        },
+        "rung": {
+          "title": "Rung",
+          "type": "string"
+        },
+        "rungs_sha": {
+          "title": "Rungs Sha",
+          "type": "string"
+        },
+        "to_model": {
+          "title": "To Model",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rung",
+        "from_model",
+        "to_model",
+        "model_id",
+        "rungs_sha"
+      ],
+      "title": "ModelSwitch",
+      "type": "object"
+    },
+    "ModelWiring": {
+      "$defs": {
+        "CatalogModel": {
+          "description": "What a catalog model is, as a person choosing a rung's model reads it:\nits windows, who serves it, and the name its provider knows it by. Never its `base_url` or\nkey: an endpoint can carry a credential.",
+          "properties": {
+            "context_window": {
+              "title": "Context Window",
+              "type": "integer"
+            },
+            "max_output_tokens": {
+              "title": "Max Output Tokens",
+              "type": "integer"
+            },
+            "model_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Model Id"
+            },
+            "provider": {
+              "title": "Provider",
+              "type": "string"
+            }
+          },
+          "required": [
+            "context_window",
+            "max_output_tokens",
+            "provider"
+          ],
+          "title": "CatalogModel",
+          "type": "object"
+        },
+        "ModelSwitch": {
+          "description": "What `switch_model` changed: the payload `model_switched` journals.",
+          "properties": {
+            "from_model": {
+              "title": "From Model",
+              "type": "string"
+            },
+            "model_id": {
+              "title": "Model Id",
+              "type": "string"
+            },
+            "rung": {
+              "title": "Rung",
+              "type": "string"
+            },
+            "rungs_sha": {
+              "title": "Rungs Sha",
+              "type": "string"
+            },
+            "to_model": {
+              "title": "To Model",
+              "type": "string"
+            }
+          },
+          "required": [
+            "rung",
+            "from_model",
+            "to_model",
+            "model_id",
+            "rungs_sha"
+          ],
+          "title": "ModelSwitch",
+          "type": "object"
+        }
+      },
+      "description": "A session's wiring, derived from the engine config and its `model_switched` lines.",
+      "properties": {
+        "catalog": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Catalog",
+          "type": "array"
+        },
+        "models": {
+          "additionalProperties": {
+            "$ref": "#/$defs/CatalogModel"
+          },
+          "title": "Models",
+          "type": "object"
+        },
+        "roles": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Roles",
+          "type": "object"
+        },
+        "rungs": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Rungs",
+          "type": "object"
+        },
+        "switches": {
+          "items": {
+            "$ref": "#/$defs/ModelSwitch"
+          },
+          "title": "Switches",
+          "type": "array"
+        }
+      },
+      "required": [
+        "rungs",
+        "catalog",
+        "switches"
+      ],
+      "title": "ModelWiring",
+      "type": "object"
+    },
+    "OpenWorkInfo": {
+      "description": "One piece of open work as a frontend reads it: what the start header\nsays once, and what the person picks from when several are open.",
+      "properties": {
+        "at": {
+          "title": "At",
+          "type": "string"
+        },
+        "key": {
+          "title": "Key",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "worktree",
+            "in_place"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Title"
+        },
+        "work": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Work"
+        },
+        "worktree_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Worktree Path"
+        }
+      },
+      "required": [
+        "key",
+        "title",
+        "work",
+        "mode",
+        "worktree_path",
+        "session_id",
+        "at"
+      ],
+      "title": "OpenWorkInfo",
+      "type": "object"
+    },
+    "Restored": {
+      "description": "What a task or operation undo restored, in which workspace.",
+      "properties": {
+        "beside": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Beside",
+          "type": "array"
+        },
+        "kept": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Kept",
+          "type": "array"
+        },
+        "kept_by_default": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Kept By Default",
+          "type": "array"
+        },
+        "restored": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Restored",
+          "type": "array"
+        },
+        "root": {
+          "title": "Root",
+          "type": "string"
+        }
+      },
+      "required": [
+        "root",
+        "restored"
+      ],
+      "title": "Restored",
+      "type": "object"
+    },
+    "RunBlob": {
+      "description": "A run blob as a frontend reads it: its text, or why there is none.",
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "sha": {
+          "title": "Sha",
+          "type": "string"
+        },
+        "size": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Size"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Text"
+        },
+        "withheld": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Withheld"
+        }
+      },
+      "required": [
+        "run_id",
+        "sha",
+        "field",
+        "size",
+        "text"
+      ],
+      "title": "RunBlob",
+      "type": "object"
+    },
+    "RunDiff": {
+      "$defs": {
+        "PathDiff": {
+          "description": "One path's change between two trees, as `diff_stats` counts it.",
+          "properties": {
+            "added": {
+              "title": "Added",
+              "type": "integer"
+            },
+            "kind": {
+              "enum": [
+                "created",
+                "edited",
+                "deleted"
+              ],
+              "title": "Kind",
+              "type": "string"
+            },
+            "path": {
+              "title": "Path",
+              "type": "string"
+            },
+            "removed": {
+              "title": "Removed",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "path",
+            "kind",
+            "added",
+            "removed"
+          ],
+          "title": "PathDiff",
+          "type": "object"
+        }
+      },
+      "description": "A task's or one step's change, between two trees the journal names.",
+      "properties": {
+        "base": {
+          "title": "Base",
+          "type": "string"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/$defs/PathDiff"
+          },
+          "title": "Files",
+          "type": "array"
+        },
+        "operation_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Operation Id"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "task_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Task Id"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "tip": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Tip"
+        }
+      },
+      "required": [
+        "run_id",
+        "task_id",
+        "operation_id",
+        "base",
+        "tip",
+        "files",
+        "text"
+      ],
+      "title": "RunDiff",
+      "type": "object"
+    },
+    "RunHeader": {
+      "$defs": {
+        "HeaderLine": {
+          "properties": {
+            "kind": {
+              "enum": [
+                "workspace",
+                "isolation",
+                "sandbox",
+                "deny_list",
+                "commands",
+                "bootstrap",
+                "mcp",
+                "discovery",
+                "secrets",
+                "storage",
+                "models",
+                "spend"
+              ],
+              "title": "Kind",
+              "type": "string"
+            },
+            "source": {
+              "title": "Source",
+              "type": "string"
+            },
+            "text": {
+              "title": "Text",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "text",
+            "source"
+          ],
+          "title": "HeaderLine",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "lines": {
+          "items": {
+            "$ref": "#/$defs/HeaderLine"
+          },
+          "title": "Lines",
+          "type": "array"
+        },
+        "sandbox": {
+          "default": "",
+          "title": "Sandbox",
+          "type": "string"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "uncommitted": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Uncommitted",
+          "type": "array"
+        }
+      },
+      "required": [
+        "session_id",
+        "lines"
+      ],
+      "title": "RunHeader",
+      "type": "object"
+    },
+    "RunMetrics": {
+      "properties": {
+        "budget_hard_caps": {
+          "default": 0,
+          "title": "Budget Hard Caps",
+          "type": "integer"
+        },
+        "budget_warnings": {
+          "default": 0,
+          "title": "Budget Warnings",
+          "type": "integer"
+        },
+        "cost_usd": {
+          "default": 0.0,
+          "title": "Cost Usd",
+          "type": "number"
+        },
+        "isolation": {
+          "default": "",
+          "title": "Isolation",
+          "type": "string"
+        },
+        "model_calls": {
+          "default": 0,
+          "title": "Model Calls",
+          "type": "integer"
+        },
+        "operations": {
+          "default": 0,
+          "title": "Operations",
+          "type": "integer"
+        },
+        "operations_ambiguous": {
+          "default": 0,
+          "title": "Operations Ambiguous",
+          "type": "integer"
+        },
+        "operations_incomplete": {
+          "default": 0,
+          "title": "Operations Incomplete",
+          "type": "integer"
+        },
+        "outcome": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Outcome"
+        },
+        "plans": {
+          "default": 0,
+          "title": "Plans",
+          "type": "integer"
+        },
+        "reviews": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Reviews",
+          "type": "object"
+        },
+        "round_ends": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Round Ends",
+          "type": "object"
+        },
+        "rounds": {
+          "default": 0,
+          "title": "Rounds",
+          "type": "integer"
+        },
+        "run_id": {
+          "default": "",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "tasks_accepted": {
+          "default": 0,
+          "title": "Tasks Accepted",
+          "type": "integer"
+        },
+        "tasks_committed": {
+          "default": 0,
+          "title": "Tasks Committed",
+          "type": "integer"
+        },
+        "tasks_total": {
+          "default": 0,
+          "title": "Tasks Total",
+          "type": "integer"
+        },
+        "tokens_in": {
+          "default": 0,
+          "title": "Tokens In",
+          "type": "integer"
+        },
+        "tokens_out": {
+          "default": 0,
+          "title": "Tokens Out",
+          "type": "integer"
+        },
+        "tool_calls": {
+          "default": 0,
+          "title": "Tool Calls",
+          "type": "integer"
+        },
+        "tool_refusals": {
+          "default": 0,
+          "title": "Tool Refusals",
+          "type": "integer"
+        },
+        "wall_ms": {
+          "default": 0,
+          "title": "Wall Ms",
+          "type": "integer"
+        }
+      },
+      "title": "RunMetrics",
+      "type": "object"
+    },
+    "SessionBudget": {
+      "$defs": {
+        "RungBudget": {
+          "description": "One rung's share of the family's spend, and the rung's own cap beneath the\ntotal. An engine value, like `SessionBudget`.",
+          "properties": {
+            "cap_seq": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cap Seq"
+            },
+            "cap_source": {
+              "enum": [
+                "config",
+                "session",
+                "none"
+              ],
+              "title": "Cap Source",
+              "type": "string"
+            },
+            "cap_usd": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cap Usd"
+            },
+            "spent_usd": {
+              "title": "Spent Usd",
+              "type": "number"
+            }
+          },
+          "required": [
+            "spent_usd",
+            "cap_usd",
+            "cap_source",
+            "cap_seq"
+          ],
+          "title": "RungBudget",
+          "type": "object"
+        }
+      },
+      "description": "A session family's spend against its cap \u2014 what `/budget` shows. An\nengine value, computed per call and stored nowhere; not a schema contract\n(`BudgetStatus` stays retired).",
+      "properties": {
+        "cap_seq": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Cap Seq"
+        },
+        "cap_source": {
+          "enum": [
+            "config",
+            "session"
+          ],
+          "title": "Cap Source",
+          "type": "string"
+        },
+        "cap_usd": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Cap Usd"
+        },
+        "roles": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Roles",
+          "type": "object"
+        },
+        "rungs": {
+          "additionalProperties": {
+            "$ref": "#/$defs/RungBudget"
+          },
+          "title": "Rungs",
+          "type": "object"
+        },
+        "spent_usd": {
+          "title": "Spent Usd",
+          "type": "number"
+        },
+        "warning_fractions": {
+          "default": [],
+          "items": {
+            "type": "number"
+          },
+          "title": "Warning Fractions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "spent_usd",
+        "cap_usd",
+        "cap_source",
+        "cap_seq"
+      ],
+      "title": "SessionBudget",
+      "type": "object"
+    },
+    "SessionInfo": {
+      "$defs": {
+        "OpenWorkInfo": {
+          "description": "One piece of open work as a frontend reads it: what the start header\nsays once, and what the person picks from when several are open.",
+          "properties": {
+            "at": {
+              "title": "At",
+              "type": "string"
+            },
+            "key": {
+              "title": "Key",
+              "type": "string"
+            },
+            "mode": {
+              "enum": [
+                "worktree",
+                "in_place"
+              ],
+              "title": "Mode",
+              "type": "string"
+            },
+            "session_id": {
+              "title": "Session Id",
+              "type": "string"
+            },
+            "title": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Title"
+            },
+            "work": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Work"
+            },
+            "worktree_path": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Worktree Path"
+            }
+          },
+          "required": [
+            "key",
+            "title",
+            "work",
+            "mode",
+            "worktree_path",
+            "session_id",
+            "at"
+          ],
+          "title": "OpenWorkInfo",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "continuing": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OpenWorkInfo"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "created_at": {
+          "default": "",
+          "title": "Created At",
+          "type": "string"
+        },
+        "last_run_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Run Id"
+        },
+        "last_seq": {
+          "title": "Last Seq",
+          "type": "integer"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "updated_at": {
+          "default": "",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "session_id",
+        "last_seq"
+      ],
+      "title": "SessionInfo",
+      "type": "object"
+    },
+    "UndoReport": {
+      "$defs": {
+        "CodeOutcome": {
+          "description": "What an undo or redo did to one workspace's code.",
+          "properties": {
+            "committed": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Committed"
+            },
+            "kept": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Kept",
+              "type": "array"
+            },
+            "kept_by_default": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Kept By Default",
+              "type": "array"
+            },
+            "key": {
+              "title": "Key",
+              "type": "string"
+            },
+            "note": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Note"
+            },
+            "restored": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Restored",
+              "type": "array"
+            },
+            "root": {
+              "title": "Root",
+              "type": "string"
+            },
+            "skipped": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Skipped",
+              "type": "array"
+            },
+            "where": {
+              "enum": [
+                "worktree",
+                "checkout",
+                "in_place"
+              ],
+              "title": "Where",
+              "type": "string"
+            }
+          },
+          "required": [
+            "key",
+            "where",
+            "root"
+          ],
+          "title": "CodeOutcome",
+          "type": "object"
+        },
+        "ForkEffect": {
+          "description": "An effect a fork cannot undo: something that already happened in the world.",
+          "properties": {
+            "detail": {
+              "title": "Detail",
+              "type": "string"
+            },
+            "kind": {
+              "title": "Kind",
+              "type": "string"
+            },
+            "seq": {
+              "title": "Seq",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "seq",
+            "kind",
+            "detail"
+          ],
+          "title": "ForkEffect",
+          "type": "object"
+        }
+      },
+      "description": "What an undo or a redo did, and what it could not do (decision 3).",
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "boolean"
+        },
+        "conversation": {
+          "title": "Conversation",
+          "type": "boolean"
+        },
+        "not_undone": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ForkEffect"
+          },
+          "title": "Not Undone",
+          "type": "array"
+        },
+        "prompt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prompt"
+        },
+        "seq": {
+          "title": "Seq",
+          "type": "integer"
+        },
+        "to_turn": {
+          "title": "To Turn",
+          "type": "integer"
+        },
+        "withheld": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Withheld",
+          "type": "array"
+        },
+        "workspaces": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/CodeOutcome"
+          },
+          "title": "Workspaces",
+          "type": "array"
+        }
+      },
+      "required": [
+        "seq",
+        "to_turn",
+        "code",
+        "conversation"
+      ],
+      "title": "UndoReport",
+      "type": "object"
+    },
+    "Undoable": {
+      "description": "A turn a person can take back, and how (decision 1).",
+      "properties": {
+        "no_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "No Code"
+        },
+        "options": {
+          "items": {
+            "enum": [
+              "both",
+              "conversation",
+              "code"
+            ],
+            "type": "string"
+          },
+          "title": "Options",
+          "type": "array"
+        },
+        "prompt": {
+          "title": "Prompt",
+          "type": "string"
+        },
+        "turn": {
+          "title": "Turn",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "turn",
+        "prompt",
+        "options"
+      ],
+      "title": "Undoable",
+      "type": "object"
+    },
+    "Unresolved": {
+      "additionalProperties": false,
+      "properties": {
+        "candidates": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Candidates",
+          "type": "array"
+        },
+        "question": {
+          "title": "Question",
+          "type": "string"
+        }
+      },
+      "required": [
+        "question"
+      ],
+      "title": "Unresolved",
+      "type": "object"
+    },
+    "WorkProgress": {
+      "$defs": {
+        "PartState": {
+          "description": "The design's or the plan's approval against what is on disk now.",
+          "properties": {
+            "approved": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Approved"
+            },
+            "bound_to": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Bound To"
+            },
+            "current": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Current"
+            },
+            "version": {
+              "title": "Version",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "version",
+            "approved",
+            "current"
+          ],
+          "title": "PartState",
+          "type": "object"
+        },
+        "RunAt": {
+          "properties": {
+            "at_task": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "At Task"
+            },
+            "outcome": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Outcome"
+            },
+            "run_id": {
+              "title": "Run Id",
+              "type": "string"
+            },
+            "state": {
+              "enum": [
+                "live",
+                "suspended",
+                "ended"
+              ],
+              "title": "State",
+              "type": "string"
+            }
+          },
+          "required": [
+            "run_id",
+            "state",
+            "outcome",
+            "at_task"
+          ],
+          "title": "RunAt",
+          "type": "object"
+        },
+        "TaskStatus": {
+          "properties": {
+            "commit": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Commit"
+            },
+            "id": {
+              "title": "Id",
+              "type": "string"
+            },
+            "key": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Key"
+            },
+            "run": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Run"
+            },
+            "state": {
+              "enum": [
+                "pending",
+                "open",
+                "held",
+                "committed",
+                "unchecked",
+                "dropped",
+                "replaced",
+                "lost"
+              ],
+              "title": "State",
+              "type": "string"
+            },
+            "title": {
+              "title": "Title",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "title",
+            "state"
+          ],
+          "title": "TaskStatus",
+          "type": "object"
+        },
+        "TellStatus": {
+          "description": "A tell to the work's team: `sent` until a run delivers it, `delivered` until\nAthena replies, `replied` with her outcome; `unanswered` when the run it was delivered in\nended with no reply.",
+          "properties": {
+            "id": {
+              "title": "Id",
+              "type": "string"
+            },
+            "outcome": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "applied",
+                    "planned",
+                    "needs_design",
+                    "declined"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Outcome"
+            },
+            "state": {
+              "enum": [
+                "sent",
+                "delivered",
+                "replied",
+                "unanswered"
+              ],
+              "title": "State",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "state"
+          ],
+          "title": "TellStatus",
+          "type": "object"
+        },
+        "WorkKey": {
+          "description": "Which work: a design's folder (`dir`, `name`), or a one-task plan, named by the run that\ndelegated it first.",
+          "properties": {
+            "dir": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Dir"
+            },
+            "first_run": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "First Run"
+            },
+            "name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Name"
+            }
+          },
+          "title": "WorkKey",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "design": {
+          "$ref": "#/$defs/PartState"
+        },
+        "key": {
+          "$ref": "#/$defs/WorkKey"
+        },
+        "plan": {
+          "$ref": "#/$defs/PartState"
+        },
+        "plan_run": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Plan Run"
+        },
+        "plan_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Plan Sha"
+        },
+        "plan_version": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Plan Version"
+        },
+        "run": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RunAt"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "runs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Runs",
+          "type": "array"
+        },
+        "tasks": {
+          "items": {
+            "$ref": "#/$defs/TaskStatus"
+          },
+          "title": "Tasks",
+          "type": "array"
+        },
+        "tells": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/TellStatus"
+          },
+          "title": "Tells",
+          "type": "array"
+        }
+      },
+      "required": [
+        "key",
+        "runs",
+        "design",
+        "plan",
+        "plan_run",
+        "plan_version",
+        "plan_sha",
+        "tasks",
+        "run"
+      ],
+      "title": "WorkProgress",
+      "type": "object"
+    }
+  },
+  "routes": [
+    {
+      "capability": "wire",
+      "method": "GET",
+      "mutating": false,
+      "path": "/",
+      "stream": false
+    },
+    {
+      "capability": "sessions",
+      "method": "POST",
+      "mutating": true,
+      "path": "/session",
+      "stream": false
+    },
+    {
+      "capability": "sessions",
+      "method": "GET",
+      "mutating": false,
+      "path": "/session",
+      "stream": false
+    },
+    {
+      "capability": "sessions",
+      "method": "GET",
+      "mutating": false,
+      "path": "/session/{sid}",
+      "stream": false
+    },
+    {
+      "capability": "sessions",
+      "method": "GET",
+      "mutating": false,
+      "path": "/works",
+      "stream": false
+    },
+    {
+      "capability": "sessions",
+      "method": "DELETE",
+      "mutating": true,
+      "path": "/session/{sid}",
+      "stream": false
+    },
+    {
+      "capability": "liveness",
+      "method": "GET",
+      "mutating": false,
+      "path": "/session/{sid}/liveness",
+      "stream": false
+    },
+    {
+      "capability": "header",
+      "method": "GET",
+      "mutating": false,
+      "path": "/session/{sid}/header",
+      "stream": false
+    },
+    {
+      "capability": "sessions",
+      "method": "GET",
+      "mutating": false,
+      "path": "/session/{sid}/work",
+      "stream": false
+    },
+    {
+      "capability": "sessions",
+      "method": "POST",
+      "mutating": true,
+      "path": "/session/{sid}/title",
+      "stream": false
+    },
+    {
+      "capability": "events",
+      "method": "GET",
+      "mutating": false,
+      "path": "/session/{sid}/events",
+      "stream": true
+    },
+    {
+      "capability": "journal",
+      "method": "GET",
+      "mutating": false,
+      "path": "/session/{sid}/journal",
+      "stream": true
+    },
+    {
+      "capability": "runs",
+      "method": "GET",
+      "mutating": false,
+      "path": "/run/{run_id}/events",
+      "stream": true
+    },
+    {
+      "capability": "runs",
+      "method": "GET",
+      "mutating": false,
+      "path": "/run/{run_id}/journal",
+      "stream": true
+    },
+    {
+      "capability": "undo",
+      "method": "GET",
+      "mutating": false,
+      "path": "/session/{sid}/hidden",
+      "stream": false
+    },
+    {
+      "capability": "turns",
+      "method": "POST",
+      "mutating": true,
+      "path": "/session/{sid}/turn",
+      "stream": false
+    },
+    {
+      "capability": "turns",
+      "method": "POST",
+      "mutating": false,
+      "path": "/session/{sid}/attachment",
+      "stream": false
+    },
+    {
+      "capability": "turns",
+      "method": "POST",
+      "mutating": true,
+      "path": "/session/{sid}/interrupt",
+      "stream": false
+    },
+    {
+      "capability": "questions",
+      "method": "POST",
+      "mutating": false,
+      "path": "/session/{sid}/answer/{qid}",
+      "stream": false
+    },
+    {
+      "capability": "budget",
+      "method": "GET",
+      "mutating": false,
+      "path": "/session/{sid}/budget",
+      "stream": false
+    },
+    {
+      "capability": "budget",
+      "method": "POST",
+      "mutating": true,
+      "path": "/session/{sid}/cap",
+      "stream": false
+    },
+    {
+      "capability": "coder",
+      "method": "POST",
+      "mutating": true,
+      "path": "/session/{sid}/coder",
+      "stream": false
+    },
+    {
+      "capability": "resume",
+      "method": "POST",
+      "mutating": true,
+      "path": "/session/{sid}/resume",
+      "stream": false
+    },
+    {
+      "capability": "coder",
+      "method": "POST",
+      "mutating": true,
+      "path": "/session/{sid}/pause",
+      "stream": false
+    },
+    {
+      "capability": "coder",
+      "method": "POST",
+      "mutating": true,
+      "path": "/session/{sid}/drop",
+      "stream": false
+    },
+    {
+      "capability": "models",
+      "method": "GET",
+      "mutating": false,
+      "path": "/session/{sid}/rung",
+      "stream": false
+    },
+    {
+      "capability": "models",
+      "method": "POST",
+      "mutating": true,
+      "path": "/session/{sid}/rung",
+      "stream": false
+    },
+    {
+      "capability": "jobs",
+      "method": "GET",
+      "mutating": false,
+      "path": "/session/{sid}/jobs",
+      "stream": false
+    },
+    {
+      "capability": "jobs",
+      "method": "POST",
+      "mutating": true,
+      "path": "/session/{sid}/jobs/{job_id}/kill",
+      "stream": false
+    },
+    {
+      "capability": "undo",
+      "method": "GET",
+      "mutating": false,
+      "path": "/session/{sid}/undo",
+      "stream": false
+    },
+    {
+      "capability": "undo",
+      "method": "POST",
+      "mutating": true,
+      "path": "/session/{sid}/undo",
+      "stream": false
+    },
+    {
+      "capability": "undo",
+      "method": "POST",
+      "mutating": true,
+      "path": "/session/{sid}/redo",
+      "stream": false
+    },
+    {
+      "capability": "undo",
+      "method": "POST",
+      "mutating": true,
+      "path": "/session/{sid}/undo/task",
+      "stream": false
+    },
+    {
+      "capability": "undo",
+      "method": "POST",
+      "mutating": true,
+      "path": "/session/{sid}/undo/operation",
+      "stream": false
+    },
+    {
+      "capability": "fork",
+      "method": "POST",
+      "mutating": true,
+      "path": "/session/{sid}/fork",
+      "stream": false
+    },
+    {
+      "capability": "handoff",
+      "method": "GET",
+      "mutating": false,
+      "path": "/session/{sid}/handoff",
+      "stream": false
+    },
+    {
+      "capability": "metrics",
+      "method": "GET",
+      "mutating": false,
+      "path": "/session/{sid}/metrics",
+      "stream": false
+    },
+    {
+      "capability": "metrics",
+      "method": "GET",
+      "mutating": false,
+      "path": "/run/{run_id}/metrics",
+      "stream": false
+    },
+    {
+      "capability": "blobs",
+      "method": "GET",
+      "mutating": false,
+      "path": "/run/{run_id}/blob/{sha}",
+      "stream": false
+    },
+    {
+      "capability": "diffs",
+      "method": "GET",
+      "mutating": false,
+      "path": "/run/{run_id}/diff/task/{task_id}",
+      "stream": false
+    },
+    {
+      "capability": "diffs",
+      "method": "GET",
+      "mutating": false,
+      "path": "/run/{run_id}/diff/step/{operation_id}",
+      "stream": false
+    },
+    {
+      "capability": "finalize",
+      "method": "POST",
+      "mutating": true,
+      "path": "/session/{sid}/finalize",
+      "stream": false
+    },
+    {
+      "capability": "locate",
+      "method": "POST",
+      "mutating": false,
+      "path": "/locate",
+      "stream": false
+    },
+    {
+      "capability": "input",
+      "method": "GET",
+      "mutating": false,
+      "path": "/session/{sid}/files",
+      "stream": false
+    },
+    {
+      "capability": "input",
+      "method": "POST",
+      "mutating": false,
+      "path": "/session/{sid}/file",
+      "stream": false
+    },
+    {
+      "capability": "input",
+      "method": "POST",
+      "mutating": false,
+      "path": "/secret",
+      "stream": false
+    }
+  ],
+  "run_records": {
+    "$comment": "a run's records are journal events: their payload per kind is in packages/core/schema/golden/journal_event.schema.json, a frozen contract"
+  },
+  "session_records": {
+    "action_granted": {
+      "description": "An action a standing grant approved, so no one was asked: one line, never a\nquestion. What ran, under which grant, and what that grant covers.",
+      "properties": {
+        "action_id": {
+          "title": "Action Id",
+          "type": "string"
+        },
+        "cls": {
+          "title": "Cls",
+          "type": "string"
+        },
+        "display": {
+          "title": "Display",
+          "type": "string"
+        },
+        "operation_id": {
+          "title": "Operation Id",
+          "type": "string"
+        },
+        "prefix": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Prefix",
+          "type": "array"
+        },
+        "scope": {
+          "anyOf": [
+            {
+              "enum": [
+                "once",
+                "session",
+                "repo"
+              ],
+              "type": "string"
+            },
+            {
+              "const": "never_ask",
+              "type": "string"
+            }
+          ],
+          "title": "Scope"
+        }
+      },
+      "required": [
+        "action_id",
+        "operation_id",
+        "display",
+        "scope",
+        "cls",
+        "prefix"
+      ],
+      "title": "ActionGrantedLine",
+      "type": "object"
+    },
+    "agent": {
+      "$defs": {
+        "EventKind": {
+          "enum": [
+            "run_start",
+            "effect_intended",
+            "effect_started",
+            "effect_completed",
+            "budget",
+            "exec",
+            "route",
+            "read_tier",
+            "citation_gate",
+            "read_answered",
+            "scout_start",
+            "scout_tool",
+            "scout_escape",
+            "scout_escalated",
+            "scout_report",
+            "session_start",
+            "turn",
+            "interrupt",
+            "session_end",
+            "question_asked",
+            "question_answered",
+            "context_tokens",
+            "untrusted_read",
+            "mcp_connect",
+            "mcp_call",
+            "external_call",
+            "secret_denied",
+            "secret_suspected",
+            "redaction",
+            "hook",
+            "callback_error",
+            "run_end",
+            "tool_call",
+            "model_call",
+            "task_delegated",
+            "task_reported",
+            "box_message",
+            "box_compaction",
+            "task_reviewed",
+            "plan_written",
+            "plan_outgrown",
+            "agent_start",
+            "agent_message",
+            "agent_report",
+            "tell_delivered",
+            "tell_reply"
+          ],
+          "title": "EventKind",
+          "type": "string"
+        },
+        "P": {
+          "additionalProperties": false,
+          "description": "Base for every payload: strict, frozen, no extra fields.",
+          "properties": {},
+          "title": "P",
+          "type": "object"
+        }
+      },
+      "description": "One record of a spawned agent's round on the session log (`agents/spawn.py`): its\n`agent_start`, each `agent_message`, its `agent_report`. Folded here, so the session knows\nits agents, and what each was told and answered, from its log alone.",
+      "properties": {
+        "event": {
+          "$ref": "#/$defs/EventKind"
+        },
+        "payload": {
+          "$ref": "#/$defs/P"
+        }
+      },
+      "required": [
+        "event",
+        "payload"
+      ],
+      "title": "AgentLine",
+      "type": "object"
+    },
+    "bound": {
+      "x-opaque": true
+    },
+    "box_call": {
+      "x-opaque": true
+    },
+    "box_compaction": {
+      "x-opaque": true
+    },
+    "cap": {
+      "description": "The person's cap for the session family, or `None` when they lifted it.\nThe family's latest line is its cap; with none, the engine config's `hard_cost_usd`.",
+      "properties": {
+        "hard_cost_usd": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Hard Cost Usd"
+        },
+        "rung": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rung"
+        }
+      },
+      "required": [
+        "hard_cost_usd"
+      ],
+      "title": "CapLine",
+      "type": "object"
+    },
+    "code_snapshot": {
+      "x-opaque": true
+    },
+    "command_grant": {
+      "x-opaque": true
+    },
+    "compaction": {
+      "$defs": {
+        "JsonValue": {}
+      },
+      "description": "One committed compaction: the whole cut in one line, so a crash can\nnever leave a block without its standing, or a boundary without its block.",
+      "properties": {
+        "block": {
+          "title": "Block",
+          "type": "string"
+        },
+        "boundary": {
+          "title": "Boundary",
+          "type": "integer"
+        },
+        "facts": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Facts",
+          "type": "object"
+        },
+        "lifted": {
+          "default": [],
+          "items": {
+            "type": "integer"
+          },
+          "title": "Lifted",
+          "type": "array"
+        },
+        "previous": {
+          "title": "Previous",
+          "type": "integer"
+        },
+        "standing": {
+          "title": "Standing",
+          "type": "string"
+        }
+      },
+      "required": [
+        "boundary",
+        "previous",
+        "block",
+        "standing",
+        "facts"
+      ],
+      "title": "CutLine",
+      "type": "object"
+    },
+    "concern": {
+      "$defs": {
+        "Concern": {
+          "description": "`concern_raised`: the utterance itself. The evidence class is always `claim` \u2014 a\nconcern is never a fact, and has no field that could make it look like one.",
+          "properties": {
+            "anchor": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Anchor",
+              "type": "array"
+            },
+            "event": {
+              "const": "raised",
+              "default": "raised",
+              "title": "Event",
+              "type": "string"
+            },
+            "id": {
+              "title": "Id",
+              "type": "string"
+            },
+            "raised_by": {
+              "enum": [
+                "zeus",
+                "coder",
+                "critic",
+                "user"
+              ],
+              "title": "Raised By",
+              "type": "string"
+            },
+            "text": {
+              "title": "Text",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "raised_by",
+            "text"
+          ],
+          "title": "Concern",
+          "type": "object"
+        },
+        "Dismissed": {
+          "description": "`concern_dismissed`: the user, and only the user, said stop displaying it.",
+          "properties": {
+            "event": {
+              "const": "dismissed",
+              "default": "dismissed",
+              "title": "Event",
+              "type": "string"
+            },
+            "id": {
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "title": "Dismissed",
+          "type": "object"
+        },
+        "Promoted": {
+          "description": "`concern_promoted`: a registered check now watches it. Watched, not resolved.",
+          "properties": {
+            "check_id": {
+              "title": "Check Id",
+              "type": "string"
+            },
+            "event": {
+              "const": "promoted",
+              "default": "promoted",
+              "title": "Event",
+              "type": "string"
+            },
+            "id": {
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "check_id"
+          ],
+          "title": "Promoted",
+          "type": "object"
+        },
+        "Touched": {
+          "description": "`concern_touched`: a run modified an anchored path. Records that something happened\nNEAR the concern and decides nothing about it.",
+          "properties": {
+            "event": {
+              "const": "touched",
+              "default": "touched",
+              "title": "Event",
+              "type": "string"
+            },
+            "id": {
+              "title": "Id",
+              "type": "string"
+            },
+            "path": {
+              "title": "Path",
+              "type": "string"
+            },
+            "run_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Run Id"
+            }
+          },
+          "required": [
+            "id",
+            "path"
+          ],
+          "title": "Touched",
+          "type": "object"
+        }
+      },
+      "discriminator": {
+        "mapping": {
+          "dismissed": "#/$defs/Dismissed",
+          "promoted": "#/$defs/Promoted",
+          "raised": "#/$defs/Concern",
+          "touched": "#/$defs/Touched"
+        },
+        "propertyName": "event"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Concern"
+        },
+        {
+          "$ref": "#/$defs/Touched"
+        },
+        {
+          "$ref": "#/$defs/Promoted"
+        },
+        {
+          "$ref": "#/$defs/Dismissed"
+        }
+      ]
+    },
+    "constraint": {
+      "description": "A `constraint` line's payload: the constraint, and the id it supersedes. The ledger\nkeeps the constraint (`ledger.Constraint`); `supersedes` is the line's alone.",
+      "properties": {
+        "author": {
+          "enum": [
+            "zeus",
+            "user"
+          ],
+          "title": "Author",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "scope": {
+          "enum": [
+            "session",
+            "design",
+            "packet_set"
+          ],
+          "title": "Scope",
+          "type": "string"
+        },
+        "scope_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scope Id"
+        },
+        "sources": {
+          "items": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "title": "Sources",
+          "type": "array"
+        },
+        "superseded_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Superseded By"
+        },
+        "supersedes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supersedes"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "valid_from": {
+          "title": "Valid From",
+          "type": "integer"
+        },
+        "valid_until": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Valid Until"
+        }
+      },
+      "required": [
+        "id",
+        "text",
+        "sources",
+        "author",
+        "scope",
+        "valid_from"
+      ],
+      "title": "ConstraintP",
+      "type": "object"
+    },
+    "design_record": {
+      "x-opaque": true
+    },
+    "episode": {
+      "$defs": {
+        "Tier": {
+          "description": "How much the user is consulted before a change happens.\n\nOrdered \u2014 `TIER_ORDER` is the order, and `max()` over it is what makes \"never\nde-escalate\" (invariant 17) structurally impossible to violate rather than a policy\nsomeone must remember to enforce.\n\nIt lives here rather than in `chickadee/approval/` because a G0 contract carries it and\n`schema/` cannot import from a package built three phases later. That is also the right\nhome on the merits: a tier is written down and read back \u2014 by the journal, the handoff,\nthe visibility surface \u2014 and what crosses that boundary is a wire type.",
+          "enum": [
+            "t0",
+            "t1",
+            "t2"
+          ],
+          "title": "Tier",
+          "type": "string"
+        }
+      },
+      "description": "Payload of an `episode` line \u2014 one per `coder` call, written at dispatch.",
+      "properties": {
+        "constraints": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Constraints",
+          "type": "array"
+        },
+        "design_sha": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Design Sha"
+        },
+        "opened_at_seq": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Opened At Seq"
+        },
+        "path": {
+          "enum": [
+            "exact",
+            "planned"
+          ],
+          "title": "Path",
+          "type": "string"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "tier": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Tier"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "run_id",
+        "path"
+      ],
+      "title": "EpisodeLine",
+      "type": "object"
+    },
+    "external_call": {
+      "x-opaque": true
+    },
+    "fork": {
+      "$defs": {
+        "ForkOrigin": {
+          "properties": {
+            "at_seq": {
+              "minimum": 0,
+              "title": "At Seq",
+              "type": "integer"
+            },
+            "session_id": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          },
+          "required": [
+            "session_id",
+            "at_seq"
+          ],
+          "title": "ForkOrigin",
+          "type": "object"
+        }
+      },
+      "description": "A child's first line, written by the store when it creates the fork.",
+      "properties": {
+        "at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "At"
+        },
+        "forked_from": {
+          "$ref": "#/$defs/ForkOrigin"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "forked_from",
+        "reason"
+      ],
+      "title": "ForkP",
+      "type": "object"
+    },
+    "frame": {
+      "description": "The turn frame: one harness line before the session's first\nuser turn, and before the first one after the date changes. The date and the git head\nare here, not in the system prefix, where either would be a cache miss on the largest\nregion for the cheapest fact.",
+      "properties": {
+        "branch": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Branch"
+        },
+        "date": {
+          "title": "Date",
+          "type": "string"
+        },
+        "head": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Head"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "date",
+        "text"
+      ],
+      "title": "FrameLine",
+      "type": "object"
+    },
+    "handoff_completed": {
+      "x-opaque": true
+    },
+    "handoff_intended": {
+      "x-opaque": true
+    },
+    "hook": {
+      "x-opaque": true
+    },
+    "limits": {
+      "x-opaque": true
+    },
+    "model_switched": {
+      "description": "What `switch_model` changed: the payload `model_switched` journals.",
+      "properties": {
+        "from_model": {
+          "title": "From Model",
+          "type": "string"
+        },
+        "model_id": {
+          "title": "Model Id",
+          "type": "string"
+        },
+        "rung": {
+          "title": "Rung",
+          "type": "string"
+        },
+        "rungs_sha": {
+          "title": "Rungs Sha",
+          "type": "string"
+        },
+        "to_model": {
+          "title": "To Model",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rung",
+        "from_model",
+        "to_model",
+        "model_id",
+        "rungs_sha"
+      ],
+      "title": "ModelSwitch",
+      "type": "object"
+    },
+    "note": {
+      "x-opaque": true
+    },
+    "packet_record": {
+      "x-opaque": true
+    },
+    "pinned": {
+      "x-opaque": true
+    },
+    "plan": {
+      "x-opaque": true
+    },
+    "plan_decision": {
+      "x-opaque": true
+    },
+    "prefix": {
+      "x-opaque": true
+    },
+    "question_answered": {
+      "description": "The choice, who gave it, and how long the wait was. `source` is an `AnswerSource` for a\nquestion and an `ApprovalDecision.source` for an approval, as given.",
+      "properties": {
+        "choice": {
+          "title": "Choice",
+          "type": "string"
+        },
+        "elapsed_ms": {
+          "minimum": 0,
+          "title": "Elapsed Ms",
+          "type": "integer"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        },
+        "scope": {
+          "default": "once",
+          "title": "Scope",
+          "type": "string"
+        },
+        "source": {
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "choice",
+        "source",
+        "elapsed_ms"
+      ],
+      "title": "QuestionAnsweredLine",
+      "type": "object"
+    },
+    "question_asked": {
+      "$defs": {
+        "ActionApproval": {
+          "additionalProperties": false,
+          "description": "One concrete effect, at dispatch time \u2014 the\nonly ask point where the argv is real rather than declared.\n\n**This is the question, not the record.** The durable record is contract 10's\n`ActionAuthorization`, and an `approve` here is what a `Confirmation` on it attests.\nKeeping them apart lets the question carry what a record should not \u2014 a rendered\n`display` line, the router's evidence \u2014 without touching a frozen row.\n\nEvery field is an observation of the action about to run, never a claim about it.\nAdded at G4.",
+          "properties": {
+            "action_id": {
+              "title": "Action Id",
+              "type": "string"
+            },
+            "asker": {
+              "default": "zeus",
+              "enum": [
+                "zeus",
+                "athena",
+                "worker"
+              ],
+              "title": "Asker",
+              "type": "string"
+            },
+            "command": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Command"
+            },
+            "credentials": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Credentials",
+              "type": "array"
+            },
+            "cwd": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Cwd"
+            },
+            "display": {
+              "title": "Display",
+              "type": "string"
+            },
+            "effect_surface": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Effect Surface",
+              "type": "array"
+            },
+            "exact": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/CommandBinding"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "grant": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/CommandBinding"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "hits": {
+              "default": [],
+              "items": {
+                "$ref": "#/$defs/FactHit"
+              },
+              "title": "Hits",
+              "type": "array"
+            },
+            "idempotent": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotent"
+            },
+            "kind": {
+              "enum": [
+                "command",
+                "mcp_tool",
+                "git"
+              ],
+              "title": "Kind",
+              "type": "string"
+            },
+            "network": {
+              "title": "Network",
+              "type": "boolean"
+            },
+            "offer_repo": {
+              "default": true,
+              "title": "Offer Repo",
+              "type": "boolean"
+            },
+            "operation_id": {
+              "title": "Operation Id",
+              "type": "string"
+            },
+            "repo_any_arguments": {
+              "default": false,
+              "title": "Repo Any Arguments",
+              "type": "boolean"
+            },
+            "reversible": {
+              "title": "Reversible",
+              "type": "boolean"
+            },
+            "sandboxed": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Sandboxed"
+            },
+            "spec_sha": {
+              "title": "Spec Sha",
+              "type": "string"
+            },
+            "task_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Task Id"
+            },
+            "tier": {
+              "$ref": "#/$defs/Tier"
+            }
+          },
+          "required": [
+            "action_id",
+            "operation_id",
+            "kind",
+            "display",
+            "spec_sha",
+            "network",
+            "idempotent",
+            "reversible",
+            "tier"
+          ],
+          "title": "ActionApproval",
+          "type": "object"
+        },
+        "ApprovalStop": {
+          "additionalProperties": false,
+          "description": "What the person is shown at a stop: the markdown, exactly. Approving binds `sha`, the\ntext last shown (invariant 15); an edit or a note makes a new text, shown again. Not\n`Stop`, the spec's first name for it: `tools/rules.Stop` is the dispatcher's verdict.",
+          "properties": {
+            "author": {
+              "enum": [
+                "zeus",
+                "athena"
+              ],
+              "title": "Author",
+              "type": "string"
+            },
+            "folder": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Folder"
+            },
+            "id": {
+              "title": "Id",
+              "type": "string"
+            },
+            "kind": {
+              "$ref": "#/$defs/StopKind"
+            },
+            "notice": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Notice"
+            },
+            "refused": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Refused"
+            },
+            "round": {
+              "default": 1,
+              "title": "Round",
+              "type": "integer"
+            },
+            "sha": {
+              "title": "Sha",
+              "type": "string"
+            },
+            "source_ref": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source Ref"
+            },
+            "text": {
+              "title": "Text",
+              "type": "string"
+            },
+            "workspace": {
+              "enum": [
+                "worktree",
+                "in_place"
+              ],
+              "title": "Workspace",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "author",
+            "text",
+            "sha",
+            "workspace"
+          ],
+          "title": "ApprovalStop",
+          "type": "object"
+        },
+        "CommandBinding": {
+          "additionalProperties": false,
+          "description": "What an *always* answer would grant, and what a later call must equal for the grant to\ncover it: the command's class, prefix and extracted destination, and what the\ncall declared beyond them, so a grant never covers a call reaching further than the one\napproved. Computed by the router from the argv, the\ncommand table and the call's declarations, never typed.",
+          "properties": {
+            "cls": {
+              "title": "Cls",
+              "type": "string"
+            },
+            "credentials": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Credentials",
+              "type": "array"
+            },
+            "destination": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Destination"
+            },
+            "effects": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Effects",
+              "type": "array"
+            },
+            "network": {
+              "default": false,
+              "title": "Network",
+              "type": "boolean"
+            },
+            "prefix": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Prefix",
+              "type": "array"
+            }
+          },
+          "required": [
+            "cls",
+            "prefix"
+          ],
+          "title": "CommandBinding",
+          "type": "object"
+        },
+        "FactHit": {
+          "additionalProperties": false,
+          "description": "One fact row that fired, with the evidence that fired it.\n\nHere rather than in `chickadee/approval/` for `Tier`'s reason: a person's\ndispatch-time confirmation carries the rows that raised the tier (`ActionApproval.hits`,\ncontract 6), and `schema/` cannot import from the package that computes them.",
+          "properties": {
+            "command_class": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Command Class"
+            },
+            "evidence": {
+              "title": "Evidence",
+              "type": "string"
+            },
+            "floor": {
+              "$ref": "#/$defs/Tier"
+            },
+            "lowerable": {
+              "title": "Lowerable",
+              "type": "boolean"
+            },
+            "path": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Path"
+            },
+            "row": {
+              "title": "Row",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "row",
+            "floor",
+            "lowerable",
+            "evidence"
+          ],
+          "title": "FactHit",
+          "type": "object"
+        },
+        "Option": {
+          "additionalProperties": false,
+          "properties": {
+            "key": {
+              "title": "Key",
+              "type": "string"
+            },
+            "label": {
+              "title": "Label",
+              "type": "string"
+            }
+          },
+          "required": [
+            "key",
+            "label"
+          ],
+          "title": "Option",
+          "type": "object"
+        },
+        "Question": {
+          "additionalProperties": false,
+          "properties": {
+            "blocking": {
+              "default": true,
+              "title": "Blocking",
+              "type": "boolean"
+            },
+            "default": {
+              "title": "Default",
+              "type": "string"
+            },
+            "evidence": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Evidence",
+              "type": "array"
+            },
+            "id": {
+              "title": "Id",
+              "type": "string"
+            },
+            "kind": {
+              "$ref": "#/$defs/QuestionKind"
+            },
+            "options": {
+              "default": [],
+              "items": {
+                "$ref": "#/$defs/Option"
+              },
+              "title": "Options",
+              "type": "array"
+            },
+            "text": {
+              "title": "Text",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "text",
+            "default"
+          ],
+          "title": "Question",
+          "type": "object"
+        },
+        "QuestionKind": {
+          "description": "The closed ask-point list. Another member is a decision, never a commit.",
+          "enum": [
+            "clarify_goal",
+            "plan_approval",
+            "route_ambiguous",
+            "design_fork",
+            "escalation",
+            "replan_premise",
+            "scope_expansion",
+            "undo_conflict",
+            "fork_code",
+            "work_folder"
+          ],
+          "title": "QuestionKind",
+          "type": "string"
+        },
+        "RetiredGate": {
+          "description": "A design gate's question as a log written before the stops holds it: its id, so\nits answer still pairs with it. Nothing asks one since the stops replaced it.",
+          "properties": {
+            "id": {
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "title": "RetiredGate",
+          "type": "object"
+        },
+        "StopKind": {
+          "enum": [
+            "design",
+            "plan"
+          ],
+          "title": "StopKind",
+          "type": "string"
+        },
+        "Tier": {
+          "description": "How much the user is consulted before a change happens.\n\nOrdered \u2014 `TIER_ORDER` is the order, and `max()` over it is what makes \"never\nde-escalate\" (invariant 17) structurally impossible to violate rather than a policy\nsomeone must remember to enforce.\n\nIt lives here rather than in `chickadee/approval/` because a G0 contract carries it and\n`schema/` cannot import from a package built three phases later. That is also the right\nhome on the merits: a tier is written down and read back \u2014 by the journal, the handoff,\nthe visibility surface \u2014 and what crosses that boundary is a wire type.",
+          "enum": [
+            "t0",
+            "t1",
+            "t2"
+          ],
+          "title": "Tier",
+          "type": "string"
+        }
+      },
+      "description": "Exactly one of `question` (an `ask`), `approval` (a `confirm_action`), `stop` (a\n`confirm_stop`), or, on an older log, `gate`, each whole: its text, options and\ndefault, the concrete action and its tier, or the markdown shown at the stop.",
+      "properties": {
+        "approval": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ActionApproval"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "gate": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RetiredGate"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "question": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Question"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "stop": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ApprovalStop"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "QuestionAskedLine",
+      "type": "object"
+    },
+    "redo": {
+      "description": "A person took an undo back, or one half of it: after the conversation\nhas moved on, only the code half is offered, and the line says which.",
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "boolean"
+        },
+        "conversation": {
+          "title": "Conversation",
+          "type": "boolean"
+        },
+        "undo_seq": {
+          "minimum": 1,
+          "title": "Undo Seq",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "undo_seq",
+        "code",
+        "conversation"
+      ],
+      "title": "RedoLine",
+      "type": "object"
+    },
+    "rejected": {
+      "$defs": {
+        "Reconsideration": {
+          "description": "`rejected_reconsidered`: we went back to it. The original line is untouched \u2014 both are\ntrue, we rejected it then and reopened it later.",
+          "properties": {
+            "by": {
+              "enum": [
+                "zeus",
+                "user"
+              ],
+              "title": "By",
+              "type": "string"
+            },
+            "event": {
+              "const": "reconsidered",
+              "default": "reconsidered",
+              "title": "Event",
+              "type": "string"
+            },
+            "id": {
+              "title": "Id",
+              "type": "string"
+            },
+            "reason": {
+              "title": "Reason",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "reason",
+            "by"
+          ],
+          "title": "Reconsideration",
+          "type": "object"
+        },
+        "RejectedAlt": {
+          "description": "A historical fact, never a live rule. There is no field saying whether the\nrejection was right, no anchor \u2014 a rejection is about a design, not a path \u2014 and no\nstatus: state is the lines.",
+          "properties": {
+            "at": {
+              "title": "At",
+              "type": "integer"
+            },
+            "by": {
+              "enum": [
+                "zeus",
+                "user"
+              ],
+              "title": "By",
+              "type": "string"
+            },
+            "event": {
+              "const": "noted",
+              "default": "noted",
+              "title": "Event",
+              "type": "string"
+            },
+            "id": {
+              "title": "Id",
+              "type": "string"
+            },
+            "reason": {
+              "title": "Reason",
+              "type": "string"
+            },
+            "recorded_by": {
+              "enum": [
+                "explicit",
+                "checkpoint"
+              ],
+              "title": "Recorded By",
+              "type": "string"
+            },
+            "scope": {
+              "enum": [
+                "session",
+                "design",
+                "packet_set"
+              ],
+              "title": "Scope",
+              "type": "string"
+            },
+            "scope_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Scope Id"
+            },
+            "text": {
+              "title": "Text",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "at",
+            "by",
+            "text",
+            "reason",
+            "scope",
+            "recorded_by"
+          ],
+          "title": "RejectedAlt",
+          "type": "object"
+        }
+      },
+      "discriminator": {
+        "mapping": {
+          "noted": "#/$defs/RejectedAlt",
+          "reconsidered": "#/$defs/Reconsideration"
+        },
+        "propertyName": "event"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/RejectedAlt"
+        },
+        {
+          "$ref": "#/$defs/Reconsideration"
+        }
+      ]
+    },
+    "scout": {
+      "x-opaque": true
+    },
+    "shell_effect": {
+      "$defs": {
+        "EventKind": {
+          "enum": [
+            "run_start",
+            "effect_intended",
+            "effect_started",
+            "effect_completed",
+            "budget",
+            "exec",
+            "route",
+            "read_tier",
+            "citation_gate",
+            "read_answered",
+            "scout_start",
+            "scout_tool",
+            "scout_escape",
+            "scout_escalated",
+            "scout_report",
+            "session_start",
+            "turn",
+            "interrupt",
+            "session_end",
+            "question_asked",
+            "question_answered",
+            "context_tokens",
+            "untrusted_read",
+            "mcp_connect",
+            "mcp_call",
+            "external_call",
+            "secret_denied",
+            "secret_suspected",
+            "redaction",
+            "hook",
+            "callback_error",
+            "run_end",
+            "tool_call",
+            "model_call",
+            "task_delegated",
+            "task_reported",
+            "box_message",
+            "box_compaction",
+            "task_reviewed",
+            "plan_written",
+            "plan_outgrown",
+            "agent_start",
+            "agent_message",
+            "agent_report",
+            "tell_delivered",
+            "tell_reply"
+          ],
+          "title": "EventKind",
+          "type": "string"
+        },
+        "P": {
+          "additionalProperties": false,
+          "description": "Base for every payload: strict, frozen, no extra fields.",
+          "properties": {},
+          "title": "P",
+          "type": "object"
+        }
+      },
+      "description": "One D40 record of Zeus's shell on the session log (`zeus/writes.SessionEffects`): a\nstep's or a job's intent, start or completion. Folded here, so the session knows which jobs\nare running from its log alone (a running job is not a safe point).",
+      "properties": {
+        "event": {
+          "$ref": "#/$defs/EventKind"
+        },
+        "payload": {
+          "$ref": "#/$defs/P"
+        }
+      },
+      "required": [
+        "event",
+        "payload"
+      ],
+      "title": "ShellEffectLine",
+      "type": "object"
+    },
+    "skill_loaded": {
+      "x-opaque": true
+    },
+    "skill_unloaded": {
+      "x-opaque": true
+    },
+    "spend": {
+      "description": "One Zeus model call's charge: what the ledger charged,\nas the session log keeps it, so a session's spend outlives the process that spent it.\n`model` is the catalog name that served the call, never the rung; `rung` is the\nrung that made it, named at composition because two rungs may share a model.",
+      "properties": {
+        "cache_writes": {
+          "minimum": 0,
+          "title": "Cache Writes",
+          "type": "integer"
+        },
+        "cached_in": {
+          "minimum": 0,
+          "title": "Cached In",
+          "type": "integer"
+        },
+        "cost_usd": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Cost Usd"
+        },
+        "estimated": {
+          "title": "Estimated",
+          "type": "boolean"
+        },
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "role": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Role"
+        },
+        "rung": {
+          "default": "zeus",
+          "minLength": 1,
+          "title": "Rung",
+          "type": "string"
+        },
+        "tokens_in": {
+          "minimum": 0,
+          "title": "Tokens In",
+          "type": "integer"
+        },
+        "tokens_out": {
+          "minimum": 0,
+          "title": "Tokens Out",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "model",
+        "tokens_in",
+        "tokens_out",
+        "cached_in",
+        "cache_writes",
+        "cost_usd",
+        "estimated"
+      ],
+      "title": "SpendLine",
+      "type": "object"
+    },
+    "summary": {
+      "x-opaque": true
+    },
+    "tell": {
+      "description": "A `tell` line: Zeus's message to the team about run `run_id`, in his words,\nthe person its authority. `sources` are the person's turns it came from, each a user turn\nor an `ask_user` answer. Its text is a session blob; the run\ndelivers it at its next boundary and journals `tell_delivered`.",
+      "properties": {
+        "from": {
+          "items": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "minItems": 1,
+          "title": "From",
+          "type": "array"
+        },
+        "id": {
+          "pattern": "^tell-[1-9][0-9]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Key"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "text_sha": {
+          "title": "Text Sha",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "run_id",
+        "text_sha",
+        "from"
+      ],
+      "title": "TellLine",
+      "type": "object"
+    },
+    "title": {
+      "description": "The session's name: the `title` role's, or the person's (`/rename`).",
+      "properties": {
+        "by": {
+          "enum": [
+            "model",
+            "person"
+          ],
+          "title": "By",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "text",
+        "by"
+      ],
+      "title": "SessionTitle",
+      "type": "object"
+    },
+    "tool": {
+      "$defs": {
+        "CoderOutcome": {
+          "description": "A `coder` result's terminal and why, typed, so a reader shows the reason without\nreading it out of the text. `terminal` is the result's head, the episode's outcome\n(`COMPLETED`, `PARTIAL`, `BLOCKED`, \u2026), or a packet-loop terminal on an older log;\n`why` the lines that say why, as the result states them.",
+          "properties": {
+            "terminal": {
+              "title": "Terminal",
+              "type": "string"
+            },
+            "why": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Why",
+              "type": "array"
+            }
+          },
+          "required": [
+            "terminal"
+          ],
+          "title": "CoderOutcome",
+          "type": "object"
+        },
+        "Handle": {
+          "description": "Stable within the session; rehydratable.\n\nThe first six fields are the spec's. The next three say where the bytes are, which the\nspec leaves to \"resolves via\": a file handle names its `path`; a stored handle names the\nrun whose blob store holds it, or None for the session's own (a checkpoint's output\nlives in its run's store); a journal handle names its run and, when it is narrower than\nthe whole journal, its seq range. `name` is a stored file's own name, when it had one.",
+          "properties": {
+            "content_sha": {
+              "title": "Content Sha",
+              "type": "string"
+            },
+            "id": {
+              "title": "Id",
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "file",
+                "diff",
+                "log",
+                "journal",
+                "findings",
+                "output",
+                "attachment"
+              ],
+              "title": "Kind",
+              "type": "string"
+            },
+            "name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Name"
+            },
+            "ops": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Ops",
+              "type": "array"
+            },
+            "path": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Path"
+            },
+            "preview": {
+              "title": "Preview",
+              "type": "string"
+            },
+            "run_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Run Id"
+            },
+            "seqs": {
+              "anyOf": [
+                {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Seqs"
+            },
+            "shape": {
+              "$ref": "#/$defs/Shape"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "shape",
+            "preview",
+            "content_sha"
+          ],
+          "title": "Handle",
+          "type": "object"
+        },
+        "ImageRef": {
+          "description": "The pixels a result sent: the downscaled bytes, in the session's blob store,\nso a resumed session sends the same bytes the live one did. A PDF sent whole is one too,\nby its media type.",
+          "properties": {
+            "media_type": {
+              "title": "Media Type",
+              "type": "string"
+            },
+            "sha": {
+              "title": "Sha",
+              "type": "string"
+            }
+          },
+          "required": [
+            "sha",
+            "media_type"
+          ],
+          "title": "ImageRef",
+          "type": "object"
+        },
+        "Shape": {
+          "description": "Enough to decide whether to fetch, without fetching.",
+          "properties": {
+            "bytes": {
+              "title": "Bytes",
+              "type": "integer"
+            },
+            "est_tokens": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Est Tokens"
+            },
+            "height": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Height"
+            },
+            "kind": {
+              "title": "Kind",
+              "type": "string"
+            },
+            "lines": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Lines"
+            },
+            "pages": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Pages"
+            },
+            "symbols": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Symbols"
+            },
+            "width": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Width"
+            }
+          },
+          "required": [
+            "bytes",
+            "kind"
+          ],
+          "title": "Shape",
+          "type": "object"
+        }
+      },
+      "description": "A `tool` line's payload. Its run is the envelope's, so the record (`ToolLine`) is\nbuilt from this and the line.",
+      "properties": {
+        "call_id": {
+          "title": "Call Id",
+          "type": "string"
+        },
+        "handle": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Handle"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "image": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ImageRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "outcome": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CoderOutcome"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "ran": {
+          "title": "Ran",
+          "type": "boolean"
+        },
+        "supersedes": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Supersedes",
+          "type": "array"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "view": {
+          "default": [],
+          "items": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "title": "View",
+          "type": "array"
+        }
+      },
+      "required": [
+        "call_id",
+        "text",
+        "ran"
+      ],
+      "title": "ToolP",
+      "type": "object"
+    },
+    "turn": {
+      "$defs": {
+        "AssistantTurnP": {
+          "properties": {
+            "calls": {
+              "default": [],
+              "items": {
+                "$ref": "#/$defs/Call"
+              },
+              "title": "Calls",
+              "type": "array"
+            },
+            "findings": {
+              "additionalProperties": {
+                "$ref": "#/$defs/JsonValue"
+              },
+              "default": {},
+              "title": "Findings",
+              "type": "object"
+            },
+            "role": {
+              "const": "assistant",
+              "default": "assistant",
+              "title": "Role",
+              "type": "string"
+            },
+            "text": {
+              "title": "Text",
+              "type": "string"
+            }
+          },
+          "required": [
+            "text"
+          ],
+          "title": "AssistantTurnP",
+          "type": "object"
+        },
+        "Attachment": {
+          "description": "A file the person sent with a turn. The\nbytes are a session blob, which `handle` names; a PDF's text layer is a second blob, which\n`text_handle` names. Numbered per session, `A-1` on, never reused.",
+          "properties": {
+            "bytes": {
+              "minimum": 1,
+              "title": "Bytes",
+              "type": "integer"
+            },
+            "delivery": {
+              "enum": [
+                "native",
+                "text",
+                "outline",
+                "none"
+              ],
+              "title": "Delivery",
+              "type": "string"
+            },
+            "est_tokens": {
+              "minimum": 0,
+              "title": "Est Tokens",
+              "type": "integer"
+            },
+            "handle": {
+              "$ref": "#/$defs/Handle"
+            },
+            "height": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Height"
+            },
+            "id": {
+              "pattern": "^A-[1-9][0-9]*$",
+              "title": "Id",
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "image",
+                "pdf",
+                "text"
+              ],
+              "title": "Kind",
+              "type": "string"
+            },
+            "lines": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Lines"
+            },
+            "media_type": {
+              "title": "Media Type",
+              "type": "string"
+            },
+            "name": {
+              "maxLength": 200,
+              "minLength": 1,
+              "title": "Name",
+              "type": "string"
+            },
+            "pages": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Pages"
+            },
+            "text_handle": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Handle"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "width": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Width"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "name",
+            "media_type",
+            "bytes",
+            "est_tokens",
+            "delivery",
+            "handle"
+          ],
+          "title": "Attachment",
+          "type": "object"
+        },
+        "Call": {
+          "description": "One tool call an assistant turn made. Its arguments are kept exactly as the model\nsent them: no layer ever rewrites a call (invariant 19).",
+          "properties": {
+            "arguments": {
+              "additionalProperties": {
+                "$ref": "#/$defs/JsonValue"
+              },
+              "title": "Arguments",
+              "type": "object"
+            },
+            "id": {
+              "title": "Id",
+              "type": "string"
+            },
+            "name": {
+              "title": "Name",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "arguments"
+          ],
+          "title": "Call",
+          "type": "object"
+        },
+        "Handle": {
+          "description": "Stable within the session; rehydratable.\n\nThe first six fields are the spec's. The next three say where the bytes are, which the\nspec leaves to \"resolves via\": a file handle names its `path`; a stored handle names the\nrun whose blob store holds it, or None for the session's own (a checkpoint's output\nlives in its run's store); a journal handle names its run and, when it is narrower than\nthe whole journal, its seq range. `name` is a stored file's own name, when it had one.",
+          "properties": {
+            "content_sha": {
+              "title": "Content Sha",
+              "type": "string"
+            },
+            "id": {
+              "title": "Id",
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "file",
+                "diff",
+                "log",
+                "journal",
+                "findings",
+                "output",
+                "attachment"
+              ],
+              "title": "Kind",
+              "type": "string"
+            },
+            "name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Name"
+            },
+            "ops": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Ops",
+              "type": "array"
+            },
+            "path": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Path"
+            },
+            "preview": {
+              "title": "Preview",
+              "type": "string"
+            },
+            "run_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Run Id"
+            },
+            "seqs": {
+              "anyOf": [
+                {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Seqs"
+            },
+            "shape": {
+              "$ref": "#/$defs/Shape"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "shape",
+            "preview",
+            "content_sha"
+          ],
+          "title": "Handle",
+          "type": "object"
+        },
+        "HarnessTurnP": {
+          "properties": {
+            "carries": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Handle"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "handle": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Handle"
+            },
+            "role": {
+              "const": "harness",
+              "default": "harness",
+              "title": "Role",
+              "type": "string"
+            },
+            "text": {
+              "title": "Text",
+              "type": "string"
+            },
+            "trigger": {
+              "title": "Trigger",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "trigger",
+            "text"
+          ],
+          "title": "HarnessTurnP",
+          "type": "object"
+        },
+        "JsonValue": {},
+        "Shape": {
+          "description": "Enough to decide whether to fetch, without fetching.",
+          "properties": {
+            "bytes": {
+              "title": "Bytes",
+              "type": "integer"
+            },
+            "est_tokens": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Est Tokens"
+            },
+            "height": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Height"
+            },
+            "kind": {
+              "title": "Kind",
+              "type": "string"
+            },
+            "lines": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Lines"
+            },
+            "pages": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Pages"
+            },
+            "symbols": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Symbols"
+            },
+            "width": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Width"
+            }
+          },
+          "required": [
+            "bytes",
+            "kind"
+          ],
+          "title": "Shape",
+          "type": "object"
+        },
+        "UserTurnP": {
+          "properties": {
+            "attachments": {
+              "default": [],
+              "items": {
+                "$ref": "#/$defs/Attachment"
+              },
+              "title": "Attachments",
+              "type": "array"
+            },
+            "role": {
+              "const": "user",
+              "default": "user",
+              "title": "Role",
+              "type": "string"
+            },
+            "text": {
+              "title": "Text",
+              "type": "string"
+            },
+            "workspace": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "worktree",
+                    "in_place"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Workspace"
+            }
+          },
+          "required": [
+            "text"
+          ],
+          "title": "UserTurnP",
+          "type": "object"
+        }
+      },
+      "discriminator": {
+        "mapping": {
+          "assistant": "#/$defs/AssistantTurnP",
+          "harness": "#/$defs/HarnessTurnP",
+          "user": "#/$defs/UserTurnP"
+        },
+        "propertyName": "role"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/UserTurnP"
+        },
+        {
+          "$ref": "#/$defs/AssistantTurnP"
+        },
+        {
+          "$ref": "#/$defs/HarnessTurnP"
+        }
+      ]
+    },
+    "undo": {
+      "$defs": {
+        "RewoundCode": {
+          "description": "What an undo did to one workspace's code: enough for a redo to\nput it back, and for a reader to know where it happened.",
+          "properties": {
+            "branch_head": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Branch Head"
+            },
+            "committed": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Committed"
+            },
+            "conflicts_kept": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Conflicts Kept",
+              "type": "array"
+            },
+            "key": {
+              "title": "Key",
+              "type": "string"
+            },
+            "mode": {
+              "enum": [
+                "worktree",
+                "in_place"
+              ],
+              "title": "Mode",
+              "type": "string"
+            },
+            "redo_ref": {
+              "title": "Redo Ref",
+              "type": "string"
+            },
+            "redo_tree": {
+              "title": "Redo Tree",
+              "type": "string"
+            },
+            "restored": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Restored",
+              "type": "array"
+            },
+            "root": {
+              "title": "Root",
+              "type": "string"
+            },
+            "target": {
+              "title": "Target",
+              "type": "string"
+            }
+          },
+          "required": [
+            "key",
+            "mode",
+            "root",
+            "target",
+            "redo_tree",
+            "redo_ref"
+          ],
+          "title": "RewoundCode",
+          "type": "object"
+        }
+      },
+      "description": "A person took back turns `to_turn` onward: the line is appended, and\nnothing is deleted. With `conversation`, the fold hides what `rewind.REWIND` says a rewind\nhides, from `to_turn` up to this line. With `code`, `workspaces` says what was restored in\neach.",
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "boolean"
+        },
+        "conversation": {
+          "title": "Conversation",
+          "type": "boolean"
+        },
+        "to_turn": {
+          "minimum": 1,
+          "title": "To Turn",
+          "type": "integer"
+        },
+        "workspaces": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RewoundCode"
+          },
+          "title": "Workspaces",
+          "type": "array"
+        }
+      },
+      "required": [
+        "to_turn",
+        "code",
+        "conversation"
+      ],
+      "title": "UndoLine",
+      "type": "object"
+    },
+    "untrusted_read": {
+      "x-opaque": true
+    },
+    "work": {
+      "description": "The session's work folder: opened by Zeus's first `doc` call, closed\nby the handoff. At most one is open: the latest line, while its state is `open`.",
+      "properties": {
+        "dir": {
+          "title": "Dir",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "open",
+            "landed",
+            "kept",
+            "dropped"
+          ],
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "dir",
+        "state"
+      ],
+      "title": "WorkLine",
+      "type": "object"
+    },
+    "workspace": {
+      "description": "The durable pointer a turn keeps to the workspace it ran in.\n\nA reference, deliberately: the worktree may be gone by the time anyone reads the turn\nback, and recording ids rather than a live object is what lets a resumed session say so\ninstead of failing to open something it assumed was there.",
+      "properties": {
+        "branch": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Branch"
+        },
+        "handoff": {
+          "enum": [
+            "pending",
+            "apply",
+            "squash",
+            "keep",
+            "discard",
+            "bring"
+          ],
+          "title": "Handoff",
+          "type": "string"
+        },
+        "lease_id": {
+          "title": "Lease Id",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "worktree",
+            "in_place"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "source_head": {
+          "title": "Source Head",
+          "type": "string"
+        },
+        "source_ref": {
+          "title": "Source Ref",
+          "type": "string"
+        },
+        "worktree_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Worktree Path"
+        }
+      },
+      "required": [
+        "mode",
+        "lease_id",
+        "source_ref",
+        "source_head",
+        "handoff"
+      ],
+      "title": "WorkspaceRef",
+      "type": "object"
+    }
+  },
+  "wire": "4.22"
+}

@@ -1,0 +1,1 @@
+max_retries is 5; the test still expects 3.

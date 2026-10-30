@@ -1,0 +1,10 @@
+{"seq":1,"at":"2026-10-10T10:00:00Z","kind":"turn","payload_sha":"ed865da2034857bd4a06b9fd130f92ccab1e56d8f1cc63105067b961a7a06501","run_id":null}
+{"seq":2,"at":"2026-10-10T10:00:02Z","kind":"turn","payload_sha":"a1fb4ded88ae0333adc045d6c0f743bddbe87a9fb6630856a4808da698a6a0ed","run_id":null}
+{"seq":3,"at":"2026-10-10T10:00:04Z","kind":"tool","payload_sha":"72e52fb7eb2e7616d6a524e2527bfbfeb9c55a6878bb003df0f8777909fd128d","run_id":null}
+{"seq":4,"at":"2026-10-10T10:00:06Z","kind":"question_asked","payload_sha":"e93202db902feac9fdde3dc79513b365c8ab1d5f8474cb7059e70e51e2dec174","run_id":null}
+{"seq":5,"at":"2026-10-10T10:00:08Z","kind":"question_answered","payload_sha":"717659935e8a2cf780bdaef38f75d908c04e292e061852b976cfd1b336072182","run_id":null}
+{"seq":6,"at":"2026-10-10T10:00:10Z","kind":"turn","payload_sha":"599dae19abdb25183b42590fc66208bd51489739ea1a5bac58d4642858f917bd","run_id":null}
+{"seq":7,"at":"2026-10-10T10:00:12Z","kind":"episode","payload_sha":"7cfb756d1c7015878805ce5ece2b6a2bb41e74c474281425e1034c59e6a60776","run_id":"2026-10-10-0123abcd"}
+{"seq":8,"at":"2026-10-10T10:00:14Z","kind":"turn","payload_sha":"150d24b831f15486608fee104ab7e7ff585c4167fe75eacad746e8bca285dcaa","run_id":null}
+{"seq":9,"at":"2026-10-10T10:00:16Z","kind":"turn","payload_sha":"14fcac459528c34d239723f75cb1e8714bdccbff19b8011a11e9d5165635236e","run_id":null}
+{"seq":10,"at":"2026-10-10T10:00:18Z","kind":"undo","payload_sha":"dbc9650db678a1b90f4eaadda66e5805e9af906360f0d71b14bb5d606d16ccf0","run_id":null}

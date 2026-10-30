@@ -1,0 +1,1 @@
+{"new": "max_retries = 5", "old": "max_retries = 3", "path": "src/client.py"}

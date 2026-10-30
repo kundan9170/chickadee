@@ -1,0 +1,1 @@
+{"new": "timeout = 10", "old": "timeout = 30", "path": "src/config.py"}

@@ -1,0 +1,1 @@
+{"approval":null,"gate":null,"question":{"blocking":true,"default":"no","evidence":[],"id":"q-demo-1","kind":"clarify_goal","options":[{"key":"yes","label":"Yes, raise it"},{"key":"no","label":"No"}],"text":"Raise the retry limit to 5?"},"stop":null}

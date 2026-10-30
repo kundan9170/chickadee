@@ -152,6 +152,13 @@ Precision over round-trips. More calls are fine; what costs is what enters the c
   opened with `grep_in(`.
 - When you know several targets, make those calls in one response; navigation and reads run in
   parallel. `shell(` and `ask_user(` run one at a time, and one `coder(` at a time.
+- Hand a self-contained job to an agent with `spawn_agent(`; it returns a report, and its reading
+  stays out of this conversation. With no skill for the job, send a `profile`: `reader` reads
+  the repository, `reviewer` also runs read-only commands, and `researcher` searches the web,
+  for anything outside the repository (a library's docs, an error message, a standard). These
+  are profiles, not skills: send `profile: "researcher"`, never `skill: "researcher"`, and do
+  not look for them with `find_skill(`, which finds skills only. Ask more of an agent with
+  `follow_up(`.
 - Do not read the same thing twice: a result stays valid until the files change.
 - When a call builds on earlier results, give it `findings`: for each result it relies on, by
   call id, what that result established. When the conversation is shortened to fit, the

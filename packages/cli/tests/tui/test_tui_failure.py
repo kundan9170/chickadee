@@ -64,13 +64,13 @@ def _cap(terminal: bool) -> RecordFrame:
     return run_record("budget", payload, 900)
 
 
-def _coder_result(terminal: str, seq: int = 950) -> RecordFrame:
+def _coder_result(terminal: str, seq: int = 950, run_id: str | None = RUN_ID) -> RecordFrame:
     outcome: dict[str, Any] = {"terminal": terminal, "why": [WHY]}
     payload: dict[str, Any] = {
         "call_id": "c-coder", "ran": True, "text": f"{terminal}{{…}}", "outcome": outcome,
     }  # fmt: skip
     return RecordFrame(
-        scope=SID, seq=seq, at="2026-10-10T10:05:00Z", kind="tool", run_id=RUN_ID,
+        scope=SID, seq=seq, at="2026-10-10T10:05:00Z", kind="tool", run_id=run_id,
         payload=payload,
     )  # fmt: skip
 
@@ -206,3 +206,12 @@ async def test_the_report_is_in_view_above_the_pinned_facts() -> None:
         assert stream.region.bottom <= facts.region.y, "the facts sit below, not over"
         assert stream.max_scroll_y > 0, "the stream overflows here"
         assert stream.scroll_y == stream.max_scroll_y, "and shows its newest line, the report"
+
+
+def test_a_coder_answer_with_no_run_is_never_the_run_on_screen_s_failure() -> None:
+    """A `coder` call answered with no run (a stop that approved nothing, a work already
+    complete) names none: it is Zeus's answer alone, never `RUN BLOCKED` on the run shown."""
+    feed = _feed()
+    feed.apply(_coder_result("BLOCKED", run_id=None))
+    assert feed.state.worker.outcome is None
+    assert failure_lines(feed.state, COLOURS) == []

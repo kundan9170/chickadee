@@ -118,6 +118,13 @@ class CoderRun(Protocol):
         the design's sha, or the one-task brief's. None for a call nothing was approved for."""
         ...
 
+    @property
+    def opened(self) -> bool:
+        """Whether a run was opened: False for a call answered with none (a refusal, a work
+        already complete, a stop that approved nothing), whose `report()` is that answer. No
+        `episode` line names it, since no run will ever bear its id."""
+        ...
+
     def report(self) -> ToolResult | Said: ...
 
     def abandon(self) -> None:
@@ -350,11 +357,15 @@ def open_episode(
     *,
     opened_at_seq: int,
     cancel: threading.Event | None,
-) -> OpenedEpisode:
+) -> OpenedEpisode | ToolResult | Said:
     """Name the run and write its `episode` line — at dispatch, while the call still
     waits for its result, which is when the fold accepts it. The run does nothing until its
-    `report()` is asked for, so the line is synced to disk before any of its work."""
+    `report()` is asked for, so the line is synced to disk before any of its work. A call
+    answered with no run is that answer, and writes no line: a line would name a run that
+    never exists, and a screen following episodes would show it in place of the real one."""
     run = port.open(delegation, session_id=session.session_id, cancel=cancel)
+    if not run.opened:
+        return run.report()
     with given_back_on_failure(run.run_id, run.abandon):
         line = session.record_episode(
             EpisodeLine(

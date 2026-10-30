@@ -314,7 +314,7 @@ def test_a_complete_work_is_said_to_be_and_nothing_runs(
     said = state(engine, SID).result("c2")
     assert said is not None and said.text.startswith(f"COMPLETE · work {NAME}")
     assert "nothing ran" in said.text
-    assert len(_runs(engine)) == 2 and _projection_missing(repo, _runs(engine)[-1])
+    assert len(_runs(engine)) == 1, "nothing ran, so no `episode` line names a run"
 
 
 def _projection_missing(repo: Path, run_id: str) -> bool:
@@ -438,7 +438,7 @@ def test_another_work_is_refused_while_a_run_is_paused(
     engines.append(engine)
     engine.turn(SID, "add b").wait(timeout=WAIT_S)
     said = state(engine, SID).result("c2")
-    assert said is not None and said.text.startswith("BLOCKED")
+    assert said is not None and said.text.startswith("INTERRUPTED{tool: coder")
     assert f"run {first} of work {NAME} is paused" in said.text
     assert f"coder(work={NAME!r})" in said.text and "/drop" in said.text
     assert back.stops == [], "nothing is asked"

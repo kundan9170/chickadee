@@ -61,8 +61,9 @@ class Delegations:
         *,
         opened_at_seq: int,
         cancel: threading.Event | None,
-    ) -> OpenedEpisode | Failure:
-        """Name the run and write its episode line; or the refusal, when nothing opened."""
+    ) -> OpenedEpisode | Answer:
+        """Name the run and write its episode line; or the call's answer, when nothing opened:
+        a refusal, or an answer with no run (`CoderRun.opened`)."""
         if self._box is None:
             raise HarnessBug("a Zeus loop without a box was asked to delegate")
         if cancel is not None and cancel.is_set():

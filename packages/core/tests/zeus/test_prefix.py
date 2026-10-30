@@ -385,8 +385,9 @@ def test_with_the_default_work_dir_the_template_is_todays_bytes() -> None:
     which `worktree(` moves between; and by D240, continuing a work where it stopped,
     its `RESUMED` and `COMPLETE` answers; and by D240's background run, "While the
     team works", `RESUMED` gone; and by its `tell(`, and how a tell differs from an
-    amendment."""
+    amendment; and by the agents line, `spawn_agent(` with a profile, never the
+    researcher as a skill."""
     text = with_work_dir(load_template(TEMPLATES, "zeus.md"), DEFAULT_DIR)
     assert (
-        sha256_hex(text) == "2e83f10529e92fb3edffdba35d97080350050a09de3c6973fed43584e8f11d52"
+        sha256_hex(text) == "6f5cc3d361a14e88a5afab109c90a8f51e969037168c66c85c90c655b5e0fb79"
     )

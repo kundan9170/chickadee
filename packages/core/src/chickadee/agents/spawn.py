@@ -45,6 +45,7 @@ the round ends (`AgentPorts.close`). What rounds share is guarded where it is de
 
 from __future__ import annotations
 
+import difflib
 import logging
 import threading
 import time
@@ -344,14 +345,7 @@ class Agents:
         if skill is not None:
             indexed = self._catalog.get(skill)
             if indexed is None:
-                near = self._catalog.near(skill)
-                return InvalidArgument(
-                    "skill",
-                    f"no skill is named {skill!r}",
-                    do=f"send one of: {', '.join(near)}"
-                    if near
-                    else "call find_skill with what the job is, and send a name it gives",
-                )
+                return self._unknown_skill(skill)
             # Read again, as `load_skill` reads it: the file may have changed or gone since
             # the index was built, and what runs, its profile and tools as well as its body,
             # is what is on disk now.
@@ -408,6 +402,35 @@ class Agents:
         tools, foreign = chosen.narrowed(found.tools if found is not None else None)
         notes = (f"not this profile's tools, so they narrow nothing: {', '.join(foreign)}",)
         return Spawned(chosen, found, tools, notes if foreign else (), body)
+
+    def _unknown_skill(self, skill: str) -> InvalidArgument:
+        """Why `skill` names nothing, and what to send instead. A profile's name, or one near
+        it (`research`, `web-researcher`), sent as a skill is the usual slip: `find_skill`
+        cannot find a profile, so pointing there would send the model in a circle."""
+        profiles = sorted(self._profiles)
+        near = self._catalog.near(skill)
+        lowered = skill.lower()
+        named = lowered if lowered in self._profiles else None
+        if named is None and not near:
+            close = difflib.get_close_matches(lowered, profiles, n=1, cutoff=0.6)
+            named = close[0] if close else next((p for p in profiles if p in lowered), None)
+        if named is not None:
+            return InvalidArgument(
+                "skill",
+                f"no skill is named {skill!r}; {named} is a profile, not a skill",
+                do=f"send profile {named!r} and no skill",
+            )
+        if near:
+            do = (
+                f"send one of: {', '.join(near)}; or a profile ({', '.join(profiles)}) "
+                "and no skill"
+            )
+        else:
+            do = (
+                f"send a profile ({', '.join(profiles)}) and no skill, or call find_skill "
+                "with what the job is and send a skill name it gives"
+            )
+        return InvalidArgument("skill", f"no skill is named {skill!r}", do=do)
 
     def _wider(self, profile: Profile) -> str | None:
         """Why `profile`'s role would reach past the spawner's ceiling, or None (decision 4)."""

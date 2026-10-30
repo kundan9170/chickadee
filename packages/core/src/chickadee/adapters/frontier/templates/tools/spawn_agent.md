@@ -5,8 +5,9 @@ The agent is a cheaper model in a context of its own: it sees your `task` and th
 skill (its own method, profile and tools), or a `profile` to run one with no skill: `reader`
 reads and searches the repository; `reviewer` also finds the tests that cover a file and
 runs read-only commands; `researcher` searches and reads the web, and nothing of the repository:
-give it no `handles`, and put what it must know in the task in your own words. No agent edits a
-file, and one that would need to cannot.
+give it no `handles`, and put what it must know in the task in your own words. These three are
+profiles, not skills: send `profile: "researcher"`, never `skill: "researcher"`, and do not look
+for them with `find_skill`. No agent edits a file, and one that would need to cannot.
 
 Write the task as four things: what to find out, what to return, where to look, and what is out
 of scope. A vague task wastes the agent's calls. The report has a summary, findings each citing

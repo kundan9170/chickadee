@@ -12,9 +12,9 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-from coder_helpers import SID, build, make_ignoring_repo, make_repo, solved
-from repos import git
-from zeus_turn_helpers import WAIT_S, answer, call, calls, state
+from coder_helpers import APP, SID, build, make_ignoring_repo, make_repo, solved
+from repos import git, init_repo
+from zeus_turn_helpers import WAIT_S, answer, call, calls, state, with_sessions
 
 import chickadee.engine as engine_module
 from chickadee.context.project import JournalRecords
@@ -381,5 +381,43 @@ def test_a_task_undo_of_a_run_the_session_never_had_is_refused_by_name(
     try:
         with pytest.raises(SessionError, match="no run R-none in this session"):
             engine.undo_task(SID, "R-none", "T1")
+    finally:
+        engine.close()
+
+
+@pytest.mark.parametrize("workspace", ["worktree", "in_place"])
+def test_a_task_undo_in_a_repository_that_had_no_commit(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, raw: dict[str, Any], workspace: str
+) -> None:
+    """A new project, never committed before the run (#704). In a worktree its first task's
+    commit has the worktree's empty first commit for a parent, so the task is undone as any
+    other; in place a task is no commit, the refusal says so, and the turn undo takes the change
+    back."""
+    repo = init_repo(
+        tmp_path / "repo",
+        {
+            "app.py": APP,
+            "tests/test_app.py": "def test_go():\n    assert True\n",
+            ".gitignore": "__pycache__/\n",
+        },
+        commit=None,
+    )
+    engine_module.init_repo(repo)
+    with_sessions(repo, SID)
+    engine, turn = one_edit(monkeypatch, repo, raw, workspace)
+    try:
+        (run,) = [e.run_id for e in state(engine, SID).episodes()]
+        if workspace == "in_place":
+            assert b"return 2" in read(repo)
+            with pytest.raises(SessionError, match="ran in place"):
+                engine.undo_task(SID, run, "T1")
+            engine.undo(SID, turn, code=True, conversation=False)
+            assert b"return 1" in read(repo)
+            return
+        wt = worktree_of(engine)
+        assert b"return 2" in read(wt)
+        done = engine.undo_task(SID, run, "T1")
+        assert done.restored == ("app.py",)
+        assert b"return 1" in read(wt)
     finally:
         engine.close()

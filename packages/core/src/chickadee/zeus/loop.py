@@ -84,7 +84,7 @@ from chickadee.tools.meta import is_line, split_meta
 from chickadee.tools.policy import RolePolicy
 from chickadee.tools.rules import BoundReached, Pending, Refuse
 from chickadee.tools.spec import INLINE_BYTES_DEFAULT, RESULT_LINES_DEFAULT
-from chickadee.tools.tool import Answer, Failure, Tool
+from chickadee.tools.tool import Answer, Tool
 from chickadee.zeus.bounds import BoundLines
 from chickadee.zeus.calls import (
     RepetitionKey,
@@ -353,7 +353,7 @@ class ZeusLoop:
         self._config = config
         self._sink = ZeusSink(session)
         self._delegations = Delegations(session, tools.box)
-        self._opened: dict[str, OpenedEpisode | Failure] = {}
+        self._opened: dict[str, OpenedEpisode | Answer] = {}
         """`coder` calls opened and not yet run, by call id: `_delegate` to `_delegated`."""
         self.interrupts = interrupts if interrupts is not None else Interrupts()
         if ledger is not None and not model:

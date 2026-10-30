@@ -749,10 +749,9 @@ def test_a_stop_that_is_not_approved_ends_the_call_before_the_lease_is_taken(
     text = result(engine, "c1")
     assert text.startswith(f"{outcome} · run not started")
     assert "keep the public API" in text
-    # The call's `episode` line names a run nothing was approved for, and that never began.
-    (episode,) = state(engine).episodes()
-    assert episode.design_sha is None
-    assert not journal_path(resolve_roots(repo), episode.run_id).exists()
+    # Nothing was approved, so no run opened and no `episode` line names one: a line would
+    # name a run that never exists, and the screen would show it in place of the real one.
+    assert state(engine).episodes() == ()
     live = [c.text for c in state(engine).ledger.live_constraints()]
     assert live == ["keep the public API"]
 

@@ -80,8 +80,10 @@ class Skills:
         (`index.skill_row`), an agent skill's with what one round of its profile may cost,
         under a line saying how each kind is used."""
         hits = rank(self.catalog, query, self._find_results)
+        profiles = self._profiles(query, every=not hits)
         if not hits:
-            return f"no skill matches {query!r}; the index lists every skill this session has"
+            none = f"no skill matches {query!r}; the index lists every skill this session has"
+            return "\n".join((none, *profiles))
         rows = [
             skill_row(
                 hit.skill,
@@ -91,7 +93,24 @@ class Skills:
             )
             for hit in hits
         ]
-        return "\n".join((f"Best first. {HOW}", *rows))
+        return "\n".join((f"Best first. {HOW}", *rows, *profiles))
+
+    def _profiles(self, query: str, *, every: bool) -> tuple[str, ...]:
+        """The built-in and person's profiles, which are not skills and so never rank: every
+        one when no skill matched, else those `query` names. Without them a model looking
+        for the researcher here finds nothing and is told nothing exists. `costs` is keyed by
+        the session's profiles; a port given none lists none."""
+        shown = [
+            f"- {name} · profile, no skill: spawn_agent(profile={name!r}, task=…) · {cost}"
+            for name, cost in self._costs.items()
+            if every or name in query.lower()
+        ]
+        if not shown:
+            return ()
+        return (
+            "Profiles run an agent with no skill; send one as `profile`, never `skill`:",
+            *shown,
+        )
 
     def load(self, name: str, call_id: str) -> str | InvalidArgument:
         """`name`'s body, framed, after recording its load against `call_id`: the call whose

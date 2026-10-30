@@ -139,7 +139,7 @@ def test_coder_while_the_team_works_is_answered_at_once(
     try:
         engine.turn(SID, "make go return 2").wait(timeout=WAIT_S)
         again = state(engine, SID).result("c2")
-        assert again is not None and again.text.startswith("BLOCKED")
+        assert again is not None and again.text.startswith("INTERRUPTED{tool: coder")
         assert "is working; one run at a time" in again.text
         # The run's state beside Zeus's: working, never read as paused.
         started = state(engine, SID).result("c1")
@@ -147,6 +147,12 @@ def test_coder_while_the_team_works_is_answered_at_once(
         live = engine.liveness(SID)
         assert live.team_run == started.text.split()[3]
         assert live.paused_run is None
+        # Refused before anything opened: no run, so no `episode` line naming one that never
+        # exists. A screen following episodes left the working run for it on every refusal.
+        assert (again.run_id, again.outcome) == (None, None)
+        assert [e.run_id for e in state(engine, SID).episodes()] == [started.text.split()[3]], (
+            "one episode: the run that works"
+        )
     finally:
         go.set()
         engine.close()
@@ -282,7 +288,7 @@ def test_another_session_s_run_is_never_this_one_s(
         # Refused by the repository's WRITE lease the run holds, never as this session's team.
         assert wrote is not None and "pause the team first" not in wrote.text
         refused = state(engine, other).result("c9")
-        assert refused is not None and refused.text.startswith("BLOCKED")
+        assert refused is not None and refused.text.startswith("INTERRUPTED{tool: coder")
         assert f"run {run_id} of another session is working" in refused.text
 
         with pytest.raises(SessionError, match="nothing is running in this session"):

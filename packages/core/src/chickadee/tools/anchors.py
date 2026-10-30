@@ -33,7 +33,14 @@ def replace_text(
     label: str = "",
 ) -> DraftRefused | None:
     """`old` replaced by `new` in `path` as the call holds it now, or why not. `label` names
-    the edit within its call (`edit 1: `), so a refusal says which."""
+    the edit within its call (`edit 1: `), so a refusal says which. An `old` equal to `new`
+    changes nothing, and is refused rather than answered as an edit made."""
+    if old == new:
+        return DraftRefused(
+            "BAD_FORMAT",
+            f"{path}: {label}old and new are the same text, so the edit changes nothing",
+            do="send new as the text old should become, or make no edit",
+        )
     text = call.text(path)
     if isinstance(text, DraftRefused):
         return text

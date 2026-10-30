@@ -173,6 +173,31 @@ def test_later_calls_write_the_same_work_and_edit_and_remove(
     assert len(works(state(engine, SID))) == 1
 
 
+def test_a_file_named_from_the_work_folder_and_an_edit_that_changes_nothing_are_refused(
+    monkeypatch: pytest.MonkeyPatch,
+    repo: Path,
+    raw: dict[str, Any],
+    engines: list[PacketEngine],
+) -> None:
+    """`design/api.md` from Zeus would land in `design/design/`, where nothing reads it; an
+    edit whose old and new are one text changes nothing. Both are refused, saying what to
+    send."""
+    script = [
+        calls(doc("d1", title=TITLE)),
+        calls(doc("d2", file="design/api.md", content="# API\n")),
+        calls(call("doc", "d3", op="edit", file="README.md", old="Retry", new="Retry")),
+        answer("done"),
+    ]
+    engine = turn(monkeypatch, repo, raw, engines, script)
+
+    nested = text(engine, "d2")
+    assert nested.startswith("DENIED") and "send file 'api.md'" in nested
+    design = tree(engine) / folder(engine) / "design"
+    assert not (design / "design").exists() and not (design / "api.md").exists()
+    same = text(engine, "d3")
+    assert same.startswith("BAD_FORMAT") and "changes nothing" in same
+
+
 def test_a_design_file_that_is_not_markdown_is_refused_and_opens_nothing(
     monkeypatch: pytest.MonkeyPatch,
     repo: Path,

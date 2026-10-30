@@ -362,3 +362,34 @@ def test_a_worker_whose_policy_offers_no_shell_is_told_nothing_runs(rig: BoxRig)
     rig.box().open(design()).report()
     system = str(rig.rungs["worker"].requests[0].messages[0].content)
     assert "No command can run" in system and "`shell`" not in system
+
+
+@pytest.mark.parametrize("mode", ["in_place", "worktree"])
+def test_a_repository_with_no_commit_yet_runs_from_the_empty_tree(
+    tmp_path: Path, mode: str
+) -> None:
+    """A new project, `git init` and never committed, has no HEAD: the run starts from nothing
+    rather than stopping on `git rev-parse HEAD`. In place, `repo_head` is recorded empty, which
+    its readers take as no lower bound, and the run's changes are measured from the empty tree;
+    a worktree starts from the empty first commit it makes."""
+    from box_helpers import APP, BoxRig
+    from repos import init_repo
+
+    source = init_repo(tmp_path / "repo", {"app.py": APP}, commit=None)
+    rig = BoxRig(source)
+    try:
+        rig.athena_script = [
+            calls(acall("review", "a1", task="T1", answer="accept")),
+            answer("Done."),
+        ]
+        rig.worker_script = WORKER
+        report = rig.box().open(one_task("Return 2", BRIEF, workspace=mode)).report()
+
+        assert isinstance(report, CoderReport) and report.outcome == "COMPLETED", report
+        start = _run(rig.workspaces[0], report.run_id or "").first(RunStartP)
+        assert start is not None
+        assert (start.repo_head == "") == (mode == "in_place")
+        if mode == "in_place":
+            assert "return 2" in (source / "app.py").read_text(encoding="utf-8")
+    finally:
+        rig.close()

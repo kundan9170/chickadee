@@ -108,6 +108,15 @@ def test_find_shows_kind_profile_cost_and_what_to_pass(tmp_path: Path) -> None:
         both = Skills(discover(tree.roots()), session).find("migration")
         assert "- migrations · project · how to write a migration" in both
         assert "no skill matches" in skills.find("kubernetes")
+        nothing = skills.find("kubernetes").split("\n")
+        assert nothing[1].startswith("Profiles run an agent with no skill")
+        assert nothing[2] == (
+            "- reader · profile, no skill: spawn_agent(profile='reader', task=…) · up to 30 "
+            "tool calls a round on mid-param"
+        )
+        named = skills.find("reader for the migration")
+        assert "survey" in named and "spawn_agent(profile='reader'" in named
+        assert "profile=" not in skills.find("survey migration")
     finally:
         session.close()
 

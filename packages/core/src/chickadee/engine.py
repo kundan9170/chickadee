@@ -764,6 +764,8 @@ class _EngineRun:
     moved: Callable[[], str | None] = lambda: None
     """Moves Zeus's view to where the session's `workspace` line now puts it, and says so when
     this run's call created the worktree."""
+    opened: bool = True
+    """False for an answer with no run (`_answered`): no `episode` line names it."""
 
     def report(self) -> ToolResult | Said:
         """The call's answer: at once, whether or not a run goes on behind it."""
@@ -989,7 +991,11 @@ class _EngineBox:
         if held is not None:
             refused = _refused_paused(delegation, *held)
         if refused is not None:
-            return self._answered(CoderReport.before_run("BLOCKED", refused))
+            # Raised, not answered: refused before anything opened, the call is answered "not
+            # run" with no run id and no `episode` line (`Delegations.open`). A line would name
+            # a run that never exists, and a screen following episodes would leave the run
+            # that works for it on every refused call.
+            raise EngineBusy(refused)
         with self._session.lock:
             default = session_mode(self._session.state, engine.config.workspace.mode)
         docs = self._docs
@@ -1117,7 +1123,7 @@ class _EngineBox:
     def _answered(self, outcome: CoderReport | Complete) -> _EngineRun:
         """A `coder` call answered with no run: nothing is leased."""
         said = render_outcome(outcome)
-        return _EngineRun(new_run_id(), lambda: said, lambda: None)
+        return _EngineRun(new_run_id(), lambda: said, lambda: None, opened=False)
 
     def _handed_over(self, handle: CoderHandle, mode: str) -> Said:
         """The run goes on on its own: its watcher waits for its end, and the
@@ -1153,12 +1159,9 @@ class _EngineBox:
         if latest.state == "live":
             # Another caller's run of this work, on this engine's one episode (a host's, or
             # one a `/resume` started): nothing is opened beside it.
-            return self._answered(
-                CoderReport.before_run(
-                    "BLOCKED",
-                    f"run {latest.run_id} of this work is still running; one run at a time. "
-                    "Wait for it to end, then call coder with this work again",
-                )
+            raise EngineBusy(
+                f"run {latest.run_id} of this work is still running; one run at a time. "
+                "Wait for it to end, then call coder with this work again"
             )
         if complete(found) and not found.design.changed:
             return self._answered(

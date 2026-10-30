@@ -201,6 +201,7 @@ class FakeRun:
     text: str
     box: FakeBox
     design_sha: str | None = None
+    opened: bool = True
 
     def report(self) -> Said:
         # The run's work happens here, and only here: `open` named it and did nothing.

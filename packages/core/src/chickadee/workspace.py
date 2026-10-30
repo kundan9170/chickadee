@@ -115,7 +115,7 @@ def _git(root: Path, *args: str, hooks: bool = False) -> str:
     return git(root, *args, on_error=_GitFailed, hooks=hooks)
 
 
-def _head(root: Path) -> str | None:
+def head_commit(root: Path) -> str | None:
     """The current commit, or None on an unborn HEAD (`git init` with no commit yet)."""
     done = _run_git(root, "rev-parse", "HEAD")
     return _text(done) if done.exit_code == 0 else None
@@ -457,7 +457,7 @@ def snapshot(source: Path, run_id: str) -> tuple[str, str]:
       An unreferenced commit is unreachable by definition, and unreachable objects are what
       `gc` collects — so a snapshot without a ref is a safety net with a timer on it.
     """
-    head = _head(source)
+    head = head_commit(source)
     tree_sha, _ = _write_tree(source, "snapshot")
 
     parents = ["-p", head] if head else []
@@ -577,7 +577,7 @@ def _park(
     root: Path, tree: str, skipped: tuple[str, ...], ref: str, message: str
 ) -> TurnSnapshot:
     """`tree`, committed on the workspace's head and named by `ref` so `gc` keeps it."""
-    head = _head(root)
+    head = head_commit(root)
     parents = ["-p", head] if head else []
     commit = _git(root, *SNAPSHOT_IDENTITY, "commit-tree", tree, *parents, "-m", message)
     _git(root, "update-ref", ref, commit)
@@ -595,7 +595,7 @@ def park_step(root: Path, run_id: str, task: str, tree: str, message: str) -> st
     Returns the commit."""
     ref = step_ref(run_id, task)
     found = _run_git(root, "rev-parse", "--verify", "--quiet", f"{ref}^{{commit}}")
-    parent = _text(found) if found.exit_code == 0 and _text(found) else _head(root)
+    parent = _text(found) if found.exit_code == 0 and _text(found) else head_commit(root)
     parents = ["-p", parent] if parent else []
     commit = _git(root, *SNAPSHOT_IDENTITY, "commit-tree", tree, *parents, "-m", message)
     _git(root, "update-ref", ref, commit)
@@ -735,7 +735,7 @@ def ref_tips(root: Path) -> tuple[str, ...]:
     commits = {
         sha for kind, sha in (line.split() for line in out.splitlines()) if kind == "commit"
     }
-    head = _head(root)
+    head = head_commit(root)
     return tuple(sorted({*commits, *((head,) if head else ())}))
 
 
@@ -748,7 +748,7 @@ def history_head(root: Path, before: Sequence[str], started: float) -> str | Non
     The date is what tells a fetched commit from one the command made and then fetched into a
     remote-tracking ref of its own (`git fetch. HEAD:refs/remotes/x`); a commit in the
     second `started` began counts as made, the cautious answer."""
-    head = _head(root)
+    head = head_commit(root)
     if head is None:
         return None
     unreachable = "".join(f"^{tip}\n" for tip in before).encode()
@@ -1246,7 +1246,7 @@ def _seed_commit(root: Path, session: str) -> str | None:
     repository with no commits gets its empty first commit first, to be the seed's parent."""
     if not dirty_paths(root):
         return None
-    if _head(root) is None:
+    if head_commit(root) is None:
         _first_commit(root)
     tree, _ = _write_tree(root, "the worktree's seed")
     if tree == _git(root, "rev-parse", "HEAD^{tree}"):
@@ -1341,7 +1341,7 @@ def _worktree(
     goal: str,
     start: str | None = None,
 ) -> Workspace:
-    if _head(identity.root) is None and start is None:
+    if head_commit(identity.root) is None and start is None:
         _first_commit(identity.root)
     branch = run_branch_name(goal, run_id)
     path = identity.git_common_dir / WORKTREES_DIR / run_id

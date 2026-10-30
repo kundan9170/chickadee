@@ -58,7 +58,7 @@ from chickadee.schema.ids import new_run_id
 from chickadee.schema.journal import EventKind, RunEndP, RunStartP
 from chickadee.state.roots import Roots
 from chickadee.state.roots import roots as resolve_roots
-from chickadee.workspace import SnapshotSite, Workspace
+from chickadee.workspace import EMPTY_TREE, SnapshotSite, Workspace, head_commit
 
 __all__ = [
     "Box",
@@ -355,8 +355,12 @@ class BoxRun:
                     f"run {self.run_id} started {start.isolation}, and its workspace is now "
                     f"{mode}"
                 )
-            return self._workspace.spec.dirty_snapshot_sha or start.repo_head
-        head = git(root, "rev-parse", "HEAD")
+            return self._workspace.spec.dirty_snapshot_sha or start.repo_head or EMPTY_TREE
+        # A repository with no commit yet (`git init`, a new project) has no HEAD. The run
+        # starts from nothing: `repo_head` is recorded empty, which every reader of it takes as
+        # "no lower bound" (`Projector.landed`, `undo`), and its changes are measured from the
+        # empty tree, as `workspace.snapshot` names the pre-image there.
+        head = head_commit(root) or ""
         configured, caps = parts.budget.run_caps()
         setting = self._settings()
         request = self._request
@@ -378,7 +382,7 @@ class BoxRun:
         # `run_start` stays a run's first line; its `config_sha` already holds the set's digest.
         if unwritten is not None:
             write_bound(RunHookSink(journal), self._hooks, unwritten)
-        return self._workspace.spec.dirty_snapshot_sha or head
+        return self._workspace.spec.dirty_snapshot_sha or head or EMPTY_TREE
 
     def _loop(self, journal: Journal, parts: RunParts, base: str) -> TaskLoop:
         env = self._env

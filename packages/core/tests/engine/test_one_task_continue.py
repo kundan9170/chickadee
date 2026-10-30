@@ -184,7 +184,7 @@ def test_another_title_is_refused_while_the_one_task_run_is_paused(
     try:
         engine.turn(SID, "add b").wait(timeout=WAIT_S)
         said = state(engine, SID).result("c2")
-        assert said is not None and said.text.startswith("BLOCKED")
+        assert said is not None and said.text.startswith("INTERRUPTED{tool: coder")
         assert f"run {first} of the one-task plan 'Return 2' is paused" in said.text
         assert "coder(title='Return 2', brief)" in said.text and "/drop" in said.text
         assert person.stops == [], "nothing is asked"

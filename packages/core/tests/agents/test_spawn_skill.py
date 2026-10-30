@@ -4,9 +4,17 @@ knowledge skill is loaded, never spawned; an untrusted repository's agent skill 
 
 from __future__ import annotations
 
+from dataclasses import replace
 from pathlib import Path
 
-from agents_helpers import AgentClient, agents_for, report, turn_text, write_repo
+from agents_helpers import (
+    AgentClient,
+    agents_for,
+    reader_profile,
+    report,
+    turn_text,
+    write_repo,
+)
 
 from chickadee.context.kept_lines import AgentRecord
 from chickadee.context.results import InvalidArgument
@@ -235,5 +243,30 @@ def test_a_repositorys_agent_file_is_recorded_as_the_projects(tmp_path: Path) ->
         assert isinstance(agents.spawn("looker", None, "Look.", (), call_id="z1"), str)
         (start,) = [p for p in _payloads(session) if isinstance(p, AgentStartP)]
         assert start.source == "project"
+    finally:
+        session.close()
+
+
+def test_a_profile_sent_as_a_skill_is_refused_naming_the_profile(tmp_path: Path) -> None:
+    """`researcher` is a profile, not a skill; `find_skill` cannot find a profile, so the
+    refusal names the profile to send rather than pointing there."""
+    repo = write_repo(tmp_path / "repo")
+    session = Session.create(tmp_path / "sessions", "S")
+    try:
+        profiles = {
+            n: replace(reader_profile(), name=n, role=n)
+            for n in ("reader", "reviewer", "researcher")
+        }
+        agents = agents_for(
+            session, repo, AgentClient(), roots=_roots(tmp_path), profiles=profiles
+        )
+        for sent in ("researcher", "Researcher", "research", "web-researcher"):
+            out = agents.spawn(sent, None, "Look.", (), call_id="z1")
+            assert isinstance(out, InvalidArgument), sent
+            assert "researcher is a profile, not a skill" in out.render(), sent
+            assert "Do: send profile 'researcher' and no skill" in out.render(), sent
+        other = agents.spawn("kubernetes", None, "Look.", (), call_id="z2")
+        assert isinstance(other, InvalidArgument)
+        assert "send a profile (reader, researcher, reviewer) and no skill" in other.render()
     finally:
         session.close()

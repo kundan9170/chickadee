@@ -277,6 +277,16 @@ def resolve(root: Path, work: WorkLine | None, part: Part, file: str) -> str | D
     why = file_error(file)
     if why is not None:
         return DraftRefused("DENIED", why, do=NAME_FROM_FOLDER)
+    head, _, rest = file.partition("/")
+    if rest and head.casefold() == part:
+        # Named from the work folder, not from `part/`: it would land in `design/design/`,
+        # where nothing reads it, and the README would list it by a name the folder does
+        # not hold. Refused, so the file and the name it is read by stay one.
+        return DraftRefused(
+            "DENIED",
+            f"{file} names {part}/ again: `file` is already in your {part}/ folder",
+            do=f"send file {rest!r}",
+        )
     folder = part_dir(work.dir, work.name, part)
     if leaves(root, folder, file):
         return DraftRefused("DENIED", f"{file} leads out of your folder", do=NAME_FROM_FOLDER)

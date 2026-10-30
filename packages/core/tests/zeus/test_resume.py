@@ -21,7 +21,7 @@ from chickadee.context.standing import journaled_effects
 from chickadee.context.work_line import WorkLine
 from chickadee.schema import ToolCall
 from chickadee.work import record_work
-from chickadee.zeus.delegate import Delegation, open_episode
+from chickadee.zeus.delegate import Delegation, OpenedEpisode, open_episode
 
 from .zeus_helpers import SESSION_ID, FakeBox, FakeRun, answer, call, calls, rig
 
@@ -197,7 +197,7 @@ def test_an_episode_line_that_cannot_be_written_gives_the_lease_back(
 
         monkeypatch.undo()
         opened = open_episode(session, box, _delegation(), opened_at_seq=at, cancel=None)
-        assert opened.run.run_id == "R-2"
+        assert isinstance(opened, OpenedEpisode) and opened.run.run_id == "R-2"
         assert box.abandoned == ["R-1"], "the run that opened is not handed back"
 
 

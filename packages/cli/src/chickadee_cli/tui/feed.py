@@ -498,8 +498,14 @@ class Feed:
                 zeus.entries.append(result)
                 zeus.results[typed.call_id] = result
                 zeus.cards += 1
-                if typed.outcome is not None and state.athena.run_id is not None:
-                    # A `coder` result answers the run its episode opened.
+                if (
+                    typed.outcome is not None
+                    and frame.run_id is not None
+                    and state.athena.run_id is not None
+                ):
+                    # A `coder` result answers the run its episode opened One with no
+                    # run (a work already complete, a stop that approved nothing) is Zeus's
+                    # answer alone: never the failure of the run on screen.
                     state.worker.outcome = typed.outcome
                     return _moved(Pane.ZEUS, Pane.WORKER)
             case SpendRecord():

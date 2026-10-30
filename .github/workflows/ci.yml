@@ -1,0 +1,101 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # The corpus the E1 manifests describe, pinned by commit. `packages/eval/manifests/e1.toml`
+  # records 34 Python + 49 JavaScript problems by id; if upstream adds or removes an
+  # exercise, the committed split no longer partitions the pool and the run is measuring a
+  # different benchmark than the one registered. Pinned so that fails a test rather than
+  # changing a number.
+  POLYGLOT_REF: 7e0611e77b54e2dea774cdc0aa00cf9f7ed6144f
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Sync workspace
+        run: uv sync --all-packages
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Format check
+        run: uv run ruff format --check .
+
+      - name: Types
+        # pyright is strict on core only; the surfaces are checked, not strict.
+        run: uv run pyright
+
+      # The eval's loader and perturbation tests run against the real Polyglot corpus, not
+      # a fixture: a loader once passed a full fixture-based suite while opening 0 of 83 real
+      # problems, because the fixture was written to match it. Without this checkout those
+      # tests skip, and CI green would only mean "agrees with itself".
+      #
+      # Pinned to a commit rather than a branch: an upstream change to the corpus must fail
+      # loudly against the committed manifests instead of silently redefining the benchmark
+      # between two runs that report the same number.
+      - name: Fetch the Polyglot benchmark
+        uses: actions/checkout@v4
+        with:
+          repository: Aider-AI/polyglot-benchmark
+          ref: ${{ env.POLYGLOT_REF }}
+          path: .polyglot-benchmark
+
+      # Node and npm, so the JavaScript half of E1 is exercised rather than skipped. The
+      # eval provisions jest itself from its own pinned lockfile (`toolchains/javascript/`);
+      # this only supplies the runtime that provisioning needs. Pinned to a major so a
+      # runner-image change cannot quietly move what the benchmark ran under.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # Bubblewrap, so the `@bwrap_only` tests run here instead of skipping: the sandbox half
+      # of `test_no_write.py`, `test_deny_read.py` and `test_sandbox_linux.py`. Without it the
+      # boundary Zeus's shell rests on is never exercised where every PR is checked.
+      - name: Install bubblewrap
+        run: sudo apt-get update && sudo apt-get install -y bubblewrap
+
+      # Ubuntu 24.04's AppArmor stops unprivileged processes creating user namespaces, which
+      # bubblewrap needs. This setting is the CI runner's, made on a throwaway VM; Chickadee
+      # never changes it on a person's machine.
+      # Guarded on the key, so an image without AppArmor's restriction skips the step rather
+      # than failing it.
+      - name: Allow unprivileged user namespaces
+        run: |
+          key=/proc/sys/kernel/apparmor_restrict_unprivileged_userns
+          if [ -e "$key" ]; then sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0; fi
+
+      # Proves the sandbox runs, as the runner's normal user, before the tests: `true` under
+      # the argv `isolation/linux.py`'s `bwrap_argv` builds, read from it rather than copied
+      # here, so the probe cannot drift from the wrap the tests exercise. A runner where any
+      # of its features (proc and dev mounts, the read-only root, a private /tmp, no network)
+      # is denied fails here, loudly, rather than with every sandbox test failing on an
+      # opaque bwrap error.
+      - name: Bubblewrap runs
+        run: |
+          argv=$(uv run python -c 'import shlex; from pathlib import Path; from chickadee.isolation.linux import bwrap_argv; from chickadee.isolation.types import Isolation; print(shlex.join(bwrap_argv(Isolation(argv=("true",), cwd=Path.cwd()))))')
+          echo "$argv"
+          eval "$argv"
+
+      - name: Tests
+        env:
+          CKD_POLYGLOT_ROOT: ${{ github.workspace }}/.polyglot-benchmark
+        # `-rs` because a bare `s` in the progress dots is how coverage disappears without
+        # anyone deciding to drop it. Every skip prints
+        # its reason, so "did the real-corpus tests actually run" is answerable from the log
+        # instead of inferred from a green tick.
+        run: uv run pytest -rs

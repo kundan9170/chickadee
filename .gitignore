@@ -1,0 +1,29 @@
+# harness runtime state
+.chickadee/
+
+models/
+p0/
+scratch/
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+dist/
+build/
+*.egg-info/
+
+# docs tooling (scripts/check_mermaid.mjs installs these on demand)
+node_modules/
+package.json
+package-lock.json
+
+# macOS rewrites this constantly. It was tracked from Phase 0 until D63 and unignored, so
+# any branch running `git add -A` swept the churn into its diff and failed the scope audit.
+.DS_Store
+
+# the model inspector's React app (ui/inspector) keeps its manifest
+!ui/inspector/package.json
+!ui/inspector/package-lock.json

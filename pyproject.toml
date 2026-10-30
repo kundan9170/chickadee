@@ -1,0 +1,153 @@
+[project]
+name = "chickadee-workspace"
+version = "0.0.0"
+description = "Workspace root for Chickadee. Not a distributable package."
+requires-python = ">=3.12"
+
+[tool.uv.workspace]
+members = ["packages/core", "packages/cli", "packages/eval", "packages/serve", "packages/wire"]
+
+[tool.uv.sources]
+chickadee-core = { workspace = true }
+chickadee-cli = { workspace = true }
+chickadee-eval = { workspace = true }
+chickadee-serve = { workspace = true }
+chickadee-wire = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    # Runs the suite on every core (`addopts` below): serially it took minutes, and every
+    # change runs the whole suite before it is handed off.
+    "pytest-xdist>=3.6",
+    "ruff>=0.6",
+    "pyright>=1.1.380",
+    # The goldens are the contract other implementations read. Checking them with a real
+    # JSON Schema validator is the only way the export is tested as a schema rather than
+    # as bytes that match themselves.
+    "jsonschema>=4.23",
+    # The test that holds the V4A parser to exactly what `apply_patch.lark` admits reads the
+    # grammar with a real Lark parser. Tests only: nothing at run time
+    # parses a grammar, the provider decodes under it.
+    "lark>=1.2",
+    # And with LLGuidance, the decoder OpenAI constrains with: the grammar must stay inside its
+    # Lark subset (no lookarounds, priorities or imports) and mean the same there.
+    "llguidance>=1.0",
+    # `chickadee_wire/models.py` is generated from the wire golden and committed;
+    # `test_models_generated.py` regenerates it to prove the copy is current. Nothing at run
+    # time generates.
+    "datamodel-code-generator>=0.26",
+]
+
+# ---------------------------------------------------------------------------
+# Lint. Rules are repo-wide; per-package strictness lives in the pyright block.
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 96
+target-version = "py312"
+src = [
+    "packages/core/src",
+    "packages/cli/src",
+    "packages/eval/src",
+    "packages/serve/src",
+    "packages/wire/src",
+]
+# Only Python we own. Without this, `ruff format` rewrites the Python inside fenced
+# blocks in documents.
+include = ["packages/**/*.py", "scripts/**/*.py", "pyproject.toml"]
+extend-exclude = [".venv", "*.md"]
+
+[tool.ruff.lint]
+select = [
+    "E", "F", "W",   # pycodestyle + pyflakes
+    "I",             # import sorting
+    "UP",            # pyupgrade
+    "B",             # bugbear
+    "SIM",           # simplify
+    "TID",           # tidy imports — backs the packaging rule below
+    "RUF",
+    "C90",           # mccabe complexity — the habit that keeps a decision machine, a turn
+                     # loop or a compaction from growing into a 400-line function unnoticed
+    "PLR0915",       # too many statements — the same habit, measured the other way
+]
+
+[tool.ruff.lint.mccabe]
+# Set where the current code sits: `replay()` (the journal fold) is the ceiling at 55
+# branches and is exempt by name below; nothing else is near. A new function that trips
+# this is being asked to split, not to raise the number.
+max-complexity = 15
+
+[tool.ruff.lint.pylint]
+max-statements = 60
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+# Core imports no CLI/eval UI. Caught at lint time as well as by
+# tests/test_boundaries.py, because a boundary asserted in only one place is a
+# boundary that erodes when that place is skipped.
+"chickadee_cli".msg = "core must not import the CLI"
+"chickadee_eval".msg = "core must not import the eval rig"
+"chickadee_serve".msg = "core must not import the serving layer: the server calls the facade, never the reverse"
+
+[tool.ruff.lint.per-file-ignores]
+# The surfaces are allowed to import what core may not.
+"packages/cli/**" = ["TID251"]
+"packages/eval/**" = ["TID251"]
+"packages/serve/**" = ["TID251"]
+"packages/wire/**" = ["TID251"]
+# The surfaces' shared test host (a served engine and its client); core's own helpers
+# beside it stay under the ban.
+"packages/testing/hosting.py" = ["TID251"]
+# Generated from the wire golden (`tools/generate_models.py`): its line lengths and pydantic's
+# list defaults (copied per instance, so not shared) are the generator's, not ours to restyle.
+"packages/wire/src/chickadee_wire/models.py" = ["E501", "RUF012"]
+# The complexity habit is for the product. A test is long because it is a scenario; a
+# script's `main` is a checklist and is judged by its output, not its shape.
+"packages/*/tests/**" = ["C901", "PLR0915"]
+"scripts/**" = ["C901", "PLR0915"]
+
+# ---------------------------------------------------------------------------
+# Types. Strict on core; the surfaces are checked but not strict yet.
+# ---------------------------------------------------------------------------
+[tool.pyright]
+pythonVersion = "3.12"
+include = ["packages"]
+exclude = ["**/__pycache__", "**/.venv"]
+
+# Strict on core only. `strict` is a top-level list of paths, not an
+# executionEnvironments key — pyright silently reports "unrecognized setting" for the
+# latter and then checks nothing strictly, which looks identical to passing.
+strict = ["packages/core/src"]
+
+[[tool.pyright.executionEnvironments]]
+root = "packages/core"
+extraPaths = ["packages/testing"]
+
+[[tool.pyright.executionEnvironments]]
+root = "packages/cli"
+extraPaths = ["packages/testing"]
+
+[[tool.pyright.executionEnvironments]]
+root = "packages/eval"
+extraPaths = ["packages/testing"]
+
+[[tool.pyright.executionEnvironments]]
+root = "packages/serve"
+extraPaths = ["packages/testing"]
+
+[[tool.pyright.executionEnvironments]]
+root = "packages/wire"
+extraPaths = ["packages/testing"]
+
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["packages/core/tests", "packages/cli/tests", "packages/eval/tests", "packages/serve/tests", "packages/wire/tests"]
+# Test helpers every package's tests share (`packages/testing`): one home for what is not
+# one package's, such as how a test makes a git repository.
+pythonpath = ["packages/testing"]
+# `-n auto` is one worker per core, so CI and a laptop each use what they have; `-n 0` is a
+# serial run, for debugging one test. `--dist loadfile` keeps each test file on one worker,
+# so a module's fixtures behave as they do serially.
+addopts = "-q --strict-markers --strict-config -n auto --dist loadfile"
+xfail_strict = true

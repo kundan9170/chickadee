@@ -15,7 +15,7 @@
 
 <p align="center">
   <a href="#getting-started">Getting started</a> ·
-  <a href="docs/configuration.md">Configuration</a> ·
+  <a href="#configuration">Configuration</a> ·
   <a href="#documentation">Docs</a>
 </p>
 
@@ -66,16 +66,108 @@ uv sync --all-packages
 uv run chickadee setup     # writes ~/.config/chickadee/config.toml and checks the sandbox
 ```
 
-Add your models to `~/.config/chickadee/config.toml`, then, in the repository you want to work
-on:
+Add your models to `~/.config/chickadee/config.toml` (see [Configuration](#configuration) below),
+export the API key it names, then, in the repository you want to work on:
 
 ```bash
 uv run --project ~/path/to/chickadee chickadee init   # index the repository
 uv run --project ~/path/to/chickadee chickadee tui    # open the interface
 ```
 
-**[The configuration guide](docs/configuration.md)** covers every option with its default, and
-[`examples/`](examples/) has a minimal config and a complete one to start from.
+## Configuration
+
+### The main config file
+
+**`~/.config/chickadee/config.toml`** is the one file you need. It holds your models, their
+prices and your spend cap. `chickadee setup` writes a commented starting copy there, and never
+overwrites one you already have. You can also start from
+[`examples/config.toml`](examples/config.toml) (the minimum) or
+[`examples/config.full.toml`](examples/config.full.toml) (every table).
+
+Settings are read in layers, and a later layer overrides an earlier one key by key:
+
+| # | Layer | Where | Use it for |
+|---|---|---|---|
+| 1 | Defaults | built in | |
+| 2 | **User** | `~/.config/chickadee/config.toml` | **Your models, prices, spend cap and sandbox. The main file.** |
+| 3 | Project | `<repo>/.chickadee/config.toml`, committed | Only `profiles`, `secrets`, `commands` and `hooks` |
+| 4 | Local | `work.toml`, in the repository's local state | Your overrides for one clone |
+| 5 | Environment | `CHICKADEE_*` variables | A change for a single run |
+
+A repository's own file can never repoint a model, set a price or raise your spend cap, so
+cloning someone else's repository cannot spend your money. Anything else it tries is refused
+at load.
+
+### A minimal working config
+
+```toml
+# 1. The spend cap. Required: a run will not start without a finite cap.
+[spend]
+hard_cost_usd = 5.00                 # the run stops here, in a state you can resume
+warning_fractions = [0.5, 0.8]       # warn at 50% and 80% of the cap
+
+# 2. Your models. Each one is any OpenAI-compatible endpoint.
+[models.frontier]
+base_url = "https://api.example.com/v1"
+model_id = "your-frontier-model"
+api_key_env = "FRONTIER_API_KEY"     # the key is read from this variable, never stored here
+context_window = 200000
+max_output_tokens = 32000
+
+[models.local]
+base_url = "http://localhost:8000/v1"
+model_id = "your-local-coder"
+context_window = 131072
+max_output_tokens = 16384
+
+# 3. Prices, in USD per million tokens. Every model needs one.
+[prices.frontier]
+price_in = 3.00
+price_out = 15.00
+
+[prices.local]
+price_in = 0.20
+price_out = 0.60
+
+# 4. Which model each role runs on.
+[rungs]
+high-param = "frontier"              # the designer and the planner
+mid-param = "frontier"               # helpers: locate, critic, reviewers
+low-param = "local"                  # the worker
+```
+
+Then export the key the config names:
+
+```bash
+export FRONTIER_API_KEY=...
+```
+
+### The main settings explained
+
+| Setting | What it does |
+|---|---|
+| `[spend] hard_cost_usd` | The hard spend cap for a run, in USD. Required, and must be above zero. Reaching it pauses the run in a resumable state. |
+| `[spend] warning_fractions` | The fractions of the cap at which you are warned, e.g. `[0.5, 0.8]`. |
+| `[spend.rungs]` | An optional cap per rung beneath the total, e.g. `high-param = 3.00`. |
+| `[models.<name>]` | One model endpoint. `base_url` and `model_id` say where and what. `api_key_env` names the environment variable holding the key. `context_window` and `max_output_tokens` give its limits. |
+| `[prices.<name>]` | Input and output price per million tokens for the model of the same name. Price a local model at a hosted equivalent, so the cap and cost figures stay honest. |
+| `[rungs]` | Maps each rung to a model. `high-param` runs the designer and the planner, `mid-param` the helper roles, `low-param` the worker. One model can serve several rungs. |
+| `[roles]` | Optional: moves a role onto a different rung. |
+| `[workspace] mode` | `in_place` (default) works in your checkout, with snapshots to undo. `worktree` works in a separate git worktree, so your checkout changes only when you merge. |
+| `[work] dir`, `commit` | Where designs and plans are written (default `docs/chickadee`), and whether they are committed. |
+| `[sandbox] backend` | `auto` (default), `native` (bubblewrap on Linux, Seatbelt on macOS) or `none`. |
+| `[secrets] deny_add` | Extra paths kept out of the models' reach, e.g. `["**/credentials.json"]`. |
+
+To change a setting for a single run, use an environment variable. A double underscore
+separates the table from the key:
+
+```bash
+CHICKADEE_SPEND__HARD_COST_USD=2 uv run chickadee
+```
+
+To check a config file, run `chickadee setup` again: it reports the cap in force and whether
+the sandbox can run. **[The configuration guide](docs/configuration.md)** lists every option
+with its default, plus approval preferences, command rows and hooks.
 
 ## Documentation
 

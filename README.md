@@ -87,6 +87,36 @@ everything else. Details for each are in the [configuration guide](docs/configur
 - **The tests that matter.** `tests_for` picks the tests a change can reach from the graph,
   in plain code, with no model involved.
 
+**Keeping the worker honest**
+- **"Done" is checked against the record, not taken on trust.** Before the worker can hand off,
+  the harness checks its own record of what ran. Files changed since the last test run, a task
+  with changes and no test run at all, or a test the task broke that is still failing all send
+  the worker back, and the planner is told what the record showed.
+- **A watchdog for stuck workers.** It watches for a worker looping on calls that show nothing
+  new, wandering through files without making a change, or editing for too long without
+  running a test. It nudges first, then stops the round and has the worker report.
+- **Fair test accounting.** Each test's last status is read from the runner's output, never from
+  the exit code. A test that was already failing before the task touched it is never blamed on
+  the task.
+- **Cited reports.** A subagent's findings must cite file and line. Each citation is checked
+  against the repository, and the report's header says how many failed.
+
+The watchdog and the handoff check are switched on per role in your config:
+
+```toml
+[[hooks]]
+event = "after_batch"
+name = "watchdog"
+use = "progress_watchdog"
+role = "worker"
+
+[[hooks]]
+event = "before_stop"
+name = "evidence"
+use = "evidence_check"
+role = "worker"
+```
+
 **Sessions**
 - **Fork.** `chickadee fork` starts a new session from any point in another's history.
   Because every step is journaled, the fork starts from exactly what happened.

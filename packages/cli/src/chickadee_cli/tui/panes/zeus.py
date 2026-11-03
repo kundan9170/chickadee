@@ -371,11 +371,16 @@ class ZeusFrame(RoleFrame):
             for entry, view in zip(self._shown, self._views, strict=True):
                 if isinstance(view, _ReplyView | Card):
                     self._fill(entry, view)
+        added: list[Widget] = []
         for entry in entries[len(self._views) :]:
             view = self._view(entry)
             self._views.append(view)
             self._shown.append(entry)
-            self.transcript.mount(view)
+            added.append(view)
+        if added:
+            # One mount for all: each mount call walks every child already there, so mounting a
+            # reopened session's history one view at a time was quadratic in its length.
+            self.transcript.mount(*added)
         placed = (len(self._views), state.zeus.hidden, self._cleared, self._refills)
         if placed != self._placed:
             self._placed = placed

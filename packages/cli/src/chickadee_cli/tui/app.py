@@ -9,10 +9,11 @@ by 33), as ratios that scale with the terminal.
 names, and only those ("Motion": a frame budget over ssh).
 
 **Live, the feed is folded here and nowhere else.** `live.SessionReader` reads the server on
-threads and hands each frame, route answer and loss to `take`, `take_snapshot` and `take_lost`
-through `call_from_thread`, so the `Feed` is only ever touched on this event loop (its
-docstring's rule). What the person types is `talk.Talk`'s, on its own thread, and what it
-changes on screen comes back the same way (`_Screen`).
+threads and hands each frame, route answer and loss to `deliver`, which queues it for this event
+loop, so the `Feed` is only ever touched here (its docstring's rule). What waits is folded in
+order and drawn once: reopening a session reads its history far faster than a screen draws.
+What the person types is `talk.Talk`'s, on its own thread, and what it changes on screen comes
+back the same way (`_Screen`).
 
 **Views, zoom and narrow terminals.** `^D` (or `/diff`) shows the diff screen in place of the
 panes (`screens/diff.py`); `Ctrl+Up` zooms the focused pane, `Ctrl+Down` back; below 100
@@ -34,6 +35,10 @@ is on top.
 
 from __future__ import annotations
 
+import asyncio
+import contextlib
+import contextvars
+import logging
 import sys
 import threading
 from collections.abc import Callable, Iterable, Sequence
@@ -58,7 +63,7 @@ from chickadee_cli.render.stream import Verbosity
 from chickadee_cli.render.style import Style, Tone
 from chickadee_cli.surface import DONE
 from chickadee_cli.tui.composer import Composer
-from chickadee_cli.tui.feed import Changed, Feed, NotServed, Snapshot
+from chickadee_cli.tui.feed import NOTHING, Changed, Feed, NotServed, Snapshot
 from chickadee_cli.tui.header import SHORT_BELOW, BrandHeader, banner_line, header_rows
 from chickadee_cli.tui.keys import ScreenView, bound, lit
 from chickadee_cli.tui.live import NOT_SERVED_HERE, SessionReader
@@ -265,6 +270,15 @@ class ChickadeeApp(App[None]):
         """Steps whose diff was asked for: each once, answered or not."""
         self._loop_thread = threading.get_ident()
         """The thread this app's loop runs on: a call from it runs at once (`post`)."""
+        self._inbox_loop: asyncio.AbstractEventLoop | None = None
+        self._inbox_context: contextvars.Context | None = None
+        """This app's event loop, once mounted, and the context its handlers run in (the
+        active app, which drawing reads): what a reader's `deliver` wakes, and runs in."""
+        self._inbox: list[Callable[[ChickadeeApp], Changed]] = []
+        self._draining = False
+        """Whether a drain is due on the loop. `_inbox` and `_draining` are guarded by
+        `_inbox_lock`; nothing is called under it."""
+        self._inbox_lock = threading.Lock()
         self.repo = repo
         stdout = sys.__stdout__
         self.glyphs = glyphs_for(encoding or (stdout.encoding if stdout is not None else None))
@@ -322,6 +336,11 @@ class ChickadeeApp(App[None]):
         yield StatusBar(colours)
 
     def on_mount(self) -> None:
+        # Before any reader starts, below.
+        self._inbox_loop, self._inbox_context = (
+            asyncio.get_running_loop(),
+            contextvars.copy_context(),
+        )
         self.zeus.composer.focus()
         self.zeus.composer.browses = self._browses
         code = self.code
@@ -418,8 +437,43 @@ class ChickadeeApp(App[None]):
 
     # -- what the server sends, on this event loop ----------------------------------------
 
+    def deliver(self, change: Callable[[ChickadeeApp], Changed]) -> None:
+        """`change` folded on this loop, from a reader's thread, never waited for. Every change
+        waiting when the loop gets to them is folded in order and drawn once (`_drain`): a
+        session reopened reads its history far faster than a screen draws, so it is drawn once
+        it is read, not once per record. Live, a drain holds the one record that arrived."""
+        with self._inbox_lock:
+            self._inbox.append(change)
+            if self._draining:
+                return
+            self._draining = True
+        loop = self._inbox_loop
+        if loop is None:
+            raise RuntimeError("a reader delivered before the screen was mounted")
+        # A loop that has closed raises: the screen is gone, and so is whom to tell.
+        with contextlib.suppress(RuntimeError):
+            loop.call_soon_threadsafe(self._drain, context=self._inbox_context)
+
+    def _drain(self) -> None:
+        with self._inbox_lock:
+            batch, self._inbox = self._inbox, []
+            self._draining = False
+        changed = NOTHING
+        for change in batch:
+            try:
+                changed = changed | change(self)
+            except Exception:
+                # Logged, and the rest folded: one change that broke never takes the screen,
+                # or the records queued behind it, down with it.
+                logging.getLogger(__name__).exception("a delivered change failed to fold")
+        self._moved(changed)
+
     def take(self, frame: Frame) -> None:
-        self._moved(self._feed().apply(frame))
+        self._moved(self.take_frame(frame))
+
+    def take_frame(self, frame: Frame) -> Changed:
+        """`frame` folded, and what it moved, undrawn: `take` draws it, `deliver` a batch."""
+        changed = self._feed().apply(frame)
         ended = isinstance(frame, ProgressFrame) and frame.kind in ("answer", "error")
         if ended and self._files is not None:
             # A turn ended: the workspace may hold new paths, as the REPL reads it then.
@@ -431,6 +485,7 @@ class ChickadeeApp(App[None]):
             and not is_run_record(frame)
         ):
             self._interaction.feed(frame)  # a question, shown as it opens, as the REPL does
+        return changed
 
     def take_snapshot(self, value: Snapshot) -> None:
         self._moved(self._feed().snapshot(value))
@@ -1177,12 +1232,13 @@ def connector(
         reader = SessionReader(
             client,
             session_id,
-            on_frame=lambda frame: app.call_from_thread(app.take, frame),
-            on_snapshot=lambda value: app.call_from_thread(app.take_snapshot, value),
-            on_lost=lambda what, why, stream: app.call_from_thread(
-                app.take_lost, what, why, stream
+            # Each through the one inbox, so what one reader thread delivers keeps its order.
+            on_frame=lambda frame: app.deliver(lambda a: a.take_frame(frame)),
+            on_snapshot=lambda value: app.deliver(lambda a: a._feed().snapshot(value)),
+            on_lost=lambda what, why, stream: app.deliver(
+                lambda a: a._feed().lost(what, why, stream=stream)
             ),
-            on_link=lambda link: app.call_from_thread(app.take_link, link),
+            on_link=lambda link: app.deliver(lambda a: a._feed().link(link)),
         )
         if client.server is not None:
             app.take_snapshot(client.server)  # how long a question waits here

@@ -15,12 +15,12 @@ import threading
 import time
 from collections.abc import Iterator
 from pathlib import Path
-from typing import cast
+from typing import Any, cast
 
 import pytest
 from recordings import Replayed, recording, replayed, run_frames
 from textual.content import Content
-from tui_frames import WAIT_S, until
+from tui_frames import SID, WAIT_S, session, until
 
 from chickadee_cli.tui.app import ChickadeeApp, connector
 from chickadee_cli.tui.feed import Feed
@@ -243,3 +243,66 @@ def test_a_route_that_answers_after_failing_is_said_recovered() -> None:
     reader._read_one(StaleRoute.BUDGET)  # pyright: ignore[reportPrivateUsage]
     assert seen[-1] == "the budget", "said once"
     reader.close()
+
+
+# -- a reopened session's history is drawn once it is read, not once per record ---------------
+
+
+def _turns(n: int) -> list[RecordFrame]:
+    frames: list[RecordFrame] = []
+    for i in range(n):
+        frames.append(session("turn", {"role": "user", "text": f"question {i}"}, 2 * i + 1))
+        frames.append(session("turn", {"role": "assistant", "text": f"answer {i}"}, 2 * i + 2))
+    return frames
+
+
+async def test_records_waiting_together_are_folded_in_order_and_drawn_once() -> None:
+    """The reader runs ahead of the screen while it reads a session's history: what waits is
+    folded in order and drawn once, to the state folding the records directly reaches. One
+    draw per record made a long session's reopening take minutes (229 s for 1000 records)."""
+    frames = _turns(150)
+    app = ChickadeeApp(feed=Feed(SID), depth="truecolor", encoding="utf-8")
+    async with app.run_test(size=SIZE) as pilot:
+        drawn: list[object] = []
+        show = app.show
+
+        def counted(*args: Any, **kwargs: Any) -> None:
+            drawn.append(args)
+            show(*args, **kwargs)
+
+        app.show = counted  # type: ignore[method-assign]
+        for frame in frames:  # all waiting before the loop gets to them
+            app.deliver(lambda a, f=frame: a.take_frame(f))
+        await pilot.pause()
+        direct = Feed(SID)
+        for frame in frames:
+            direct.apply(frame)
+        assert [e.kind for e in app.state.zeus.entries] == [
+            e.kind for e in direct.state.zeus.entries
+        ]
+        assert len(app.state.zeus.entries) == len(frames)
+        assert len(drawn) == 1, "one draw for the batch"
+        views = list(app.zeus.transcript.children)
+        assert len([v for v in views if v.display]) >= len(frames) - 1, "every entry mounted"
+
+
+async def test_the_zeus_pane_mounts_what_a_draw_adds_in_one_call() -> None:
+    """Each mount walks every view already there: one per entry was quadratic in a session's
+    length."""
+    feed = Feed(SID)
+    app = ChickadeeApp(feed=feed, depth="truecolor", encoding="utf-8")
+    async with app.run_test(size=SIZE) as pilot:
+        transcript = app.zeus.transcript
+        mounts: list[int] = []
+        mount = transcript.mount
+
+        def counted(*widgets: Any, **kwargs: Any) -> Any:
+            mounts.append(len(widgets))
+            return mount(*widgets, **kwargs)
+
+        transcript.mount = counted  # type: ignore[method-assign]
+        for frame in _turns(20):
+            feed.apply(frame)
+        app.show(app.state)
+        await pilot.pause()
+        assert mounts == [40]

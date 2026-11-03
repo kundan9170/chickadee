@@ -45,6 +45,15 @@ Chickadee splits the work by difficulty:
 **The bet:** solve nearly as many tasks as a frontier-only harness (at most 5 percentage points
 fewer) for at most half the cost. That is a hypothesis under test, not a result.
 
+**Choose models on your own work, not on leaderboards.** The journal records every task end to
+end: the request, each edit and test, the review's verdict and what it cost. That makes a team's
+real workload replayable, and we are building that replay into the eval rig. When a new
+open-weight model is released, a team can rerun last month's tasks on it and compare how many
+it solves, how often review rejects its work and what it costs, all on their own code. Keeping
+up with fast-moving open model releases becomes a measurement instead of a guess.
+
+<sub>Today the eval rig runs on public benchmarks. Replaying a team's own tasks is in development.</sub>
+
 <p align="center">
   <img alt="The Chickadee home screen: the designer pane, recent sessions, and the planner and worker panes waiting" src="docs/assets/screenshot-home.webp" width="100%">
   <br><sub>The home screen. The designer, planner and worker each have a pane, and the header shows the models in use and the session's spend against its cap.</sub>

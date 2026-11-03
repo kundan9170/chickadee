@@ -74,6 +74,19 @@ everything else. Details for each are in the [configuration guide](docs/configur
 - **Forked skills.** A skill marked `context: fork` runs as its own subagent instead of loading
   into the conversation.
 
+**Code graph**
+- **An index of your code.** `chickadee init` parses the repository with tree-sitter into a
+  local SQLite graph of symbols, calls and imports, and keeps it current as files change.
+  Language servers confirm where each call lands. 14 languages ship with profiles, including
+  Python, TypeScript, Go, Rust, Java and C++.
+- **Navigation tools for the models.** `atlas` maps the codebase's components and how they
+  connect. `symbol` gives a definition with its callers, callees and tests. `neighbors` shows
+  what surrounds a symbol, and `impact` lists what may break if it changes.
+- **Honest edges.** Each link is marked `resolved`, `fallback` or `unknown`, never a guess
+  presented as fact, and the gaps the index cannot see are named.
+- **The tests that matter.** `tests_for` picks the tests a change can reach from the graph,
+  in plain code, with no model involved.
+
 **Sessions**
 - **Fork.** `chickadee fork` starts a new session from any point in another's history.
   Because every step is journaled, the fork starts from exactly what happened.

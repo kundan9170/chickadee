@@ -14,6 +14,7 @@
 </p>
 
 <p align="center">
+  <a href="#features">Features</a> ·
   <a href="#getting-started">Getting started</a> ·
   <a href="#configuration">Configuration</a> ·
   <a href="#documentation">Docs</a>
@@ -58,6 +59,45 @@ up with fast-moving open model releases becomes a measurement instead of a guess
   <img alt="The Chickadee home screen: the designer pane, recent sessions, and the planner and worker panes waiting" src="docs/assets/screenshot-home.webp" width="100%">
   <br><sub>The home screen. The designer, planner and worker each have a pane, and the header shows the models in use and the session's spend against its cap.</sub>
 </p>
+
+## Features
+
+The features you expect from a coding agent, built on the same journal and controls as
+everything else. Details for each are in the [configuration guide](docs/configuration.md).
+
+**Agents**
+- **Subagents.** The designer can spawn read-only helpers (reader, reviewer, researcher) to work
+  in parallel. Define your own in config, with fewer tools, another model and their own call,
+  time and cost limits.
+- **Skills.** `SKILL.md` skills in the Agent Skills format. Existing `.claude/skills/` and
+  `.agents/skills/` folders are picked up as they are.
+- **Forked skills.** A skill marked `context: fork` runs as its own subagent instead of loading
+  into the conversation.
+
+**Sessions**
+- **Fork.** `chickadee fork` starts a new session from any point in another's history.
+  Because every step is journaled, the fork starts from exactly what happened.
+- **Resume and replay.** `chickadee resume` picks up a session whose process died.
+  `chickadee replay` rebuilds a run from its journal and checks it comes out identical.
+- **Undo.** Every turn is snapshotted, and each accepted task is one commit you can take back.
+- **Worktrees.** Work in a separate git worktree, so your checkout changes only when you merge.
+
+**Extend**
+- **Hooks.** Run your own scripts at 16 points, from `session_start` through `before_tool`,
+  `after_tool` and `task_committed` to `session_end`. Narrow them by role, model, tool or path,
+  and choose whether a failing hook blocks.
+- **MCP.** Connect MCP servers, under policy. `chickadee mcp trust` pins a server's tools, so
+  a tool that later changes is caught.
+- **Web.** Fetch pages, and search through Tavily, Brave, Exa, Mojeek or your own SearXNG.
+- **Scripting.** `chickadee run` and `chickadee ask` work headless, with `--json` output for
+  scripts and CI.
+
+**Control**
+- **Approvals.** Risky commands ask first, and your standing answers are remembered.
+  A repository's own hooks and commands stay off until you accept them with `chickadee trust`.
+- **Spend caps.** A hard cap per session, and optionally per model tier, shown live.
+- **Inspector.** `chickadee inspect` opens a local web page showing exactly what each model
+  was sent and what it said.
 
 ## Getting started
 

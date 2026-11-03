@@ -90,8 +90,8 @@ everything else. Details for each are in the [configuration guide](docs/configur
 **Keeping the worker honest**
 - **"Done" is checked against the record, not taken on trust.** Before the worker can hand off,
   the harness checks its own record of what ran. Files changed since the last test run, a task
-  with changes and no test run at all, or a test the task broke that is still failing all send
-  the worker back, and the planner is told what the record showed.
+  with changes and no test run at all, or a test the task broke that is still failing sends
+  the worker back once to fix it, and the planner is told what the record showed.
 - **A watchdog for stuck workers.** It watches for a worker looping on calls that show nothing
   new, wandering through files without making a change, or editing for too long without
   running a test. It nudges first, then stops the round and has the worker report.

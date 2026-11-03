@@ -1,5 +1,8 @@
-Chickadee, Copyright (C) 2026 Kundan Kumar. Licensed under the GNU Affero
-General Public License v3.0 or later. See LICENSE.
+Chickadee
+Copyright (C) 2026 Kundan Kumar. All rights reserved.
+
+Chickadee is proprietary software; see LICENSE. This file lists third-party
+material included in it, which remains under its own license.
 
 -------------------------------------------------------------------------------
 
@@ -9,3 +12,5 @@ License, Version 2.0: the allowlist of tree-sitter-bash node types and the test 
 a literal word in `packages/core/src/chickadee/shell_line.py`, and test cases
 ported into `packages/core/tests/test_shell_line.py`, from
 `codex-rs/shell-command/src/bash.rs`.
+
+A copy of the Apache License, Version 2.0 is in third_party/Apache-2.0.txt.

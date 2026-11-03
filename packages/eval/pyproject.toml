@@ -2,7 +2,6 @@
 name = "chickadee-eval"
 version = "0.0.0"
 description = "Benchmark harness for measuring Chickadee's solve rate and cost."
-license = "AGPL-3.0-or-later"
 authors = [{ name = "Kundan Kumar", email = "kundan91700@gmail.com" }]
 requires-python = ">=3.12"
 dependencies = [

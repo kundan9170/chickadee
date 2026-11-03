@@ -2,7 +2,6 @@
 name = "chickadee-core"
 version = "0.0.0"
 description = "The Chickadee engine: roles, task loop, edit port, sandbox and journal."
-license = "AGPL-3.0-or-later"
 authors = [{ name = "Kundan Kumar", email = "kundan91700@gmail.com" }]
 requires-python = ">=3.12"
 dependencies = [

@@ -2,7 +2,6 @@
 name = "chickadee-serve"
 version = "0.0.0"
 description = "Serves the Chickadee engine over a local socket."
-license = "AGPL-3.0-or-later"
 authors = [{ name = "Kundan Kumar", email = "kundan91700@gmail.com" }]
 requires-python = ">=3.12"
 dependencies = [

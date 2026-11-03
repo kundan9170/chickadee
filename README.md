@@ -14,8 +14,6 @@
 </p>
 
 <p align="center">
-  <a href="#how-it-works">How it works</a> ·
-  <a href="#what-you-can-rely-on">Guarantees</a> ·
   <a href="#getting-started">Getting started</a> ·
   <a href="docs/configuration.md">Configuration</a> ·
   <a href="#documentation">Docs</a>
@@ -47,52 +45,10 @@ Chickadee splits the work by difficulty:
 **The bet:** solve nearly as many tasks as a frontier-only harness (at most 5 percentage points
 fewer) for at most half the cost. That is a hypothesis under test, not a result.
 
-## How it works
-
-```mermaid
-flowchart LR
-    U([You]) -->|request| Z["Designer<br/><sub>frontier model</sub><br/>writes the design"]
-    Z -->|stop 1: you approve the design| A["Planner<br/><sub>frontier model</sub><br/>writes the plan"]
-    A -->|stop 2: you approve the plan| W["Worker<br/><sub>small model</sub><br/>edits and tests, task by task"]
-    W -->|report| A
-    A -->|review: accept, feedback or re-cut| W
-    A -->|outcome| Z
-    Z -->|handoff: what changed, and what was verified| U
-```
-
-1. **Design.** The designer reads the code and writes a design in markdown. You approve it at **stop 1**.
-2. **Plan.** The planner writes the plan, a list of tasks. You approve it at **stop 2**. For a
-   small change, the designer writes a plan of one task and the planner's step is skipped.
-3. **Work.** The worker does each task in the session's own worktree. Every edit is snapshotted,
-   and each accepted task becomes one commit that `undo` can take back.
-4. **Check.** The planner runs the tests for each task, and the full suite as a final check.
-5. **Hand off.** The designer reports what changed, what ran, and what was *not* independently
-   verified.
-
 <p align="center">
   <img alt="The Chickadee home screen: the designer pane, recent sessions, and the planner and worker panes waiting" src="docs/assets/screenshot-home.webp" width="100%">
   <br><sub>The home screen. The designer, planner and worker each have a pane, and the header shows the models in use and the session's spend against its cap.</sub>
 </p>
-
-## What you can rely on
-
-- **Models cannot act directly.** They make tool calls, and policy code decides. Writes go
-  through one edit port, and commands run only inside a sandbox.
-- **Verification is never overstated.** Tests the worker writes during a run guide the work, but
-  they are not counted as proof. If you supplied no acceptance tests, the handoff says so.
-- **Everything can be undone.** Every turn is snapshotted, and each accepted task is one commit
-  that `undo` takes back. For full isolation, a session can work in its own git worktree, so
-  your checkout changes only when you merge. Approval prompts are kept for what can't be
-  undone: network access, credentials, destructive git, and overwriting something with no saved
-  prior state.
-- **Everything is resumable.** The journal is the single source of truth. A crash, an interrupt
-  or a closed terminal loses nothing, and recovery checks what actually happened before it
-  retries anything.
-- **Spend is capped.** Each session has a hard spend cap and warning thresholds, shown live in
-  the header. Hitting the cap pauses the run in a resumable state.
-- **Bring your own models.** Every role points at any OpenAI-compatible endpoint, hosted or
-  local ([configuring models](docs/configuration.md#models-rungs-and-roles)). A repository's own config can
-  never repoint a model or raise a spend cap.
 
 ## Getting started
 

@@ -43,6 +43,19 @@ Chickadee splits the work by difficulty:
   sandboxed. Every effect is written to a journal before it happens, so a run can be stopped,
   inspected, undone and resumed.
 
+Small things add up to fewer tokens:
+
+- **Outlines before files.** Opening a file shows its outline first. The model reads only the
+  function or lines it needs, never the whole file by default.
+- **Errors come with the read.** Language-server errors and warnings arrive with the file, so
+  there is no extra round trip to find out what is broken.
+- **No paying twice.** Lines the model already holds are answered with a pointer, not sent again.
+  Long command output is cut to a handle the model can search instead of reading in full.
+- **A map, not a search.** The code graph answers "who calls this?" and "what breaks if this
+  changes?" in one call, instead of rounds of grep.
+- **Cheap checks first.** Every written file is syntax-checked in plain code, so a broken edit
+  is caught at once, without a test run or a model call.
+
 **The bet:** solve nearly as many tasks as a frontier-only harness (at most 5 percentage points
 fewer) for at most half the cost. That is a hypothesis under test, not a result.
 
@@ -95,11 +108,6 @@ everything else. Details for each are in the [configuration guide](docs/configur
 - **A watchdog for stuck workers.** It watches for a worker looping on calls that show nothing
   new, wandering through files without making a change, or editing for too long without
   running a test. It nudges first, then stops the round and has the worker report.
-- **Fair test accounting.** Each test's last status is read from the runner's output, never from
-  the exit code. A test that was already failing before the task touched it is never blamed on
-  the task.
-- **Cited reports.** A subagent's findings must cite file and line. Each citation is checked
-  against the repository, and the report's header says how many failed.
 
 The watchdog and the handoff check are switched on per role in your config:
 
